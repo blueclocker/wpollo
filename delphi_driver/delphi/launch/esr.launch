@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <!-- socketcan_bridge_node >
+  <node pkg="delphi" type="delphi_node" name="delphi_node" output="screen"/-->
+  <node pkg="delphi" type="person_subscriber" name="delphi_0" output="screen"/>
+</launch>

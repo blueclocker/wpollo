@@ -1,0 +1,16 @@
+calibration_node: {theta_x: 1.5707963, theta_y: 3.1415926, theta_z: 0.0, x: 0.2, y: 2.0,
+  z: 0.0}
+camera:
+  camera_height: 1200
+  camera_width: 1920
+  config_camera: [4306.37205655706, 0.0, 802.1519317540232, 0.0, 4307.411849731741,
+    479.2531644403244, 0.0, 0.0, 1.0]
+rosdistro: 'melodic
+
+  '
+roslaunch:
+  uris: {host_legion_y7000p__41349: 'http://Legion-Y7000P:41349/', host_legion_y7000p__46011: 'http://Legion-Y7000P:46011/'}
+rosversion: '1.14.11
+
+  '
+run_id: d071c5e2-1f85-11ec-8f21-dc41a9f8a098

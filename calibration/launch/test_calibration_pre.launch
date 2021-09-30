@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <!-- galaxy_camera >
+  <include file="$(find galaxy_camera)/launch/MER-231.launch">
+  </include-->
+  <!-- delphi >
+  <include file="$(find delphi)/launch/esr.launch">
+  </include-->
+  <node pkg="calibration" type="radar_calibration" name="radar_calibration" output="screen"/>
+    <rosparam file="$(find calibration)/config/camera.yaml"/>
+  <node pkg="rosbag" type="play" name="play" args="-l $(find calibration)/bag/raw_data.bag"/>
+  <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view"/>
+</launch>

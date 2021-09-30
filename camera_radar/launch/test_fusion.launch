@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <node pkg="camera_radar" type="camera_radar_node" name="camera_radar_node" output="screen"/>
+    <rosparam file="$(find camera_radar)/config/config.yaml"/>
+</launch>

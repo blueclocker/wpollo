@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <!-- galaxy_camera -->
+  <include file="$(find galaxy_camera)/launch/MER-231.launch">
+  </include>
+  <!-- YOLO -->
+  <include file="$(find darknet_ros)/launch/darknet_ros.launch">
+  </include>
+  <node pkg="test" type="test_node" name="test_node"/>
+</launch>

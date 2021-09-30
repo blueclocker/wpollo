@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <node pkg="rosbag" type="play" name="play" args="-l $(find calibration)/bag/2021-09-29-18-53-05.bag"/>
+  <!-- YOLO >
+  <include file="$(find darknet_ros)/launch/darknet_ros.launch">
+  </include-->
+  <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view"/>
+</launch>
