@@ -2,12 +2,16 @@
 
 void Callback(const can_msgs::Frame::ConstPtr &msg)
 {
-    float id, range, angle, rate, status, width, yaw_rate, vehicle_speed;
+    float id, range, angle, rate, status, width, yaw_rate, vehicle_speed, moving, moving_fast, moving_slow, db, j;
+    //std::vector<int> move;
+    unsigned short a[64];
+    //memset(&radar_target_data_,0,sizeof(radar_target_data_));
     //range 距离（m） angle角度（度） rate速度（m/s）width 宽度（m） x，y投影面坐标  
     //yaw_rate 车辆的横摆角速度 vehicle_speed 车速度
     int number = 1;
 
-    //can报文解析
+
+    //can报文
     if (msg->id == 0x4E0)
     {
         //CAN_TX_YAW_RATE_CALC
@@ -31,11 +35,222 @@ void Callback(const can_msgs::Frame::ConstPtr &msg)
         temp_A2 = msg->data[7];
         vehicle_speed = ((temp_A1 << 8) | (temp_A2)) * 0.0625f;
 
-        ROS_INFO("yaw_rate  %f \n", yaw_rate);
-        ROS_INFO("vehicle_speed  %f \n", vehicle_speed);
+        //ROS_INFO("yaw_rate  %f \n", yaw_rate);
+        //ROS_INFO("vehicle_speed  %f \n", vehicle_speed);
     }
 
- 
+ //动静模式
+   else if(msg->id==0x540)
+    {
+      ////Group=7*9+1=10组
+      unsigned short temp_A1 = msg->data[0];
+      unsigned short temp_A2 = temp_A1&0x000F; //取出后四位
+      switch(temp_A2)
+      {
+      case 0://第0组
+        for(int j = 0; j<7;++j)
+        {
+          //Moving 0=s 1=s
+          unsigned short temp_D1 = (msg->data[j+1])&0x0020;
+          unsigned short temp_D2 = temp_D1>>5;
+          moving = temp_D2;
+          //fast
+          unsigned short temp_S1 = (msg->data[j+1])&0x0080;
+          unsigned short temp_S2 = temp_S1>>7;
+          moving_fast=temp_S2;
+          //slow
+          temp_S1 = (msg->data[j+1])&0x0040;
+          temp_S2 = temp_S1>>6;
+          moving_slow=temp_S2;
+          //回波强度 -10到21dB
+          temp_S1 = (msg->data[j+1])&0x001F;
+          db=temp_S1-10;
+        }
+        break;
+      case 1://第1组
+        for(int j = 7;j<14;++j)
+        {
+          unsigned short temp_D1 = (msg->data[j-7+1])&0x0020;
+          unsigned short temp_D2 = temp_D1>>5;
+          moving = temp_D2;
+
+          //fast
+          unsigned short temp_S1 = (msg->data[j-7+1])&0x0080;
+          unsigned short temp_S2 = temp_S1>>7;
+          moving_fast=temp_S2;
+          //slow
+          temp_S1 = (msg->data[j-7+1])&0x0040;
+          temp_S2 = temp_S1>>6;
+          moving_slow=temp_S2;
+          //回波强度
+          temp_S1 = (msg->data[j-7+1])&0x001F;
+          db=temp_S1-10;
+          a[j]=moving;   
+        }
+        break;
+      case 2://第2组
+        for(int j = 14;j<21;++j)
+        {
+          unsigned short temp_D1 = (msg->data[j-14+1])&0x0020;
+          unsigned short temp_D2 = temp_D1>>5;
+          moving = temp_D2;
+
+          //fast
+          unsigned short temp_S1 = (msg->data[j-14+1])&0x0080;
+          unsigned short temp_S2 = temp_S1>>7;
+          moving_fast=temp_S2;
+          //slow
+          temp_S1 = (msg->data[j-14+1])&0x0040;
+          temp_S2 = temp_S1>>6;
+          moving_slow=temp_S2;
+          //回波强度
+          temp_S1 = (msg->data[j-14+1])&0x001F;
+          db=temp_S1-10;   
+        }
+        break;
+      case 3://第3组
+        for(int j = 21;j<28;++j)
+        {
+          unsigned short temp_D1 = (msg->data[j-21+1])&0x0020;
+          unsigned short temp_D2 = temp_D1>>5;
+          moving = temp_D2;
+
+          //fast
+          unsigned short temp_S1 = (msg->data[j-21+1])&0x0080;
+          unsigned short temp_S2 = temp_S1>>7;
+          moving_fast=temp_S2;
+          //slow
+          temp_S1 = (msg->data[j-21+1])&0x0040;
+          temp_S2 = temp_S1>>6;
+          moving_slow=temp_S2;
+          //回波强度
+          temp_S1 = (msg->data[j-21+1])&0x001F;
+          db=temp_S1-10;
+        }
+        break;
+      case 4://第4组
+        for(int j = 28;j<35;++j)
+        {
+          unsigned short temp_D1 = (msg->data[j-28+1])&0x0020;
+          unsigned short temp_D2 = temp_D1>>5;
+          moving = temp_D2;
+
+          //fast
+          unsigned short temp_S1 = (msg->data[j-28+1])&0x0080;
+          unsigned short temp_S2 = temp_S1>>7;
+          moving_fast=temp_S2;
+          //slow
+          temp_S1 = (msg->data[j-28+1])&0x0040;
+          temp_S2 = temp_S1>>6;
+          moving_slow=temp_S2;
+          //回波强度
+          temp_S1 = (msg->data[j-28+1])&0x001F;
+          db=temp_S1-10;  
+        }
+        break;
+      case 5://第5组
+        for(int j = 35;j<42;++j)
+        {
+          unsigned short temp_D1 = (msg->data[j-35+1])&0x0020;
+          unsigned short temp_D2 = temp_D1>>5;
+          moving = temp_D2;
+
+          //fast
+          unsigned short temp_S1 = (msg->data[j-35+1])&0x0080;
+          unsigned short temp_S2 = temp_S1>>7;
+          moving_fast=temp_S2;
+          //slow
+          temp_S1 = (msg->data[j-35+1])&0x0040;
+          temp_S2 = temp_S1>>6;
+          moving_slow=temp_S2;
+          //回波强度
+          temp_S1 = (msg->data[j-35+1])&0x001F;
+          db=temp_S1-10; 
+        }
+        break;
+      case 6://第6组
+        for(int j = 42;j<49;++j)
+        {
+          unsigned short temp_D1 = (msg->data[j-42+1])&0x0020;
+          unsigned short temp_D2 = temp_D1>>5;
+          moving = temp_D2;
+
+          //fast
+          unsigned short temp_S1 = (msg->data[j-42+1])&0x0080;
+          unsigned short temp_S2 = temp_S1>>7;
+          moving_fast=temp_S2;
+          //slow
+          temp_S1 = (msg->data[j-42+1])&0x0040;
+          temp_S2 = temp_S1>>6;
+          moving_slow=temp_S2;
+          //回波强度
+          temp_S1 = (msg->data[j-42+1])&0x001F;
+          db=temp_S1-10;  
+        }
+        break;
+      case 7://第7组
+        for(int j = 49;j<56;++j)
+        {
+          unsigned short temp_D1 = (msg->data[j-49+1])&0x0020;
+          unsigned short temp_D2 = temp_D1>>5;
+          moving = temp_D2;
+
+          //fast
+          unsigned short temp_S1 = (msg->data[j-49+1])&0x0080;
+          unsigned short temp_S2 = temp_S1>>7;
+          moving_fast=temp_S2;
+          //slow
+          temp_S1 = (msg->data[j-49+1])&0x0040;
+          temp_S2 = temp_S1>>6;
+          moving_slow=temp_S2;
+          //回波强度
+          temp_S1 = (msg->data[j-49+1])&0x001F;
+          db=temp_S1-10;  
+        }
+        break;
+      case 8://第8组
+        for(int j = 56;j<63;++j)
+        {
+          unsigned short temp_D1 = (msg->data[j-56+1])&0x0020;
+          unsigned short temp_D2 = temp_D1>>5;
+          moving = temp_D2;
+
+          //fast
+          unsigned short  temp_S1 = (msg->data[j-56+1])&0x0080;
+          unsigned short temp_S2 = temp_S1>>7;
+          moving_fast=temp_S2;
+          //slow
+          temp_S1 = (msg->data[j-56+1])&0x0040;
+          temp_S2 = temp_S1>>6;
+          moving_slow=temp_S2;
+          //回波强度 
+         temp_S1 = (msg->data[j-56+1])&0x001F;
+          db=temp_S1-10;  
+        }
+        break;
+      case 9://第9组
+        unsigned short temp_D1 = (msg->data[1])&0x0020;
+        unsigned short temp_D2 = temp_D1>>5;
+        moving=temp_D2;
+
+        //fast
+        unsigned short temp_S1 = (msg->data[1])&0x0080;
+        unsigned short temp_S2 = temp_S1>>7;
+        moving_fast=temp_S2;
+        //slow
+        temp_S1 = (msg->data[1])&0x0040;
+        temp_S2 = temp_S1>>6;
+        moving_slow=temp_S2;
+        //回波强度
+        temp_S1 = (msg->data[1])&0x001F;
+        db=temp_S1-10;  
+        break;
+      }//end switch
+     //ROS_INFO("a  %f \n", a);
+     //ROS_INFO("db  %f \n", db); 
+       
+    }//end if(tmpCanID==0x540)
+     
 
     else if(0x500 <= msg->id && msg->id <= 0x53F) //过滤帧，去64目标
     {
@@ -81,19 +296,13 @@ void Callback(const can_msgs::Frame::ConstPtr &msg)
 
         //u7，0无目标，1新目标，2，5，7保留目标，3更新目标，4滑动目标，6 无效目划行
         status = (msg->data[1] & 0x00E0 >> 5); 
-        std::cout << "  id =   " << id
-                << "   range =   " << range
-                << "   angle =   " << angle
-                << "  width =   " << width
-                << "  rate =   " << rate
-                << "  status =   " << status
-                << std::endl;
         can_msgs::delphi_msg del_msg_;
         del_msg_.id = (int)id;
         del_msg_.angel = angle;
         del_msg_.range = range;
         del_msg_.rate = rate;
         del_msg_.width = width;
+        del_msg_.db = db;
         del_msg_.status = (int)status;
         msg_pre.push_back(del_msg_);
     }
@@ -110,12 +319,12 @@ void Callback(const can_msgs::Frame::ConstPtr &msg)
 int main(int argc, char **argv)
 {
     // 初始化ROS节点
-    ros::init(argc, argv, "delphi_data");
+    ros::init(argc, argv, "delphi");
     // 创建节点句柄
-    ros::NodeHandle nh, nh_("~");
+    ros::NodeHandle nh("~");
 
-    ros::Subscriber sub = nh_.subscribe("/can_tx", 10, Callback);
-    pub = nh_.advertise<can_msgs::delphi_msges>("delphi_esr", 10); //发布雷达消息
+    ros::Subscriber sub = nh.subscribe("/received_messages", 10, Callback);
+    pub = nh.advertise<can_msgs::delphi_msges>("delphi_esr", 10); //发布雷达消息
     //ros::Rate loop_rate(1);
     ros::spin();
     return 0;

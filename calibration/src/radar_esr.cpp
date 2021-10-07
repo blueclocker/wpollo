@@ -1,7 +1,7 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-25 20:28:10
- * @LastEditTime: 2021-09-29 21:27:59
+ * @LastEditTime: 2021-10-06 20:49:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/calibration/src/radar_esr.cpp
@@ -60,11 +60,11 @@ bool RadarCalibration::set_param(ros::NodeHandle &n)
     return camera_flag;
 }
 
-geometry_msgs::Point RadarCalibration::polar_xy(const float range_, const float angle_)
+geometry_msgs::Point RadarCalibration::polar_xy(const can_msgs::delphi_msg polar_xy_in)
 {
     geometry_msgs::Point point_xy;
-    point_xy.x = range_ * std::sin(angle_*pi/180);
-    point_xy.y = range_ * std::cos(angle_*pi/180);
+    point_xy.x = polar_xy_in.range * std::sin(polar_xy_in.angel*pi/180);
+    point_xy.y = polar_xy_in.range * std::cos(polar_xy_in.angel*pi/180);
     point_xy.z = 0;
     return point_xy;
 }
@@ -90,9 +90,9 @@ pixel_position RadarCalibration::position_transform(const geometry_msgs::Point i
     return out_2d;
 }
 
-std::vector<geometry_msgs::Point> RadarCalibration::radar_filter(const std::vector<can_msgs::delphi_msg> delphi_in)
+std::vector<can_msgs::delphi_msg> RadarCalibration::radar_filter(const std::vector<can_msgs::delphi_msg> delphi_in)
 {
-    std::vector<geometry_msgs::Point> radar_filter_output;
+    std::vector<can_msgs::delphi_msg> radar_filter_output;
     for(int i = 0; i < delphi_in.size(); i++)
     {
         //滤波
@@ -100,28 +100,32 @@ std::vector<geometry_msgs::Point> RadarCalibration::radar_filter(const std::vect
         {
             continue;
         }else{
-            radar_filter_output.push_back(polar_xy(delphi_in[i].range, delphi_in[i].angel));
+            radar_filter_output.push_back(delphi_in[i]);
         }
     }
     return radar_filter_output;
 }
 
-std::vector<pixel_position> RadarCalibration::space_ok(const std::vector<geometry_msgs::Point> space_in_)
+std::vector<radarinfo> RadarCalibration::space_ok(const std::vector<can_msgs::delphi_msg> space_in_)
 {
     //输出结果
-    std::vector<pixel_position> pixel_out;
+    std::vector<radarinfo> radarinfo_out;
     for(int i = 0; i < space_in_.size(); i++)
     {
-        pixel_position test_out;
-        test_out = position_transform(space_in_[i]);
-        ROS_INFO("point%d: x=%d, y=%d", i, test_out.x, test_out.y);
+        radarinfo test_out;
+        test_out.pxy = position_transform(polar_xy(space_in_[i]));
+        test_out.prange = space_in_[i].range;
+        test_out.pspeed = space_in_[i].rate;
+        //test_out.pdb = space_in_[i].db;
+        ROS_INFO("point%d: x=%d, y=%d", i, test_out.pxy.x, test_out.pxy.y);
+        //ROS_INFO("point%d: db=%f", i, test_out.pdb);
         //滤除投影结果在图像之外的点
-        if(test_out.x>=0 && test_out.x<=WIDTH && test_out.y>=0 && test_out.y<=HEIGHT)
+        if(test_out.pxy.x>=0 && test_out.pxy.x<=WIDTH && test_out.pxy.y>=0 && test_out.pxy.y<=HEIGHT)
         {
-            pixel_out.push_back(test_out);
+            radarinfo_out.push_back(test_out);
         }
     }
-    return pixel_out;
+    return radarinfo_out;
 }
 
 void RadarCalibration::paramcallback(const geometry_msgs::Twist::ConstPtr &param)
@@ -170,19 +174,26 @@ void RadarCalibration::callback(const sensor_msgs::Image::ConstPtr &msg,
     cv_bridge::CvImagePtr cv_ptr;
     cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
     std::vector<can_msgs::delphi_msg> delphi_ = msg_esr -> delphi_msges;
-    std::vector<geometry_msgs::Point> delphi_point;
+    std::vector<can_msgs::delphi_msg> delphi_point;
     delphi_point = radar_filter(delphi_);
-    std::vector<pixel_position> pixel_point;
-    pixel_point = space_ok(delphi_point);
+    std::vector<radarinfo> radar_point;
+    radar_point = space_ok(delphi_point);
     ros::NodeHandle nh_;
     sub_param = nh_.subscribe("/dynamic_calibration/radar_transform_camera", 10, &RadarCalibration::paramcallback, this);
     //可视化
-    if(!pixel_point.empty())
+    if(!radar_point.empty())
     {
-        for(int j = 0; j<pixel_point.size(); j++)
+        for(int j = 0; j<radar_point.size(); j++)
         {
+            //描点
             cv::circle(cv_ptr->image, 
-                cv::Point(pixel_point[j].x, pixel_point[j].y), 10, CV_RGB(255,0,0), 5);
+                cv::Point(radar_point[j].pxy.x, radar_point[j].pxy.y), 8, CV_RGB(255,0,0), -1);
+            //显示range和反射率
+            char str[16];
+            sprintf(str, "%.2f %.2f", radar_point[j].prange, radar_point[j].pspeed);
+            //sprintf(str, "%.2f %.2f %.2f", radar_point[j].prange, radar_point[j].pspeed, radar_point[j].pdb);
+            cv::putText(cv_ptr->image, str, cv::Point(radar_point[j].pxy.x, radar_point[j].pxy.y), 
+                       cv::FONT_HERSHEY_TRIPLEX, 1, CV_RGB(255,0,0), 2);
         }
     }
     sensor_msgs::ImagePtr msg_ = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();

@@ -52,13 +52,25 @@ typedef message_filters::sync_policies::ApproximateTime
         <sensor_msgs::Image,can_msgs::delphi_msges>syncPolicy;
 
 //自定义单个雷达点像素坐标结构
-typedef struct Pixel_position
+struct pixel_position
 {
         //x
         int x;
         //y
         int y;
-}pixel_position;
+};
+
+typedef struct radar_info
+{
+        //像素坐标
+        pixel_position pxy;
+        //距离
+        double prange;
+        //反射率
+        //double pdb;
+        //速度
+        double pspeed;
+}radarinfo;
 
 class RadarCalibration
 {
@@ -83,13 +95,13 @@ class RadarCalibration
         //参数初始化，从yaml加载相机内参，初始化transtocamera为0
         bool set_param(ros::NodeHandle &n);
         //雷达点极坐标转直角坐标
-        geometry_msgs::Point polar_xy(const float range_, const float angle_);
+        geometry_msgs::Point polar_xy(const can_msgs::delphi_msg polar_xy_in);
         //单个雷达点投影到像素坐标系
         pixel_position position_transform(const geometry_msgs::Point in_3d);
         //滤除雷达噪点，并调用polar_xy
-        std::vector<geometry_msgs::Point> radar_filter(const std::vector<can_msgs::delphi_msg> delphi_in);
+        std::vector<can_msgs::delphi_msg> radar_filter(const std::vector<can_msgs::delphi_msg> delphi_in);
         //多个雷达点投影到像素坐标系，并去除在图像之外点
-        std::vector<pixel_position> space_ok(const std::vector<geometry_msgs::Point> space_in_);
+        std::vector<radarinfo> space_ok(const std::vector<can_msgs::delphi_msg> space_in_);
         //更新transtocamera和trans_matrix
         void paramcallback(const geometry_msgs::Twist::ConstPtr &param);
         //相机和雷达数据融合

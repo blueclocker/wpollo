@@ -1,7 +1,7 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-08 19:22:26
- * @LastEditTime: 2021-09-30 09:34:56
+ * @LastEditTime: 2021-10-06 20:06:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/camera_radar/include/camera_radar/camera_radar.h
@@ -71,24 +71,36 @@ typedef message_filters::sync_policies::ApproximateTime
 typedef message_filters::sync_policies::ApproximateTime
         <sensor_msgs::Image,darknet_ros_msgs::BoundingBoxes,can_msgs::delphi_msges>three_syncPolicy;
 //自定义单个雷达点像素坐标结构
-typedef struct Pixel_position
+struct pixel_position
 {
         //x
         int x;
         //y
         int y;
-}pixel_position;
+};
+//单个雷达点信息
+typedef struct radar_info
+{
+        //像素坐标
+        pixel_position pxy;
+        //距离
+        double prange;
+        //反射率
+        //double preflect;
+        //速度
+        double pspeed;
+}radarinfo;
 //单帧匹配结果
 typedef struct detected_obj
 {
         //相机数据
-        sensor_msgs::Image img;
+        sensor_msgs::Image::ConstPtr img;
         //YOLO检测框
-        darknet_ros_msgs::BoundingBoxes bbox;
+        std::vector<darknet_ros_msgs::BoundingBox> bbox;
         //滤波后有效雷达点
-        can_msgs::delphi_msges del_point;
+        std::vector<radarinfo> del_point;
         //同matchmap
-        std::map<int, int> map_result;
+        std::unordered_map<int, int> map_result;
 }det_obj;
 
 class CameraRadarCore
@@ -104,13 +116,15 @@ class CameraRadarCore
         Eigen::Matrix<double, 3, 3> camera_matrix;
         //外参矩阵
         Eigen::Matrix<double, 4, 4> trans_matrix;
+        //远距外参矩阵
+        Eigen::Matrix<double, 4, 4> trans_matrix_long;
         //判断有无bbox
         bool bbox_flag = false;
         ros::NodeHandle nh;
         //融合结果发布器
         ros::Publisher pub;
         //匹配结果保存于map,前一个int是bbox索引，后一个int是雷达ID索引
-        std::map<int, int> matchmap;
+        std::unordered_map<int, int> matchmap;
         //Header **暂时未用**
         std_msgs::Header ros_header;
         //订阅相机
@@ -125,21 +139,21 @@ class CameraRadarCore
         //设置相机内参和外参
         bool set_param();
         //雷达无效点初步去除,由雷达原始数据转换三维空间点及速度(1帧)
-        std::vector<geometry_msgs::Point> radar_filter(const std::vector<can_msgs::delphi_msg> delphi_in);
+        std::vector<can_msgs::delphi_msg> radar_filter(const std::vector<can_msgs::delphi_msg> delphi_in);
         //单个雷达坐标点投影
         pixel_position position_transform(const geometry_msgs::Point in_3d);
         //极坐标转geometry_msgs::Point
-        geometry_msgs::Point polar_xy(const float range_, const float angle_);
+        geometry_msgs::Point polar_xy(const can_msgs::delphi_msg polar_xy_in);
         //空间同步函数，滤除雷达无效点后投影到像素坐标系
-        std::vector<pixel_position> space_ok(const std::vector<geometry_msgs::Point> space_in_);
+        std::vector<radarinfo> space_ok(const std::vector<can_msgs::delphi_msg> space_in_);
         //IOU计算
         double IOU(const cv::Rect &r1, const cv::Rect &r2);
         //图像坐标系两点之间欧式距离计算
         double distance(const pixel_position pos_a, const pixel_position pos_b);
         //最近邻匹配
-        void knn_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_knn, const std::vector<pixel_position> radar_knn);
+        void knn_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_knn, const std::vector<radarinfo> radar_knn);
         //iou匹配
-        void iou_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_iou, const std::vector<pixel_position> radar_iou);
+        void iou_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_iou, const std::vector<radarinfo> radar_iou);
         //有YOLO检测结果回调函数
         void three_Callback(const sensor_msgs::Image::ConstPtr &three_camera, 
                       const darknet_ros_msgs::BoundingBoxes::ConstPtr &three_bboxes,
@@ -150,10 +164,10 @@ class CameraRadarCore
         //结果显示函数
         void draw_picture(const sensor_msgs::Image::ConstPtr &msg_in, 
                 const std::vector<darknet_ros_msgs::BoundingBox> &b_in,
-                const std::vector<pixel_position> &delphi_point_in);
+                const std::vector<radarinfo> &delphi_point_in);
         //函数重载
         void draw_picture(const sensor_msgs::Image::ConstPtr &msg_in, 
-                const std::vector<pixel_position> &delphi_point_in);
+                const std::vector<radarinfo> &delphi_point_in);
 
     public:
         CameraRadarCore(ros::NodeHandle &nh);

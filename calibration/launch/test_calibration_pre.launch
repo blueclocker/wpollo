@@ -9,6 +9,6 @@
   </include-->
   <node pkg="calibration" type="radar_calibration" name="radar_calibration" output="screen"/>
     <rosparam file="$(find calibration)/config/camera.yaml"/>
-  <node pkg="rosbag" type="play" name="play" args="-l $(find calibration)/bag/raw_data.bag"/>
+  <node pkg="rosbag" type="play" name="play" args="-l /home/wangpeng/raw_data.bag"/>
   <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view"/>
 </launch>
