@@ -19,3 +19,17 @@ daheng camera and delphi radar fusion
 
 录包
 rosbag record -a -x "(.*)/compressed(.*)"
+
+#更新日志
+
+20210930
+
+实现基础融合功能和标定
+
+20211007
+
+新增显示雷达点属性功能
+
+20211008
+
+新增初步匹配功能，仅能运行
