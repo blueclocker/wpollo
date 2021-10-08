@@ -1,7 +1,7 @@
 # fusion
 daheng camera and delphi radar fusion
 
-融合
+##### 融合
 
 1.roslaunch camera_radar pre_fusion.launch
 
@@ -9,7 +9,7 @@ daheng camera and delphi radar fusion
 
 3.roslaunch camera_radar fusion.launch
 
-标定
+##### 标定
 
 1.roslaunch calibration calibration_pre.launch
 
@@ -22,14 +22,14 @@ rosbag record -a -x "(.*)/compressed(.*)"
 
 # 更新日志
 
-20210930
+##### 20210930
 
 实现基础融合功能和标定
 
-20211007
+##### 20211007
 
 新增显示雷达点属性功能
 
-20211008
+##### 20211008
 
 新增初步匹配功能，仅能运行
