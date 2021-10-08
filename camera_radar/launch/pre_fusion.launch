@@ -7,7 +7,8 @@
   <!-- YOLO -->
   <include file="$(find darknet_ros)/launch/darknet_ros.launch">
   </include>
-  <!-- delphi -->
+  <!-- delphi >
   <include file="$(find delphi)/launch/esr.launch">
-  </include>
+  </include-->
+  <include file="$(find kvaser_interface)/launch/kvaser_can_bridge.launch"/>
 </launch>

@@ -67,7 +67,7 @@ typedef struct radar_info
         //距离
         double prange;
         //反射率
-        //double pdb;
+        double pdb;
         //速度
         double pspeed;
 }radarinfo;

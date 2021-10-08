@@ -1,7 +1,7 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-08 19:27:18
- * @LastEditTime: 2021-10-06 19:46:21
+ * @LastEditTime: 2021-10-07 21:15:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/camera_radar/src/camera_radar.cpp
@@ -413,11 +413,15 @@ void CameraRadarCore::draw_picture(const sensor_msgs::Image::ConstPtr &msg_in,
                 cv::Point(delphi_point_in[j].pxy.x, delphi_point_in[j].pxy.y), 10, CV_RGB(255,0,0), 5);
         }
     }
-    for(std::unordered_map<int,int>::iterator it = matchmap.begin(); it != matchmap.end(); it++)
+    if(!matchmap.empty())
     {
-        ROS_INFO("yolo %dbbox matched!", it->first);
-        cv::circle(cv_ptr->image, 
+        for(std::unordered_map<int,int>::iterator it = matchmap.begin(); it != matchmap.end(); it++)
+        {
+            ROS_INFO("yolo %dbbox matched!", it->first);
+            cv::circle(cv_ptr->image, 
                 cv::Point(delphi_point_in[it->second].pxy.x, delphi_point_in[it->second].pxy.y), 10, CV_RGB(255,255,255), 5);
+        }
+        matchmap.clear();
     }
     sensor_msgs::ImagePtr msg_ = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
     pub.publish(*msg_);

@@ -1,7 +1,7 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-25 20:28:10
- * @LastEditTime: 2021-10-06 20:49:09
+ * @LastEditTime: 2021-10-07 20:23:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/calibration/src/radar_esr.cpp
@@ -18,7 +18,7 @@ RadarCalibration::RadarCalibration(ros::NodeHandle &nh_ws)
     sub_camera = new message_filters::Subscriber<sensor_msgs::Image>(
         nh, "/galaxy_camera/image_raw", 10, ros::TransportHints().tcpNoDelay());
     sub_esr = new message_filters::Subscriber<can_msgs::delphi_msges>(
-        nh, "/delphi_esr", 10, ros::TransportHints().tcpNoDelay());
+        nh, "/delphi_0/delphi_esr", 10, ros::TransportHints().tcpNoDelay());
     sync = new message_filters::Synchronizer<syncPolicy>(syncPolicy(10), *sub_camera, *sub_esr);
     sync->registerCallback(boost::bind(&RadarCalibration::callback, this, _1, _2));
     ros::spin();
@@ -96,7 +96,7 @@ std::vector<can_msgs::delphi_msg> RadarCalibration::radar_filter(const std::vect
     for(int i = 0; i < delphi_in.size(); i++)
     {
         //滤波
-        if(delphi_in[i].status == 0 || delphi_in[i].range > 60)
+        if(delphi_in[i].status == 0 || delphi_in[i].range > 15)
         {
             continue;
         }else{
@@ -116,8 +116,8 @@ std::vector<radarinfo> RadarCalibration::space_ok(const std::vector<can_msgs::de
         test_out.pxy = position_transform(polar_xy(space_in_[i]));
         test_out.prange = space_in_[i].range;
         test_out.pspeed = space_in_[i].rate;
-        //test_out.pdb = space_in_[i].db;
-        ROS_INFO("point%d: x=%d, y=%d", i, test_out.pxy.x, test_out.pxy.y);
+        test_out.pdb = space_in_[i].db;
+        //ROS_INFO("point%d: x=%d, y=%d", i, test_out.pxy.x, test_out.pxy.y);
         //ROS_INFO("point%d: db=%f", i, test_out.pdb);
         //滤除投影结果在图像之外的点
         if(test_out.pxy.x>=0 && test_out.pxy.x<=WIDTH && test_out.pxy.y>=0 && test_out.pxy.y<=HEIGHT)
@@ -190,8 +190,8 @@ void RadarCalibration::callback(const sensor_msgs::Image::ConstPtr &msg,
                 cv::Point(radar_point[j].pxy.x, radar_point[j].pxy.y), 8, CV_RGB(255,0,0), -1);
             //显示range和反射率
             char str[16];
-            sprintf(str, "%.2f %.2f", radar_point[j].prange, radar_point[j].pspeed);
-            //sprintf(str, "%.2f %.2f %.2f", radar_point[j].prange, radar_point[j].pspeed, radar_point[j].pdb);
+            //sprintf(str, "%.2f %.2f", radar_point[j].prange, radar_point[j].pspeed);
+            sprintf(str, "%.2f %.2f %.2f", radar_point[j].prange, radar_point[j].pspeed, radar_point[j].pdb);
             cv::putText(cv_ptr->image, str, cv::Point(radar_point[j].pxy.x, radar_point[j].pxy.y), 
                        cv::FONT_HERSHEY_TRIPLEX, 1, CV_RGB(255,0,0), 2);
         }

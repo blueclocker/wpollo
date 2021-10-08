@@ -9,5 +9,5 @@
     <param name="can_circuit_id" value="$(arg can_circuit_id)" />
     <param name="can_bit_rate" value="$(arg can_bit_rate)" />
   </node>
-  <node pkg="delphi" type="person_subscriber" name="person_subscriber" output="screen"/>
+  <node pkg="delphi" type="person_subscriber" name="delphi_0" output="screen"/>
 </launch>
