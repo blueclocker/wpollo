@@ -1,13 +1,14 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-08 19:27:18
- * @LastEditTime: 2021-10-07 21:15:09
+ * @LastEditTime: 2021-10-11 10:27:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/camera_radar/src/camera_radar.cpp
  */
 
 #include "camera_radar/camera_radar.h"
+#include "camera_radar/Hungarian.h"
 
 CameraRadarCore::CameraRadarCore(ros::NodeHandle &nh_ws)
 {
@@ -253,7 +254,7 @@ double CameraRadarCore::distance(const pixel_position pos_a, const pixel_positio
 void CameraRadarCore::knn_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_knn, 
                                 const std::vector<radarinfo> radar_knn)
 {
-    ROS_INFO("matching ...");
+    ROS_INFO("knn matching ...");
     std::vector<pixel_position> bbox_knn_in;
     for(int i = 0; i < bbox_knn.size(); i++)
     {
@@ -284,6 +285,8 @@ void CameraRadarCore::knn_match(const std::vector<darknet_ros_msgs::BoundingBox>
             matchmap.insert(std::pair<int, int>(j, radar_mark));
             //删去已经匹配的雷达点
             radar_knn_in[radar_mark].pxy = {-1, -1};
+        }else{
+            break;
         }
     }
 }
@@ -292,6 +295,7 @@ void CameraRadarCore::knn_match(const std::vector<darknet_ros_msgs::BoundingBox>
 void CameraRadarCore::iou_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_iou, 
                                 const std::vector<radarinfo> radar_iou)
 {
+    ROS_INFO("iou matching ...");
     std::vector<cv::Rect> bbox_iou_in, radar_iou_in;
     cv::Rect std_rect(-1, -1, -1, -1);
     for(int i = 0; i < bbox_iou.size(); i++)
@@ -329,6 +333,46 @@ void CameraRadarCore::iou_match(const std::vector<darknet_ros_msgs::BoundingBox>
             radar_iou_in[iou_mark] = {-1, -1, -1, -1};
         }
     }
+}
+
+void CameraRadarCore::hung_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_hung, const std::vector<radarinfo> radar_hung)
+{
+    ROS_INFO("hung matching ...");
+    std::vector<pixel_position> bbox_hung_in;
+    for(int i = 0; i < bbox_hung.size(); i++)
+    {
+        pixel_position temp;
+        temp.x = (int)((bbox_hung[i].xmin + bbox_hung[i].xmax) / 2);
+        temp.y = (int)((bbox_hung[i].ymin + bbox_hung[i].ymax) / 2);
+        bbox_hung_in.push_back(temp);
+    }
+    std::vector<radarinfo> radar_hung_in = radar_hung;
+    std::vector<std::vector<double> > costMatrix;
+    for(int i = 0; i < bbox_hung_in.size(); i++)
+    {
+        std::vector<double> costmatrix_line;
+        for(int j = 0; j < radar_hung_in.size(); j++)
+        {
+            costmatrix_line.push_back(distance(bbox_hung_in[i], radar_hung_in[j].pxy));
+        }
+        costMatrix.push_back(costmatrix_line);
+    }
+    HungarianAlgorithm HungAlgo;
+    std::vector<int> assignment;
+    double cost = HungAlgo.Solve(costMatrix, assignment);
+    for (int x = 0; x < costMatrix.size(); x++)
+    {
+        if(assignment[x] != -1)
+        {
+            if(costMatrix[x][assignment[x]] <= 100)
+            {
+                matchmap.insert(std::pair<int, int>(x, assignment[x]));
+            }else{
+                cost -= costMatrix[x][assignment[x]];
+            }
+        }
+    }
+    ROS_INFO("cost = %f", cost);
 }
 
 //测试坐标变换回调函数
@@ -381,7 +425,7 @@ void CameraRadarCore::three_Callback(const sensor_msgs::Image::ConstPtr &three_c
     std::vector<radarinfo> three_radar_point;
     three_radar_point = space_ok(three_delphi_);
     //匹配
-    knn_match(three_bboxes_, three_radar_point);
+    hung_match(three_bboxes_, three_radar_point);
     //结果用OPENCV可视化
     draw_picture(three_camera, three_bboxes_, three_radar_point);
     ROS_INFO("sensor fusion!");

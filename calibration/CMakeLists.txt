@@ -14,7 +14,6 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   std_msgs
   darknet_ros_msgs
-  delphi_esr_msgs
   message_filters
 )
 

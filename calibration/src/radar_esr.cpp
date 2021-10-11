@@ -14,7 +14,7 @@ RadarCalibration::RadarCalibration(ros::NodeHandle &nh_ws)
     {
         ROS_INFO("param set finished!");
     }
-    pub = nh_ws.advertise<sensor_msgs::Image>("calibration_image", 100);
+    pub = nh_ws.advertise<sensor_msgs::Image>("calibration_image1", 100);
     sub_camera = new message_filters::Subscriber<sensor_msgs::Image>(
         nh, "/galaxy_camera/image_raw", 10, ros::TransportHints().tcpNoDelay());
     sub_esr = new message_filters::Subscriber<can_msgs::delphi_msges>(
@@ -96,7 +96,7 @@ std::vector<can_msgs::delphi_msg> RadarCalibration::radar_filter(const std::vect
     for(int i = 0; i < delphi_in.size(); i++)
     {
         //滤波
-        if(delphi_in[i].status == 0 || delphi_in[i].range > 15)
+        if(delphi_in[i].status == 0 || delphi_in[i].range > 60)
         {
             continue;
         }else{

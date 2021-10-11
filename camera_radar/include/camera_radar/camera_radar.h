@@ -1,7 +1,7 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-08 19:22:26
- * @LastEditTime: 2021-10-06 20:06:08
+ * @LastEditTime: 2021-10-11 09:25:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/camera_radar/include/camera_radar/camera_radar.h
@@ -86,7 +86,7 @@ typedef struct radar_info
         //距离
         double prange;
         //反射率
-        //double preflect;
+        //double pdb;
         //速度
         double pspeed;
 }radarinfo;
@@ -154,6 +154,8 @@ class CameraRadarCore
         void knn_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_knn, const std::vector<radarinfo> radar_knn);
         //iou匹配
         void iou_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_iou, const std::vector<radarinfo> radar_iou);
+        //最近邻匹配
+        void hung_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_hung, const std::vector<radarinfo> radar_hung);
         //有YOLO检测结果回调函数
         void three_Callback(const sensor_msgs::Image::ConstPtr &three_camera, 
                       const darknet_ros_msgs::BoundingBoxes::ConstPtr &three_bboxes,

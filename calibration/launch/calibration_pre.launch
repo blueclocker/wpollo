@@ -5,8 +5,7 @@
   <include file="$(find galaxy_camera)/launch/MER-231.launch">
   </include>
   <!-- delphi >
-  <include file="$(find delphi)/launch/esr.launch">
-  </include-->
+  <include file="$(find delphi)/launch/esr.launch"/-->
   <include file="$(find kvaser_interface)/launch/kvaser_can_bridge.launch"/>
   <node pkg="calibration" type="radar_calibration" name="radar_calibration" output="screen"/>
     <rosparam file="$(find calibration)/config/camera.yaml"/>
