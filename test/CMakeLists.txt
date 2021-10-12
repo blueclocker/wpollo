@@ -157,7 +157,7 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-add_executable(test_node src/test_node.cpp)
+add_executable(test_node src/test_node.cpp src/Hungarian.cpp)
 target_link_libraries(test_node ${catkin_LIBRARIES} ${OpenCV_LIBS})
 add_dependencies(test_node darknet_ros_msgs_gencpp)
 
