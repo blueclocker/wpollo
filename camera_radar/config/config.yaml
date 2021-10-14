@@ -6,11 +6,15 @@ camera:
   camera_width: 1920
   camera_height: 1200
 
-config_tf: [0.2, 2.0, 0.0, 1.5707963, 3.1415926, 0.0]
+config_tf: [-0.1, 1.0, 0.0, 1.46,0.052, -0.05]
 
-config_tf_long: [0.2, 2.0, 0.0, 1.5707963, 3.1415926, 0.0]
+config_tf_long: [0.2, 0.4, 0.0, 1.62, 0.1, -0.1]
 
-iou_key: 0.6
+iou_key: 0.2
 
-car_width: 2.0
-car_height: 1.8
+car_width: 500
+car_height: 500
+
+anchor:
+  scales: [32, 64, 128]
+  ratios: [0.5, 1.0, 2.0]

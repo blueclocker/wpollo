@@ -1,7 +1,7 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-08 19:22:26
- * @LastEditTime: 2021-10-11 09:25:36
+ * @LastEditTime: 2021-10-14 13:48:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/camera_radar/include/camera_radar/camera_radar.h
@@ -30,6 +30,8 @@
  * 
  *                               神兽保佑            永无BUG
  */
+#ifndef CAMERA_RADAR_H_
+#define CAMERA_RADAR_H_
 
 #include <iostream>
 #include <vector>
@@ -111,7 +113,11 @@ class CameraRadarCore
         //iou匹配阈值
         double IOU_KEY;
         //雷达框预定义大小
-        double CAR_WIDTH, CAR_HEIGHT;
+        int CAR_WIDTH, CAR_HEIGHT;
+        //锚框宽高比
+        std::vector<double> ratios;
+        //锚框基本尺寸
+        std::vector<int> scales;
         //内参矩阵
         Eigen::Matrix<double, 3, 3> camera_matrix;
         //外参矩阵
@@ -125,6 +131,8 @@ class CameraRadarCore
         ros::Publisher pub;
         //匹配结果保存于map,前一个int是bbox索引，后一个int是雷达ID索引
         std::unordered_map<int, int> matchmap;
+        //匹配结果保存，前一个三int三bbox索引，后一个cv::Rect是具体雷达框尺寸
+        std::unordered_map<int, cv::Rect> ioumap;
         //Header **暂时未用**
         std_msgs::Header ros_header;
         //订阅相机
@@ -138,7 +146,9 @@ class CameraRadarCore
         message_filters::Synchronizer<three_syncPolicy> *three_sync;
         //设置相机内参和外参
         bool set_param();
-        //雷达无效点初步去除,由雷达原始数据转换三维空间点及速度(1帧)
+        //对单个雷达点生成一组锚框
+        std::vector<cv::Rect> anchor_generate(const pixel_position anchor_in);
+        //雷达无效点初步去除
         std::vector<can_msgs::delphi_msg> radar_filter(const std::vector<can_msgs::delphi_msg> delphi_in);
         //单个雷达坐标点投影
         pixel_position position_transform(const geometry_msgs::Point in_3d);
@@ -154,8 +164,10 @@ class CameraRadarCore
         void knn_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_knn, const std::vector<radarinfo> radar_knn);
         //iou匹配
         void iou_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_iou, const std::vector<radarinfo> radar_iou);
-        //最近邻匹配
+        //匈牙利匹配
         void hung_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_hung, const std::vector<radarinfo> radar_hung);
+        //融合匹配程序
+        void total_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_total, const std::vector<radarinfo> radar_total);
         //有YOLO检测结果回调函数
         void three_Callback(const sensor_msgs::Image::ConstPtr &three_camera, 
                       const darknet_ros_msgs::BoundingBoxes::ConstPtr &three_bboxes,
@@ -175,3 +187,4 @@ class CameraRadarCore
         CameraRadarCore(ros::NodeHandle &nh);
         ~CameraRadarCore();
 };
+#endif
