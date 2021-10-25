@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   can_msgs
   socketcan_interface
   rosconsole_bridge
+  tf
 )
 
 ## System dependencies are found with CMake's conventions

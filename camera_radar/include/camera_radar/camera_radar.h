@@ -1,7 +1,7 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-08 19:22:26
- * @LastEditTime: 2021-10-14 13:48:45
+ * @LastEditTime: 2021-10-24 22:39:40
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/camera_radar/include/camera_radar/camera_radar.h
@@ -64,6 +64,9 @@
 #include <message_filters/synchronizer.h>
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
+#include <visualization_msgs/Marker.h>
+#include <visualization_msgs/MarkerArray.h>
+#include <tf/transform_broadcaster.h>
 
 #define pi 3.1415926
 //两传感器时间同步
@@ -112,8 +115,18 @@ class CameraRadarCore
         int WIDTH, HEIGHT;
         //iou匹配阈值
         double IOU_KEY;
-        //雷达框预定义大小
-        int CAR_WIDTH, CAR_HEIGHT;
+        //相机原始数据
+        std::string cameraTopicName;
+        int cameraTopicqueuesize;
+        //雷达原始数据
+        std::string radarTopicName;
+        int radarTopicqueuesize;
+        //检测程序原始数据
+        std::string detectionTopicName;
+        int detectionTopicqueuesize;
+        //融合结果发布话题
+        std::string camera_radarTopicName;
+        int camera_radarTopicqueuesize;
         //锚框宽高比
         std::vector<double> ratios;
         //锚框基本尺寸
@@ -122,10 +135,13 @@ class CameraRadarCore
         Eigen::Matrix<double, 3, 3> camera_matrix;
         //外参矩阵
         Eigen::Matrix<double, 4, 4> trans_matrix;
-        //远距外参矩阵
-        Eigen::Matrix<double, 4, 4> trans_matrix_long;
         //判断有无bbox
         bool bbox_flag = false;
+        //markerarray
+        visualization_msgs::MarkerArray msg_markerarray;
+        std::vector<visualization_msgs::Marker> msg_marks;
+        ros::Publisher pub_mark;
+        //ros句柄
         ros::NodeHandle nh;
         //融合结果发布器
         ros::Publisher pub;
@@ -144,8 +160,8 @@ class CameraRadarCore
         //ROS时间同步
         message_filters::Synchronizer<two_syncPolicy> *two_sync;
         message_filters::Synchronizer<three_syncPolicy> *three_sync;
-        //设置相机内参和外参
-        bool set_param();
+        //设置参数
+        bool set_param(ros::NodeHandle &nh_param);
         //对单个雷达点生成一组锚框
         std::vector<cv::Rect> anchor_generate(const pixel_position anchor_in);
         //雷达无效点初步去除
@@ -156,6 +172,8 @@ class CameraRadarCore
         geometry_msgs::Point polar_xy(const can_msgs::delphi_msg polar_xy_in);
         //空间同步函数，滤除雷达无效点后投影到像素坐标系
         std::vector<radarinfo> space_ok(const std::vector<can_msgs::delphi_msg> space_in_);
+        //小孔成像求物体实际大小
+        double measurement_width(const double range_mea, const darknet_ros_msgs::BoundingBox bbox_mea);
         //IOU计算
         double IOU(const cv::Rect &r1, const cv::Rect &r2);
         //图像坐标系两点之间欧式距离计算

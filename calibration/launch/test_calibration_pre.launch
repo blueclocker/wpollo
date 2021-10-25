@@ -9,6 +9,7 @@
   </include-->
   <node pkg="calibration" type="radar_calibration" name="radar_calibration" output="screen"/>
     <rosparam file="$(find calibration)/config/camera.yaml"/>
-  <node pkg="rosbag" type="play" name="play" args="-l /home/wangpeng/2021-10-09-16-12-47.bag"/>
+  <node pkg="tf" type="static_transform_publisher" name="radar_camera" args="-0.3 0.8 0.0 0.024 -0.06 1.48 pitch_camera delphi 100" />
+  <node pkg="rosbag" type="play" name="play" args="-l /home/wangpeng/2021-10-14-15-44-22.bag"/>
   <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view"/>
 </launch>

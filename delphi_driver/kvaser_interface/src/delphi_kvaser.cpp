@@ -1,6 +1,6 @@
-#include<delphi/delphi.h>
+#include "kvaser_interface/delphi_kvaser.h"
 
-void Callback(const can_msgs::Frame::ConstPtr &msg)
+void DelphiKvaser::Callback(const can_msgs::Frame::ConstPtr &msg)
 {
     float id, range, angle, rate, status, width, yaw_rate, vehicle_speed, moving, moving_fast, moving_slow, db, j;
     //std::vector<int> move;
@@ -195,24 +195,15 @@ void Callback(const can_msgs::Frame::ConstPtr &msg)
     broadcaster.sendTransform(tf::StampedTransform(base2radar,ros::Time::now(),"base_link","delphi"));
 }
 
-int main(int argc, char **argv)
+DelphiKvaser::DelphiKvaser(ros::NodeHandle &nh_)
 {
-    // 初始化ROS节点
-    ros::init(argc, argv, "delphi");
-    // 创建节点句柄
-    ros::NodeHandle nh("~");
-    //tf::TransformBroadcaster broadcaster;
-    //tf::Transform base2radar;
-    //tf::Quaternion q;
-    //q.setRPY(0,0,M_PI);
-    //base2radar.setRotation(q);
-    //base2radar.setOrigin(tf::Vector3(2.4,0,0));
-    //broadcaster.sendTransform(tf::StampedTransform(base2radar,ros::Time::now(),"base_link","delphi"));
-
-    ros::Subscriber sub = nh.subscribe("/can_tx", 10, Callback);
-    pub = nh.advertise<can_msgs::delphi_msges>("delphi_esr", 10); //发布雷达消息
-    pub_mark = nh.advertise<visualization_msgs::MarkerArray>("delphi_marker", 10); //发布雷达消息
-    //ros::Rate loop_rate(1);
+    ros::Subscriber sub = nh_.subscribe("/can_tx", 10, &DelphiKvaser::Callback, this);
+    pub = nh_.advertise<can_msgs::delphi_msges>("delphi_esr", 10); //发布雷达消息
+    pub_mark = nh_.advertise<visualization_msgs::MarkerArray>("delphi_marker", 10); //发布雷达消息
     ros::spin();
-    return 0;
 }
+
+DelphiKvaser::~DelphiKvaser()
+{
+}
+

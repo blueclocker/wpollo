@@ -1,7 +1,7 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-08 19:27:18
- * @LastEditTime: 2021-10-14 14:33:16
+ * @LastEditTime: 2021-10-25 16:55:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/camera_radar/src/camera_radar.cpp
@@ -13,23 +13,24 @@
 CameraRadarCore::CameraRadarCore(ros::NodeHandle &nh_ws)
 {
     //设置参数
-    if(set_param())
+    if(set_param(nh_ws))
     {
         ROS_INFO("param set finished!");
     }
     //ROS_INFO("car_width = %d", CAR_WIDTH);
     //ROS_INFO("anchor scales = %.2f", ratios[1]);
     //定义发布器
-    pub = nh_ws.advertise<sensor_msgs::Image>("fusion_image", 100);
+    pub = nh_ws.advertise<sensor_msgs::Image>(camera_radarTopicName, camera_radarTopicqueuesize);
+    pub_mark = nh_ws.advertise<visualization_msgs::MarkerArray>("delphi_marker", 10); //发布雷达消息
     //时间融合
     sub_camera = new message_filters::Subscriber<sensor_msgs::Image>(
-        nh, "/galaxy_camera/image_raw", 1, ros::TransportHints().tcpNoDelay()
+        nh, cameraTopicName, cameraTopicqueuesize, ros::TransportHints().tcpNoDelay()
     );
     sub_bboxes = new message_filters::Subscriber<darknet_ros_msgs::BoundingBoxes>(
-        nh, "/darknet_ros/bounding_boxes", 1, ros::TransportHints().tcpNoDelay()
+        nh, detectionTopicName, detectionTopicqueuesize, ros::TransportHints().tcpNoDelay()
     );
     sub_radar  = new message_filters::Subscriber<can_msgs::delphi_msges>(
-        nh, "/delphi_0/delphi_esr", 1, ros::TransportHints().tcpNoDelay()
+        nh, radarTopicName, radarTopicqueuesize, ros::TransportHints().tcpNoDelay()
     );
     two_sync = new message_filters::Synchronizer<two_syncPolicy>(
         two_syncPolicy(10), *sub_camera, *sub_radar
@@ -56,12 +57,12 @@ CameraRadarCore::~CameraRadarCore()
     delete three_sync;
 }
 
-bool CameraRadarCore::set_param()
+bool CameraRadarCore::set_param(ros::NodeHandle &nh_param)
 {
     XmlRpc::XmlRpcValue camera_param, tf_param, scales_, ratios_;
     bool tf_flag = false, camera_flag = false, anchor_flag = false;
     //读取anchor参数
-    if(!nh.getParam("anchor/scales", scales_))
+    if(!nh_param.getParam("match/anchor/scales", scales_))
     {
         ROS_ERROR("Failed to get anchor scales from server.");
     }else{
@@ -72,7 +73,7 @@ bool CameraRadarCore::set_param()
         }
         anchor_flag = true;
     }
-    if(!nh.getParam("anchor/ratios", ratios_))
+    if(!nh_param.getParam("match/anchor/ratios", ratios_))
     {
         ROS_ERROR("Failed to get anchor ratios from server.");
     }else{
@@ -86,7 +87,7 @@ bool CameraRadarCore::set_param()
     //世界坐标变换参数，平移x,y,z;旋转x,y,z(rad)
     Eigen::Matrix<double, 6, 1> tf_6d;
     //读取yaml tf_6d参数
-    if(!nh.getParam("config_tf", tf_param))
+    if(!nh_param.getParam("camera/config_tf", tf_param))
     {
         ROS_ERROR("Failed to get tf parameter from server.");
     }else{
@@ -97,21 +98,8 @@ bool CameraRadarCore::set_param()
         }
         tf_flag = true;
     }
-    //tf_6d << 0, 0, 0, pi/2, pi, 0;
-    //读取yaml tf_6d_long参数
-    /*if(!nh.getParam("config_tf_long", tf_long_param))
-    {
-        ROS_ERROR("Failed to get tf_long parameter from server.");
-    }else{
-        for (int i = 0; i < tf_long_param.size(); i++)
-        {
-            tf_6d_long(i) = (double)tf_long_param[i];
-            //ROS_INFO("tf_6d[%d]=%f", i, tf_6d(i));
-        }
-        tf_long_flag = true;
-    }*/
     //读取yaml camera_martxia参数
-    if(!nh.getParam("camera/config_camera", camera_param))
+    if(!nh_param.getParam("camera/config_camera", camera_param))
     {
         ROS_ERROR("Failed to get camera parameter from server.");
     }else{
@@ -157,39 +145,19 @@ bool CameraRadarCore::set_param()
     //变换矩阵,平移和旋转
     //Eigen::Matrix<double, 4, 4> trans_matrix;
     trans_matrix = move * twist_x * twist_y * twist_z;
-    /*tf_long
-    move << 1.0, 0.0, 0.0, tf_6d_long(0),
-            0.0, 1.0, 0.0, tf_6d_long(1),
-            0.0, 0.0, 1.0, tf_6d_long(2),
-            0.0, 0.0, 0.0, 1.0;
-    //x旋转矩阵
-    x_ = tf_6d_long(3);
-    twist_x << 1.0, 0.0, 0.0, 0.0,
-               0.0, std::cos(x_), -std::sin(x_), 0.0,
-               0.0, std::sin(x_), std::cos(x_), 0.0,
-               0.0, 0.0, 0.0, 1.0;
-    //y旋转矩阵
-    y_ = tf_6d_long(4);
-    twist_y << std::cos(y_), 0.0, std::sin(y_), 0.0,
-               0.0, 1.0, 0.0, 0.0,
-               -std::sin(y_), 0.0, std::cos(y_), 0.0,
-               0.0, 0.0, 0.0, 1.0;
-    //z旋转矩阵
-    z_ = tf_6d_long(5);
-    twist_z << std::cos(z_), -std::sin(z_), 0.0, 0.0,
-               std::sin(z_), std::cos(z_), 0.0, 0.0,
-               0.0, 0.0, 1.0, 0.0,
-               0.0, 0.0, 0.0, 1.0;*/
-    //变换矩阵,平移和旋转
-    //Eigen::Matrix<double, 4, 4> trans_matrix;
-    //trans_matrix_long = move * twist_x * twist_y * twist_z;
     if(tf_flag && camera_flag && anchor_flag)
     {
-        nh.param<int>("camera/camera_width", WIDTH, 1920);
-        nh.param<int>("camera/camera_height", HEIGHT, 1200);
-        nh.param<double>("iou_key", IOU_KEY, 0.6);
-        nh.param<int>("car_width", CAR_WIDTH, 50);
-        nh.param<int>("car_height", CAR_HEIGHT, 50);
+        nh_param.param<int>("camera/camera_width", WIDTH, 1920);
+        nh_param.param<int>("camera/camera_height", HEIGHT, 1200);
+        nh_param.param<double>("match/iou_key", IOU_KEY, 0.6);
+        nh_param.param<std::string>("subscribers/camera_reading/topic", cameraTopicName, std::string("/galaxy_camera/image_raw"));
+        nh_param.param<int>("subscribers/camera_reading/queue_size", cameraTopicqueuesize, 1);
+        nh_param.param<std::string>("subscribers/radar_reading/topic", radarTopicName, std::string("/delphi_0/delphi_esr"));
+        nh_param.param<int>("subscribers/radar_reading/queue_size", radarTopicqueuesize, 1);
+        nh_param.param<std::string>("subscribers/detection/topic", detectionTopicName, std::string("/darknet_ros/bounding_boxes"));
+        nh_param.param<int>("subscribers/detection/queue_size", detectionTopicqueuesize, 1);
+        nh_param.param<std::string>("publishers/camera_radar/topic", camera_radarTopicName, std::string("fusion_image"));
+        nh_param.param<int>("publishers/camera_radar/queue_size", camera_radarTopicqueuesize, 100);
         return true;
     }else{
         return false;
@@ -206,7 +174,16 @@ std::vector<cv::Rect> CameraRadarCore::anchor_generate(const pixel_position anch
             int anchor_h, anchor_w;
             anchor_w = (int)std::sqrt(scales[i] * scales[i] * ratios[j]);
             anchor_h = (int)anchor_w / ratios[j];
-            cv::Rect rect_single(anchor_in.x - anchor_w/2, anchor_in.y - anchor_h/2, anchor_w, anchor_h);
+            int left_a, top_a, right_a, bot_a;
+            left_a = anchor_in.x - anchor_w/2;
+            right_a = anchor_in.x + anchor_w/2;
+            top_a = anchor_in.y - anchor_h/2;
+            bot_a = anchor_in.y + anchor_h/2;
+            if(left_a < 0) left_a = 0;
+            if(right_a > WIDTH - 1) right_a = WIDTH -1;
+            if(top_a < 0) top_a = 0;
+            if(bot_a > HEIGHT - 1) bot_a = HEIGHT - 1;
+            cv::Rect rect_single(left_a, top_a, right_a - left_a, bot_a - top_a);
             anchor_out.push_back(rect_single);
         }
     }
@@ -218,7 +195,8 @@ std::vector<can_msgs::delphi_msg> CameraRadarCore::radar_filter(const std::vecto
     std::vector<can_msgs::delphi_msg> radar_filter_output;
     for(int i = 0; i < delphi_in.size(); i++)
     {
-        if(delphi_in[i].range < 1 || delphi_in[i].range > 120)
+        //滤波
+        if(delphi_in[i].range < 1 || delphi_in[i].range > 60)
         {
             continue;
         }else{
@@ -281,6 +259,13 @@ std::vector<radarinfo> CameraRadarCore::space_ok(const std::vector<can_msgs::del
     return radarinfo_out;
 }
 
+double CameraRadarCore::measurement_width(const double range_mea, const darknet_ros_msgs::BoundingBox bbox_mea)
+{
+    double f = 25.0;//焦距25mm
+    double p = 5.86 * 0.001;//像素尺寸mm/pixel
+    return p * (bbox_mea.xmax - bbox_mea.xmin) / f * range_mea;
+}
+
 double CameraRadarCore::IOU(const cv::Rect &r1, const cv::Rect &r2)
 {
     cv::Rect N = r1 | r2;
@@ -315,14 +300,14 @@ void CameraRadarCore::knn_match(const std::vector<darknet_ros_msgs::BoundingBox>
         {
             if(radar_knn_in[k].pxy.x == -1){continue;}
             double dis_temp;
-            dis_temp = distance(bbox_knn_in[j], radar_knn_in[k].pxy);
+            dis_temp = distance(bbox_knn_in[j], radar_knn_in[k].pxy)/(bbox_knn[j].xmax-bbox_knn[j].xmin);
             if(dis_temp < dis)
             {
                 dis = dis_temp;
                 radar_mark = k;
             }
         }
-        if(dis < 100)
+        if(dis < 1)
         {
             //保存匹配关系
             matchmap.insert(std::pair<int, int>(j, radar_mark));
@@ -334,7 +319,7 @@ void CameraRadarCore::knn_match(const std::vector<darknet_ros_msgs::BoundingBox>
     }
 }
 
-//仅使用50x50定大小框用作雷达检测框
+//使用一组锚框用作雷达检测框
 void CameraRadarCore::iou_match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_iou, 
                                 const std::vector<radarinfo> radar_iou)
 {
@@ -571,28 +556,57 @@ void CameraRadarCore::draw_picture(const sensor_msgs::Image::ConstPtr &msg_in,
         for(std::unordered_map<int,int>::iterator it = matchmap.begin(); it != matchmap.end(); it++)
         {
             //ROS_INFO("yolo %dbbox matched!", it->first);
+            //雷达点
             cv::circle(cv_ptr->image, cv::Point(delphi_point_in[it->second].pxy.x, 
                         delphi_point_in[it->second].pxy.y), 8, CV_RGB(0,0,255), -1);
             cv::Rect rect_in(b_in[it->first].xmin, b_in[it->first].ymin, 
                              b_in[it->first].xmax-b_in[it->first].xmin, b_in[it->first].ymax-b_in[it->first].ymin);
             char str[16];
-            sprintf(str, "%s %.2f", b_in[it->first].Class.c_str(), delphi_point_in[it->second].pspeed);
+            //标签
+            sprintf(str, "%s %.2f", b_in[it->first].Class.c_str(), delphi_point_in[it->second].prange);
+            //sprintf(str, "%s %.2f", b_in[it->first].Class.c_str(), 
+                    //measurement_width(delphi_point_in[it->second].prange, b_in[it->first]));
             cv::putText(cv_ptr->image, str, cv::Point(b_in[it->first].xmin, b_in[it->first].ymin+40), 
                         cv::FONT_HERSHEY_TRIPLEX, 1, CV_RGB(255,0,0), 2); //cv::Scalar(b, g, r)
             //视觉检测框
             cv::rectangle(cv_ptr->image, rect_in, CV_RGB(255,0,0), 4, cv::LINE_8, 0);
-            //雷达50x50框 蓝色
-            //cv::rectangle(cv_ptr->image, cv::Rect(delphi_point_in[it->second].pxy.x, 
-            //            delphi_point_in[it->second].pxy.y - CAR_HEIGHT, CAR_WIDTH, CAR_HEIGHT), CV_RGB(0,0,255), 4, cv::LINE_8, 0);
+            //雷达框 蓝色
             cv::rectangle(cv_ptr->image, cv::Rect(ioumap[it->first]), CV_RGB(0,0,255), 4, cv::LINE_8, 0);
             draw_bbox_flag[it->first] = true;
             draw_radar_flag[it->second] = true;
+            //publish markerarray
+            /*visualization_msgs::Marker msg_marker;
+            msg_marker.header = msg_in -> header;
+            msg_marker.header.frame_id = "delphi";
+            msg_marker.id = it->second;
+            msg_marker.type = visualization_msgs::Marker::CUBE;
+            msg_marker.action = visualization_msgs::Marker::ADD;
+            msg_marker.pose.position.x = delphi_point_in[it->second].pxy.x + 2.4;
+            msg_marker.pose.position.y = - delphi_point_in[it->second].pxy.y;
+            msg_marker.pose.position.z = 0;
+            msg_marker.pose.orientation.x = 0;
+            msg_marker.pose.orientation.y = 0;
+            msg_marker.pose.orientation.z = 0;
+            msg_marker.pose.orientation.w = 1;
+            msg_marker.scale.x = 0.25;//width,m
+            msg_marker.scale.y = 0.25;//length,m
+            msg_marker.scale.z = 2;//height,m
+            msg_marker.color.r = 0;
+            msg_marker.color.g = 1;
+            msg_marker.color.b = 0;
+            msg_marker.color.a = 0.5;
+            msg_marker.lifetime = ros::Duration(0);
+            msg_marks.push_back(msg_marker);*/
+            //break;
         }
+        //msg_markerarray.markers = msg_marks;
+        //pub_mark.publish(msg_markerarray);
+        //msg_marks.clear();
         matchmap.clear();
         ioumap.clear();
     }
     //显示剩余yolo检测框
-    for(int j = 0; j < b_in.size(); j++)
+    /*for(int j = 0; j < b_in.size(); j++)
     {
         if(!draw_bbox_flag[j])
         {
@@ -611,8 +625,12 @@ void CameraRadarCore::draw_picture(const sensor_msgs::Image::ConstPtr &msg_in,
         {
             cv::circle(cv_ptr->image, cv::Point(delphi_point_in[j].pxy.x, 
                         delphi_point_in[j].pxy.y), 8, CV_RGB(255,255,255), -1);
+            char str[16];
+            sprintf(str, "%.2f", delphi_point_in[j].prange);
+            cv::putText(cv_ptr->image, str, cv::Point(delphi_point_in[j].pxy.x, delphi_point_in[j].pxy.y), 
+                        cv::FONT_HERSHEY_TRIPLEX, 1, CV_RGB(255,255,255), 2); //cv::Scalar(b, g, r)
         }
-    }
+    }*/
     sensor_msgs::ImagePtr msg_ = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
     pub.publish(*msg_);
 }

@@ -7,6 +7,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   can_msgs
   roslint
+  tf
+  can_msgs
+  std_msgs
 )
 
 catkin_package(
@@ -53,6 +56,10 @@ add_executable(list_channels
 target_link_libraries(list_channels
   ros_${PROJECT_NAME}
 )
+
+add_executable(delphi_kvaser_node src/delphi_kvaser_node.cpp src/delphi_kvaser.cpp)
+target_link_libraries(delphi_kvaser_node ${catkin_LIBRARIES})
+add_dependencies(delphi_kvaser_node can_msgs_gencpp)
 
 set(ROSLINT_CPP_OPTS "--filter=-runtime/threadsafe_fn,-build/namespaces,-build/c++11")
 roslint_cpp()

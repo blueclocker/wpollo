@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <launch>
+  <!-- ROS parameter files -->
+  <arg name="param_file" default="$(find camera_radar)/config/config.yaml"/>
+
+  <!-- Load parameters -->
+  <rosparam command="load" ns="camera_radar_node" file="$(arg param_file)"/>
+
+  <!-- Start and ros wrapper -->
   <node pkg="camera_radar" type="camera_radar_node" name="camera_radar_node" output="screen"/>
-    <rosparam file="$(find camera_radar)/config/config.yaml"/>
+
 </launch>

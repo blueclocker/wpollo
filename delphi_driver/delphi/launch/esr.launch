@@ -4,4 +4,6 @@
   <!-- socketcan_bridge_node >
   <node pkg="delphi" type="delphi_node" name="delphi_node" output="screen"/-->
   <node pkg="delphi" type="person_subscriber" name="delphi_0" output="screen"/>
+  <param name="use_sim_time" value="true" />
+  <!--node pkg="tf" type="static_transform_publisher" name="base_link_to_radar" args="2.4 0 0 0 0 3.1415926 /base_link /delphi 100" /-->
 </launch>

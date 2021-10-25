@@ -70,7 +70,7 @@ void HungarianAlgorithm::assignmentoptimal(int *assignment, double *cost, double
 	/* check if all matrix elements are positive */
 	nOfElements = nOfRows * nOfColumns;
 	distMatrix = (double *)malloc(nOfElements * sizeof(double));
-	distMatrixEnd = distMatrix + nOfElements;
+	distMatrixEnd = distMatrix + nOfElements;//distMatrix最后一个元素地址
 
 	for (row = 0; row<nOfElements; row++)
 	{
@@ -96,10 +96,11 @@ void HungarianAlgorithm::assignmentoptimal(int *assignment, double *cost, double
 		for (row = 0; row<nOfRows; row++)
 		{
 			/* find the smallest element in the row */
-			distMatrixTemp = distMatrix + row;
+			//寻找每一行最小值
+			distMatrixTemp = distMatrix + row;//地址运算
 			minValue = *distMatrixTemp;
-			distMatrixTemp += nOfRows;
-			while (distMatrixTemp < distMatrixEnd)
+			distMatrixTemp += nOfRows;//跳过该行
+			while (distMatrixTemp < distMatrixEnd)//搜索全部distMatrix
 			{
 				value = *distMatrixTemp;
 				if (value < minValue)
@@ -108,6 +109,7 @@ void HungarianAlgorithm::assignmentoptimal(int *assignment, double *cost, double
 			}
 
 			/* subtract the smallest element from each element of the row */
+			//对每一行减去该行最小值
 			distMatrixTemp = distMatrix + row;
 			while (distMatrixTemp < distMatrixEnd)
 			{
@@ -117,9 +119,10 @@ void HungarianAlgorithm::assignmentoptimal(int *assignment, double *cost, double
 		}
 
 		/* Steps 1 and 2a */
+		//标记0元素所在行及具体位置
 		for (row = 0; row<nOfRows; row++)
 			for (col = 0; col<nOfColumns; col++)
-				if (fabs(distMatrix[row + nOfRows*col]) < DBL_EPSILON)
+				if (fabs(distMatrix[row + nOfRows*col]) < DBL_EPSILON)//双精度浮点数比较，DBL_EPSILON接近0的极小值
 					if (!coveredColumns[col])
 					{
 						starMatrix[row + nOfRows*col] = true;
@@ -368,6 +371,7 @@ void HungarianAlgorithm::step5(int *assignment, double *distMatrix, bool *starMa
 
 	/* find smallest uncovered element h */
 	h = DBL_MAX;
+	//找最小元素h
 	for (row = 0; row<nOfRows; row++)
 		if (!coveredRows[row])
 			for (col = 0; col<nOfColumns; col++)
@@ -379,11 +383,13 @@ void HungarianAlgorithm::step5(int *assignment, double *distMatrix, bool *starMa
 				}
 
 	/* add h to each covered row */
+	//对有标记的行加上最小值h
 	for (row = 0; row<nOfRows; row++)
 		if (coveredRows[row])
 			for (col = 0; col<nOfColumns; col++)
 				distMatrix[row + nOfRows*col] += h;
 
+	//对无标记的列减去最小值h
 	/* subtract h from each uncovered column */
 	for (col = 0; col<nOfColumns; col++)
 		if (!coveredColumns[col])

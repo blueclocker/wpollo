@@ -20,4 +20,5 @@
 
   <depend>roscpp</depend>
   <depend>can_msgs</depend>
+  <depend>std_msgs</depend>
 </package>

@@ -9,4 +9,5 @@
   <include file="$(find kvaser_interface)/launch/kvaser_can_bridge.launch"/>
   <node pkg="calibration" type="radar_calibration" name="radar_calibration" output="screen"/>
     <rosparam file="$(find calibration)/config/camera.yaml"/>
+  <node pkg="tf" type="static_transform_publisher" name="radar_camera" args="-0.3 0.8 0.0 0.024 -0.06 1.48 pitch_camera delphi 100" />
 </launch>
