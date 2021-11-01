@@ -2,4 +2,6 @@
 
 <launch>
   <node pkg="test" type="test_node" name="test_node" output="screen"/>
+  <node pkg="rosbag" type="play" name="play" args="-l --clock /home/wangpeng/2021-10-14-15-44-22.bag"/>
+  <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view"/>
 </launch>

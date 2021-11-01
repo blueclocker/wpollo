@@ -4,10 +4,15 @@
   <!-- ROS parameter files -->
   <arg name="param_file" default="$(find camera_radar)/config/config.yaml"/>
 
+  <!--ros clock setup, run rosbag value=true, run code value=false-->
+  <param name="use_sim_time" value="true"/>
+
   <!-- Load parameters -->
   <rosparam command="load" ns="camera_radar_node" file="$(arg param_file)"/>
 
   <!-- Start and ros wrapper -->
   <node pkg="camera_radar" type="camera_radar_node" name="camera_radar_node" output="screen"/>
 
+  <!-- args="X Y Z yaw(B) pitch(G) roll(R) /father /son 100" -->
+  <node pkg="tf" type="static_transform_publisher" name="map_to_delphi_markerarray" args="0 2.4 0 0 0 0 /map /delphi_markerarray 100" />
 </launch>

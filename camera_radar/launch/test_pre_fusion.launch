@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <launch>
-  <node pkg="rosbag" type="play" name="play" args="-l $(find calibration)/bag/2021-09-29-18-53-05.bag"/>
-  <!-- YOLO >
-  <include file="$(find darknet_ros)/launch/darknet_ros.launch">
-  </include-->
-  <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view"/>
+  <!-- ROS parameter files -->
+  <arg name="param_file" default="$(find camera_radar)/config/config.yaml"/>
+
+  <!--ros clock setup, run rosbag value=true, run code value=false-->
+  <param name="use_sim_time" value="true"/>
+  <node pkg="rosbag" type="play" name="play" args="-l --clock /home/wangpeng/2021-10-14-15-44-22.bag"/>
+
+  <!-- Load parameters -->
+  <rosparam command="load" ns="camera_radar_node" file="$(arg param_file)"/>
+
+  <!-- Start and ros wrapper -->
+  <node pkg="camera_radar" type="camera_radar_node" name="camera_radar_node" output="screen"/>
+
+  <!-- args="X Y Z yaw(B) pitch(G) roll(R) /father /son 100" -->
+  <node pkg="tf" type="static_transform_publisher" name="map_to_delphi_markerarray" args="0 2.4 0 0 0 0 /map /delphi_markerarray 100" />
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find camera_radar)/config/rvizconfig.rviz"/>
 </launch>

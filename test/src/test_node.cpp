@@ -87,13 +87,13 @@ double distance(const pixel_position pos_a, const pixel_position pos_b)
                      (pos_a.y - pos_b.y) * (pos_a.y - pos_b.y));
 }
 
-void match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_hung)
+void match(const std::vector<darknet_ros_msgs::BoundingBox> *bbox_hung)
 {
     ROS_INFO("hung matching ...");
     //第一有效帧处理
     if(first_frame)
     {
-        for(int i = 0; i < bbox_hung.size(); i++)
+        for(int i = 0; i < bbox_hung->size(); i++)
         {
             obj_ID.push_back(i);
             max_number = i;
@@ -104,11 +104,11 @@ void match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_hung)
     }
     //ROS_INFO("bbox_hung size = %d", bbox_hung.size());
     std::vector<pixel_position> bbox_hung_in;
-    for (int i = 0; i < bbox_hung.size(); i++)
+    for (int i = 0; i < bbox_hung->size(); i++)
     {
         pixel_position temp;
-        temp.x = (int)((bbox_hung[i].xmin + bbox_hung[i].xmax) / 2);
-        temp.y = (int)((bbox_hung[i].ymin + bbox_hung[i].ymax) / 2);
+        temp.x = (int)((bbox_hung->at(i).xmin + bbox_hung->at(i).xmax) / 2);
+        temp.y = (int)((bbox_hung->at(i).ymin + bbox_hung->at(i).ymax) / 2);
         bbox_hung_in.push_back(temp);
     }
     HungarianAlgorithm HungAlgo;
@@ -131,23 +131,23 @@ void match(const std::vector<darknet_ros_msgs::BoundingBox> bbox_hung)
         obj_ID.resize(assignment.size());
         for (int x = 0; x < costMatrix.size(); x++)
         {
-            ROS_INFO("assignment[%d] = %d", x, assignment[x]);
+            //ROS_INFO("assignment[%d] = %d", x, assignment[x]);
             if(assignment[x] != -1)//匹配成功
             {
                 if(costMatrix[x][assignment[x]] <= 100)//距离约束
                 {
                     obj_ID[x] = temp_ID[assignment[x]];
-                    ROS_INFO("true!");
+                    //ROS_INFO("true!");
                 }else{//超出匹配约束
                     cost -= costMatrix[x][assignment[x]];
                     obj_ID[x] = max_number;
                     ++max_number;
-                    ROS_INFO("false!");
+                    //ROS_INFO("false!");
                 }
             }else{//匹配失败
                 obj_ID[x] = max_number;
                 ++max_number;
-                ROS_INFO("false");
+                //ROS_INFO("false");
             }
         }
         ROS_INFO("cost = %f", cost);
@@ -170,7 +170,7 @@ void callback(const sensor_msgs::Image::ConstPtr &msg,
     cv_bridge::CvImagePtr cv_ptr;
     cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
     darknet_ros_msgs::BoundingBox bbox;
-    match(msg_bboxes->bounding_boxes);
+    match(&msg_bboxes->bounding_boxes);
     for (int i = 0; i < (msg_bboxes->bounding_boxes).size(); i++)
     {
         bbox = msg_bboxes->bounding_boxes[i];
@@ -200,7 +200,7 @@ void cameracallback(const sensor_msgs::Image::ConstPtr &msg)
         last_frame.clear();
         ROS_INFO("camera only!");
     }
-    ROS_INFO("in cameracallback!");
+    //ROS_INFO("in cameracallback!");
     flag = false;
     //last_frame.clear();
 }

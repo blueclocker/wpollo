@@ -49,6 +49,16 @@ rosbag record -a -x "(.*)/compressed(.*)"
 ##### 20211025
 
 >封装kvaser_interface
+
 >新增单目测距
+
 >改进融合包config.yaml，实现topic动态配置
+
 >anchor_generate新增越界保护功能
+
+#####20211101
+
+>函数接口优化
+
+>匹配策略混合使用
+
