@@ -1,7 +1,7 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-08 19:27:18
- * @LastEditTime: 2021-10-31 22:44:41
+ * @LastEditTime: 2021-11-04 21:33:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/camera_radar/src/camera_radar.cpp
@@ -46,6 +46,11 @@ CameraRadarCore::CameraRadarCore(ros::NodeHandle &nh_ws)
     ros::AsyncSpinner spinner(2); // Use 2 threads
     spinner.start();
     ros::waitForShutdown();
+    //在ROS中使用C++多线程，能用但不明白
+    //boost::thread th1(&CameraRadarCore::thread_three_callback, this);
+    //boost::thread th2(&CameraRadarCore::thread_two_callback, this);
+    //th1.join();
+    //th2.join();
     //ros::spin();
 }
 
@@ -56,6 +61,18 @@ CameraRadarCore::~CameraRadarCore()
     delete sub_radar;
     delete two_sync;
     delete three_sync;
+}
+
+void CameraRadarCore::thread_two_callback()
+{
+    //boost::mutex::scoped_lock lock(mut);
+    two_sync->registerCallback(boost::bind(&CameraRadarCore::two_Callback, this, _1, _2));
+}
+
+void CameraRadarCore::thread_three_callback()
+{
+    //boost::mutex::scoped_lock lock(mut);
+    three_sync->registerCallback(boost::bind(&CameraRadarCore::three_Callback, this, _1, _2, _3));
 }
 
 bool CameraRadarCore::set_param(ros::NodeHandle &nh_param)
@@ -97,6 +114,9 @@ bool CameraRadarCore::set_param(ros::NodeHandle &nh_param)
             tf_6d(i) = (double)tf_param[i];
             //ROS_INFO("tf_6d[%d]=%f", i, tf_6d(i));
         }
+        q.setRPY(tf_6d(3), tf_6d(4), tf_6d(5));
+        radar2camera.setRotation(q);
+        radar2camera.setOrigin(tf::Vector3(tf_6d(0), tf_6d(1), tf_6d(2)));
         tf_flag = true;
     }
     //读取yaml camera_martxia参数
@@ -554,23 +574,23 @@ visualization_msgs::Marker CameraRadarCore::pub_markerarray(const int id_pub ,co
     msg_marker.header = ros_header;
     msg_marker.header.frame_id = "delphi_markerarray";
     msg_marker.id = id_pub;
-    //msg_marker.type = visualization_msgs::Marker::CUBE;
-    msg_marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+    msg_marker.type = visualization_msgs::Marker::CUBE;
+    //msg_marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
     msg_marker.action = visualization_msgs::Marker::ADD;
     msg_marker.pose.position = delphi_pub.ppoint;
     msg_marker.pose.orientation.x = 0.0;
     msg_marker.pose.orientation.y = 0.0;
     msg_marker.pose.orientation.z = 0.0;
     msg_marker.pose.orientation.w = 1.0;
-    //msg_marker.scale.x = 2.0;//width,m
-    //msg_marker.scale.y = 4.0;//length,m
+    msg_marker.scale.x = 2.0;//width,m
+    msg_marker.scale.y = 4.0;//length,m
     msg_marker.scale.z = 0.5;//height,m
     msg_marker.color.r = 0.0;
     msg_marker.color.g = 1.0;
     msg_marker.color.b = 0.0;
     msg_marker.color.a = 0.5;
     msg_marker.text = text_pub;
-    msg_marker.lifetime = ros::Duration(0);
+    msg_marker.lifetime = ros::Duration(1);
     return msg_marker;
 }
 
@@ -599,8 +619,10 @@ void CameraRadarCore::two_Callback(const sensor_msgs::Image::ConstPtr &two_img,
     cv::Rect rect(50, 50, 200, 200);
     draw_picture(msg, rect);
     ROS_INFO("only camera!");*/
+    boost::mutex::scoped_lock lock(mut);
     if(!bbox_flag)
     {
+        broadcaster.sendTransform(tf::StampedTransform(radar2camera,ros::Time::now(),"camera","delphi_markerarray"));
         std::vector<can_msgs::delphi_msg> two_delphi_ = two_radar -> delphi_msges;
         //雷达无效点滤波与雷达信息转换radarinfo
         std::vector<radarinfo> two_radar_point;
@@ -609,6 +631,7 @@ void CameraRadarCore::two_Callback(const sensor_msgs::Image::ConstPtr &two_img,
         draw_picture(two_img, two_radar_point);
         ROS_INFO("only radar!");
     }
+    //ROS_INFO("in only radar!");
     bbox_flag = false;
 }
 
@@ -617,7 +640,9 @@ void CameraRadarCore::three_Callback(const sensor_msgs::Image::ConstPtr &three_c
                     const darknet_ros_msgs::BoundingBoxes::ConstPtr &three_bboxes,
                     const can_msgs::delphi_msges::ConstPtr &three_radar)
 {
+    boost::mutex::scoped_lock lock(mut);
     ros_header = three_camera->header;
+    broadcaster.sendTransform(tf::StampedTransform(radar2camera,ros::Time::now(),"camera","delphi_markerarray"));
     //雷达输入二维极坐标
     std::vector<darknet_ros_msgs::BoundingBox> three_bboxes_ = three_bboxes -> bounding_boxes;
     std::vector<can_msgs::delphi_msg> three_delphi_ = three_radar -> delphi_msges;
@@ -674,7 +699,6 @@ void CameraRadarCore::draw_picture(const sensor_msgs::Image::ConstPtr &msg_in,
     if(!matchmap.empty())
     {
         int id_count = 0;
-        msg_marks.clear();
         for(std::unordered_map<int,int>::iterator it = matchmap.begin(); it != matchmap.end(); it++)
         {
             //ROS_INFO("yolo %dbbox matched!", it->first);
@@ -711,12 +735,12 @@ void CameraRadarCore::draw_picture(const sensor_msgs::Image::ConstPtr &msg_in,
         }
         msg_markerarray.markers = msg_marks;
         pub_mark.publish(msg_markerarray);
-        //msg_marks.clear();
+        msg_marks.clear();
         matchmap.clear();
         ioumap.clear();
     }
     //显示剩余yolo检测框
-    for(int j = 0; j < b_in.size(); j++)
+    /*for(int j = 0; j < b_in.size(); j++)
     {
         if(!draw_bbox_flag[j])
         {
@@ -740,7 +764,7 @@ void CameraRadarCore::draw_picture(const sensor_msgs::Image::ConstPtr &msg_in,
             cv::putText(cv_ptr->image, str, cv::Point(delphi_point_in[j].pxy.x, delphi_point_in[j].pxy.y), 
                         cv::FONT_HERSHEY_TRIPLEX, 1, CV_RGB(255,255,255), 2); //cv::Scalar(b, g, r)
         }
-    }
+    }*/
     sensor_msgs::ImagePtr msg_ = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
     pub.publish(*msg_);
 }

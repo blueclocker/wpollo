@@ -1,4 +1,6 @@
 #include <iostream>
+#include <thread>
+#include <mutex>
 #include <image_transport/image_transport.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/image_encodings.h>
@@ -80,6 +82,7 @@ bool first_frame = true;
 int max_number = 0;
 std::vector<pixel_position> last_frame;
 std::vector<int> obj_ID;
+boost::mutex io_mutex; 
 
 double distance(const pixel_position pos_a, const pixel_position pos_b)
 {
@@ -166,6 +169,7 @@ void match(const std::vector<darknet_ros_msgs::BoundingBox> *bbox_hung)
 void callback(const sensor_msgs::Image::ConstPtr &msg,
               const darknet_ros_msgs::BoundingBoxes::ConstPtr &msg_bboxes)
 {
+    boost::mutex::scoped_lock lock(io_mutex);
     //ros msg -> cv::mat
     cv_bridge::CvImagePtr cv_ptr;
     cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
@@ -190,16 +194,17 @@ void callback(const sensor_msgs::Image::ConstPtr &msg,
 
 void cameracallback(const sensor_msgs::Image::ConstPtr &msg)
 {
+    boost::mutex::scoped_lock lock(io_mutex);
     //ros msg -> cv::mat
-    if (flag == false)
-    {
+    //if (flag == false)
+    //{
         cv_bridge::CvImagePtr cv_ptr;
         cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
         sensor_msgs::ImagePtr msg_ = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
         pub.publish(*msg_);
         last_frame.clear();
         ROS_INFO("camera only!");
-    }
+    //}
     //ROS_INFO("in cameracallback!");
     flag = false;
     //last_frame.clear();
@@ -219,8 +224,9 @@ int main(int argc, char **argv)
         syncPolicy;
     message_filters::Synchronizer<syncPolicy> sync(syncPolicy(10), sub_camera, sub_bboxes);
     //ros::Rate r(0.03);
-    sync.registerCallback(boost::bind(&callback, _1, _2));
-    ros::Subscriber sub = nh.subscribe("/galaxy_camera/image_raw", 10, cameracallback);
+    sync.registerCallback(boost::bind(callback, _1, _2));
+    //ros::Subscriber sub = nh.subscribe("/galaxy_camera/image_raw", 10, cameracallback);
+    ros::Subscriber sub = nh.subscribe<sensor_msgs::Image>("/galaxy_camera/image_raw", 10, boost::bind(cameracallback, _1));
     //ros::MultiThreadedSpinner spinner(2);
     //spinner.spin();
     ros::AsyncSpinner spinner(2); // Use 2 threads

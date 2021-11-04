@@ -1,7 +1,7 @@
 /*
  * @Author: wpbit
  * @Date: 2021-09-08 19:22:26
- * @LastEditTime: 2021-10-31 19:21:59
+ * @LastEditTime: 2021-11-04 21:32:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /fusion/src/camera_radar/include/camera_radar/camera_radar.h
@@ -40,6 +40,9 @@
 #include <map>
 #include <eigen3/Eigen/Core>
 #include <cfloat>
+//#include <thread>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp> 
 //ROS
 #include <geometry_msgs/Point.h>
 #include <image_transport/image_transport.h>
@@ -154,6 +157,10 @@ class CameraRadarCore
         std::unordered_map<int, cv::Rect> ioumap;
         //Header 
         std_msgs::Header ros_header;
+        //tf
+        tf::TransformBroadcaster broadcaster;
+        tf::Transform radar2camera;
+        tf::Quaternion q;
         //订阅相机
         message_filters::Subscriber<sensor_msgs::Image> *sub_camera;
         //订阅yolo检测框
@@ -163,6 +170,11 @@ class CameraRadarCore
         //ROS时间同步
         message_filters::Synchronizer<two_syncPolicy> *two_sync;
         message_filters::Synchronizer<three_syncPolicy> *three_sync;
+        //线程锁
+        boost::mutex mut;
+        //多线程尝试
+        void thread_two_callback();
+        void thread_three_callback();
         //设置参数
         bool set_param(ros::NodeHandle &nh_param);
         //对单个雷达点生成一组锚框

@@ -14,5 +14,5 @@
   <node pkg="camera_radar" type="camera_radar_node" name="camera_radar_node" output="screen"/>
 
   <!-- args="X Y Z yaw(B) pitch(G) roll(R) /father /son 100" -->
-  <node pkg="tf" type="static_transform_publisher" name="map_to_delphi_markerarray" args="0 2.4 0 0 0 0 /map /delphi_markerarray 100" />
+  <!--node pkg="tf" type="static_transform_publisher" name="map_to_delphi_markerarray" args="0 2.4 0 0 0 0 /map /delphi_markerarray 100" /-->
 </launch>
