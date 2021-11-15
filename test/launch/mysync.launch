@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <node pkg="test" type="mysync" name="mysync" output="screen"/>
+  <param name="use_sim_time" value="true"/>
+  <node pkg="rosbag" type="play" name="play" args="-l --clock /home/wangpeng/2021-10-14-15-44-22.bag "/>
+  <!--node pkg="rosbag" type="play" name="play" args="-l -clock /home/wangpeng/2021-10-14-15-44-22.bag -topic /galaxy_camera/image_raw"/-->
+  <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view"/>
+</launch>

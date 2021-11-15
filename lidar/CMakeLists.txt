@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(test)
+project(lidar)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,15 +8,15 @@ project(test)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  cv_bridge
-  image_transport
+  jsk_recognition_msgs
+  pcl_ros
   roscpp
   rospy
+  sensor_msgs
   std_msgs
-  darknet_ros_msgs
-  message_filters
 )
-find_package(OpenCV REQUIRED)  
+
+find_package(PCL 1.8 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -75,7 +75,7 @@ find_package(OpenCV REQUIRED)
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs
+#   jsk_recognition_msgs#   sensor_msgs#   std_msgs
 # )
 
 ################################################
@@ -109,8 +109,8 @@ find_package(OpenCV REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES test
-#  CATKIN_DEPENDS cv_bridge image_transport roscpp rospy std_msgs
+#  LIBRARIES lidar
+#  CATKIN_DEPENDS jsk_recognition_msgs pcl_ros roscpp rospy sensor_msgs std_msgs
 #  DEPENDS system_lib
 )
 
@@ -121,15 +121,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include
+   include
   ${catkin_INCLUDE_DIRS}
-  ${OpenCV_INCLUDE_DIRS}
-  /usr/include
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/test.cpp
+#   src/${PROJECT_NAME}/lidar.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -140,7 +138,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/test_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/lidar_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -157,16 +155,8 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-add_executable(test_node src/test_node.cpp src/Hungarian.cpp)
-target_link_libraries(test_node ${catkin_LIBRARIES} ${OpenCV_LIBS})
-add_dependencies(test_node darknet_ros_msgs_gencpp)
-
-add_executable(send src/send_node.cpp src/send.cpp)
-target_link_libraries(send ${catkin_LIBRARIES} -lcanlib)
-
-add_executable(mysync src/mysync.cpp)
-target_link_libraries(mysync ${catkin_LIBRARIES} ${OpenCV_LIBS})
-add_dependencies(mysync darknet_ros_msgs_gencpp)
+add_executable(${PROJECT_NAME}_node src/euclidean.cpp src/euclidean_node.cpp)
+target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 #############
 ## Install ##
 #############
@@ -214,7 +204,7 @@ add_dependencies(mysync darknet_ros_msgs_gencpp)
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_test.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_lidar.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

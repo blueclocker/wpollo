@@ -24,7 +24,7 @@ publishers:
   detection_image:
     topic: /darknet_ros/detection_image
     queue_size: 1
-    latch: true
+    latch: flase
 
 image_view:
 

@@ -196,15 +196,15 @@ void cameracallback(const sensor_msgs::Image::ConstPtr &msg)
 {
     boost::mutex::scoped_lock lock(io_mutex);
     //ros msg -> cv::mat
-    //if (flag == false)
-    //{
+    if (flag == false)
+    {
         cv_bridge::CvImagePtr cv_ptr;
         cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
         sensor_msgs::ImagePtr msg_ = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
         pub.publish(*msg_);
         last_frame.clear();
         ROS_INFO("camera only!");
-    //}
+    }
     //ROS_INFO("in cameracallback!");
     flag = false;
     //last_frame.clear();
