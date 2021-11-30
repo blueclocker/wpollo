@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <node pkg="plan" type="Astar" name="Astar" output="screen"/>
+  <arg name="gui" default="False" />
+  <param name="robot_description" textfile="$(find plan)/urdf/model.urdf" />
+  <param name="use_gui" value="$(arg gui)"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find plan)/config/test.rviz"/>
+  <!--node pkg="tf" type="static_transform_publisher" name="car_to_map" args="1.5 1.5 0.055 -1.57 0 0 /map /base_link 100"/-->
+</launch>

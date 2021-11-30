@@ -72,3 +72,7 @@ rosbag record -a -x "(.*)/compressed(.*)"
 
 >新增lidar欧式聚类
 
+##### 20211130
+
+> 新增plan模块，实现A*全局规划，globalplan节点实现简单仿真效果
+
