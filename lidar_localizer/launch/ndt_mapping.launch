@@ -1,0 +1,33 @@
+<!-- -->
+<launch>
+
+  <!--arg name="method_type" default="0" /--> 
+  <arg name="use_odom" default="false" />
+  <arg name="use_imu" default="true" />
+  <arg name="imu_upside_down" default="true" />
+  <arg name="imu_topic" default="/gnss_imu" />
+  <param name="tf_x" value="1.2" />
+  <param name="tf_y" value="0.0" />
+  <param name="tf_z" value="2.0" />  
+  <param name="tf_roll" value="0.0" />  
+  <param name="tf_pitch" value="0.0" />  
+  <param name="tf_yaw" value="0.0" /> 
+
+  <!-- rosrun lidar_localizer ndt_mapping  -->
+  <node pkg="lidar_localizer" type="queue_counter" name="queue_counter" output="screen">
+    <remap from="/points_raw" to="/rslidar_points" />
+  </node>
+  <node pkg="lidar_localizer" type="ndt_mapping" name="ndt_mapping" output="screen">
+    <remap from="/points_raw" to="/rslidar_points" />
+    <!--param name="method_type" value="$(arg method_type)" /-->
+    <param name="use_imu" value="$(arg use_imu)" />
+    <param name="use_odom" value="$(arg use_odom)" />
+    <param name="imu_upside_down" value="$(arg imu_upside_down)" />
+    <param name="imu_topic" value="$(arg imu_topic)" />
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find lidar_localizer)/config/config.rviz" />
+  <include file="$(find prius_description)/launch/demo.launch"/>
+  <!--node pkg="tf" type="static_transform_publisher" name="rslidar_to_baselink" args="0 0 0 0 0 0 /base_link /rslidar 10"/-->
+
+</launch>

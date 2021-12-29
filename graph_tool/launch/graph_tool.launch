@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <node name="graph_tool_node" pkg="graph_tool" type="graph_tool_node" output="screen"/>
+  <node name="line_server" pkg="graph_tool" type="line_server" />
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find graph_tool)/maps/bitmap.yaml" />
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find graph_tool)/config/test.rviz"/>
+
+</launch>

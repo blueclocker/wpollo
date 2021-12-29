@@ -76,3 +76,16 @@ rosbag record -a -x "(.*)/compressed(.*)"
 
 > 新增plan模块，实现A*全局规划，globalplan节点实现简单仿真效果
 
+##### 20211229
+
+> 新增lidar_localizer模块，简化cpu版autoware激光slam: roslaunch lidar_localizer ndt_mapping.launch
+
+> 新增autoware小车模型prius_description
+
+> 新增pac2pgm模块，读取pcd点云发布nav_msgs::OccupancyGrid格式，还需map_saver保存pgm和yaml文件
+
+> 新增graph_tool模块，交互性标注slam地图得到节点拓扑图并保存成xml格式
+
+>> 启动标定程序，通过rviz 2D Pose Estimate 选定关键点，并自动给出序号，roslaunch graph_tool graph_tool.launch
+
+>> 建立X，Y两点连线，并保存两点关系，rosrun graph_tool line_client X Y

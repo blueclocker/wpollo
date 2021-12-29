@@ -159,6 +159,18 @@ target_link_libraries(Astar ${catkin_LIBRARIES})
 add_executable(globalplan src/globalplan.cpp src/globalplan_node.cpp src/AStar.cpp)
 target_link_libraries(globalplan ${catkin_LIBRARIES})
 
+add_library(xml_lib
+    src/tinystr.cpp
+    src/tinyxml.cpp
+    src/tinyxmlerror.cpp
+    src/tinyxmlparser.cpp
+)
+add_executable(drawmap src/drawmap.cpp src/drawmap_node.cpp)
+target_link_libraries(drawmap ${catkin_LIBRARIES} xml_lib)
+
+add_executable(publishmap src/publish.cpp)
+target_link_libraries(publishmap ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############

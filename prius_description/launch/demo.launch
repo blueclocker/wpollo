@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="model" default="$(find prius_description)/urdf/prius.urdf"/>
+  <param name="use_gui" value="False" />
+
+  <param name="robot_description" textfile="$(arg model)"/>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <!--node pkg="tf" type="static_transform_publisher" name="baselink_to_velodyne" args="1.2 0 2.0 0 0 0 /base_link /velodyne 100"/-->
+  <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(find prius_description)/urdf.rviz" /-->
+</launch>

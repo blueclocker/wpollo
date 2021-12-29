@@ -1,0 +1,17 @@
+<package format="2">
+  <name>prius_description</name>
+  <version>0.0.1</version>
+  <description>
+  Provides a URDF for a prius
+  </description>
+  <maintainer email="sloretz@openrobotics.org">shane loretz</maintainer>
+  <license>APACHE 2.0</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>urdf</depend>
+  <depend>roslaunch</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>rviz</depend>
+  <depend>joint_state_publisher</depend>
+  <depend>gazebo</depend>
+</package>
