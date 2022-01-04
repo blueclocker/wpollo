@@ -59,6 +59,7 @@ find_package(catkin REQUIRED COMPONENTS
  add_service_files(
    FILES
    SetPath.srv
+   SetPoint.srv
 #   Service1.srv
 #   Service2.srv
  )
@@ -171,6 +172,22 @@ add_dependencies(line_client ${PROJECT_NAME}_gencpp)
 add_executable(line_server src/lineserver.cpp)
 target_link_libraries(line_server ${catkin_LIBRARIES})
 add_dependencies(line_server ${PROJECT_NAME}_gencpp)
+
+add_executable(deletepoint_client src/deletepointclient.cpp)
+target_link_libraries(deletepoint_client ${catkin_LIBRARIES})
+add_dependencies(deletepoint_client ${PROJECT_NAME}_gencpp)
+
+add_executable(deletepoint_server src/deletepointserver.cpp)
+target_link_libraries(deletepoint_server ${catkin_LIBRARIES})
+add_dependencies(deletepoint_server ${PROJECT_NAME}_gencpp)
+
+add_executable(deletepath_client src/deletepathclient.cpp)
+target_link_libraries(deletepath_client ${catkin_LIBRARIES})
+add_dependencies(deletepath_client ${PROJECT_NAME}_gencpp)
+
+add_executable(deletepath_server src/deletepathserver.cpp)
+target_link_libraries(deletepath_server ${catkin_LIBRARIES})
+add_dependencies(deletepath_server ${PROJECT_NAME}_gencpp)
 #############
 ## Install ##
 #############

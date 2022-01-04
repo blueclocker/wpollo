@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <launch>
-  <node name="graph_tool_node" pkg="graph_tool" type="graph_tool_node" output="screen"/>
+  <arg name="map_path" default="/home/wangpeng/fusion/src/graph_tool/maps/" />
+  <arg name="map_name" default="bitnew.xml"/>
+  <arg name="isnew" default="false"/>
+
+  <node name="graph_tool_node" pkg="graph_tool" type="graph_tool_node" output="screen">
+    <param name="map_path" value="$(arg map_path)"/>
+    <param name="map_name" value="$(arg map_name)"/>
+    <param name="isnew" value="$(arg isnew)"/>
+  </node>
   <node name="line_server" pkg="graph_tool" type="line_server" />
+  <node name="deletepoint_server" pkg="graph_tool" type="deletepoint_server"/>
+  <node name="deletepath_server" pkg="graph_tool" type="deletepath_server"/>
 
   <node name="map_server" pkg="map_server" type="map_server" args="$(find graph_tool)/maps/bitmap.yaml" />
 

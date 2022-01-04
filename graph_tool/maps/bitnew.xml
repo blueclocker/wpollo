@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<graphml>
+    <key attr.name="x" attr.type="double" for="node" id="d0" />
+    <key attr.name="y" attr.type="double" for="node" id="d1" />
+    <key attr.name="angle" attr.type="double" for="node" id="d2" />
+    <key attr.name="angle" attr.type="int" for="node" id="d3" />
+    <key attr.name="distance" attr.type="double" for="edge" id="d4" />
+    <key attr.name="angle" attr.type="double" for="edge" id="d5" />
+    <graph edgedefault="directed">
+        <node id="1">
+            <data key="d0">-1.605165</data>
+            <data key="d1">1.145757</data>
+            <data key="d2">0.000000</data>
+        </node>
+        <node id="2">
+            <data key="d0">-3.235404</data>
+            <data key="d1">2.699164</data>
+            <data key="d2">0.000000</data>
+        </node>
+        <node id="3">
+            <data key="d0">-0.673249</data>
+            <data key="d1">3.040277</data>
+            <data key="d2">0.000000</data>
+        </node>
+        <node id="4">
+            <data key="d0">-3.421397</data>
+            <data key="d1">0.959826</data>
+            <data key="d2">0.000000</data>
+        </node>
+        <edge source="2" target="3">
+            <data key="d4">2.584762</data>
+            <data key="d5">7.583485</data>
+        </edge>
+        <edge source="2" target="4">
+            <data key="d4">1.749254</data>
+            <data key="d5">83.896451</data>
+        </edge>
+        <edge source="1" target="3">
+            <data key="d4">2.111320</data>
+            <data key="d5">63.807442</data>
+        </edge>
+    </graph>
+</graphml>

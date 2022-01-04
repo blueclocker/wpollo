@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-30 14:32:36
- * @LastEditTime: 2021-12-03 16:05:58
+ * @LastEditTime: 2022-01-03 15:36:21
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /fusion/src/plan/src/drawmap.cpp
@@ -12,11 +12,15 @@ GlobalMap::GlobalMap(ros::NodeHandle &n_, const std::string file_path, const boo
 {
     if(isread)
     {
+        std::string map_name_ = "bit.xml";
+        n_.getParam("map_name", map_name_);
+        map_path = map_path + map_name_;
+        //std::cout << map_path << std::endl;
         pub_globalmap = n.advertise<visualization_msgs::MarkerArray>("/global_map", 1);
         //pub_mapnode = n.advertise<visualization_msgs::MarkerArray>("/mappoint", 1);
         read_xml();
         drawmap();
-        std::cout << "publishing" << std::endl;
+        //std::cout << "publishing" << std::endl;
         while(n.ok())
         {
             map_publish();
@@ -117,7 +121,7 @@ void GlobalMap::read_xml()
                 tempinfo.y = std::atof(iter->GetText());
             }else{
                 //std::cout << "error" << std::endl;
-                connection;
+                continue;
             }
         }
         //std::cout << tempinfo.id << std::endl;

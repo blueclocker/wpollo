@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <include file="$(find plan)/launch/drawmap.launch"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find graph_tool)/maps/bitmap.yaml"/>
+</launch>

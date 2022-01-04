@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-28 18:57:04
- * @LastEditTime: 2021-12-28 22:20:32
+ * @LastEditTime: 2022-01-03 14:52:19
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /fusion/src/graph_tool/src/line.cpp
@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 
     if(client.call(srv))
     {
-        ROS_INFO("line successful");
+        ROS_INFO("line deliver successful");
     }else{
         ROS_ERROR("Failed to call service");
     }
