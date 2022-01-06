@@ -27,6 +27,11 @@
             <data key="d1">0.959826</data>
             <data key="d2">0.000000</data>
         </node>
+        <node id="5">
+            <data key="d0">-5.892994</data>
+            <data key="d1">2.826452</data>
+            <data key="d2">0.000000</data>
+        </node>
         <edge source="2" target="3">
             <data key="d4">2.584762</data>
             <data key="d5">7.583485</data>
