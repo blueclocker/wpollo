@@ -86,18 +86,19 @@ rosrun map_server map_saver -f bitmap
 ```
 roslaunch graph_tool graph_tool.launch
 ```
-- 建立X，Y两点连线，并保存两点关系
-```
-rosrun graph_tool line_client X Y
-```
-- 删除X点(及其关联的线)
-```
-rosrun graph_tool deletepoint_client X
-```
-- 删除X Y线
-```
-rosrun graph_tool deletepath_client X Y
-```
+* 使用说明：
+- 默认开启捕捉模式，捕捉半径在launch文件设置，**searchradius**
+- 添加两点连线，勾选add_path
+> 在rviz使用**initialpos**，先选定第一个点，在选定第二个点，自动实现连线
+- 删除一个点，勾选delete_point
+> 在rviz使用**initialpos**，选定要删去的点
+- 删除一条线，勾选delete_path
+> 与添加连线方法相同
+
+* 注：
+- 连线与删除过程，对两点的顺序不敏感
+- rviz可能会出现未识别到用户鼠标点击的情况，建议查看终端输出信息，再酌情处理
+- 不按照使用说明使用本工具，可能造成无法预知的问题
 
 #### 开发版 test
 **!!!!!bug多!!!!!**
@@ -160,3 +161,8 @@ rosrun graph_tool deletepath_client X Y
 ##### 20220106
 * 新增srv_tools模块
 * graph_tool模块加入原始点云地图
+
+##### 20220110
+* 优化graph_tool使用体验，实现建图过程只使用鼠标
+* 优化graph_tool对点的编号问题，当删去的是最后一点时回收该id，暂时未能解决id跳跃的问题
+* 优化graph_tool保存问题，每次存储新的文件，存储格式为**文件名-当前时间.xml**

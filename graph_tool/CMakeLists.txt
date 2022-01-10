@@ -13,7 +13,12 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf
   message_generation
+  dynamic_reconfigure
+  pcl_ros
+  pcl_conversions
 )
+
+find_package(PCL REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -92,10 +97,11 @@ find_package(catkin REQUIRED COMPONENTS
 ##     and list every .cfg file to be processed
 
 ## Generate dynamic reconfigure parameters in the 'cfg' folder
-# generate_dynamic_reconfigure_options(
+ generate_dynamic_reconfigure_options(
 #   cfg/DynReconf1.cfg
 #   cfg/DynReconf2.cfg
-# )
+    cfg/setmode.cfg
+ )
 
 ###################################
 ## catkin specific configuration ##
@@ -122,6 +128,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -165,29 +172,40 @@ add_executable(${PROJECT_NAME}_node src/main.cpp src/tool_core.cpp)
 target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} xml_lib_tool)
 add_dependencies(${PROJECT_NAME}_node ${PROJECT_NAME}_gencpp)
 
-add_executable(line_client src/lineclient.cpp)
-target_link_libraries(line_client ${catkin_LIBRARIES})
-add_dependencies(line_client ${PROJECT_NAME}_gencpp)
+#add_executable(line_client src/lineclient.cpp)
+#target_link_libraries(line_client ${catkin_LIBRARIES})
+#add_dependencies(line_client ${PROJECT_NAME}_gencpp)
 
-add_executable(line_server src/lineserver.cpp)
-target_link_libraries(line_server ${catkin_LIBRARIES})
-add_dependencies(line_server ${PROJECT_NAME}_gencpp)
+#add_executable(line_server src/lineserver.cpp)
+#target_link_libraries(line_server ${catkin_LIBRARIES})
+#add_dependencies(line_server ${PROJECT_NAME}_gencpp)
 
-add_executable(deletepoint_client src/deletepointclient.cpp)
-target_link_libraries(deletepoint_client ${catkin_LIBRARIES})
-add_dependencies(deletepoint_client ${PROJECT_NAME}_gencpp)
+#add_executable(deletepoint_client src/deletepointclient.cpp)
+#target_link_libraries(deletepoint_client ${catkin_LIBRARIES})
+#add_dependencies(deletepoint_client ${PROJECT_NAME}_gencpp)
 
-add_executable(deletepoint_server src/deletepointserver.cpp)
-target_link_libraries(deletepoint_server ${catkin_LIBRARIES})
-add_dependencies(deletepoint_server ${PROJECT_NAME}_gencpp)
+#add_executable(deletepoint_server src/deletepointserver.cpp)
+#target_link_libraries(deletepoint_server ${catkin_LIBRARIES})
+#add_dependencies(deletepoint_server ${PROJECT_NAME}_gencpp)
 
-add_executable(deletepath_client src/deletepathclient.cpp)
-target_link_libraries(deletepath_client ${catkin_LIBRARIES})
-add_dependencies(deletepath_client ${PROJECT_NAME}_gencpp)
+#add_executable(deletepath_client src/deletepathclient.cpp)
+#target_link_libraries(deletepath_client ${catkin_LIBRARIES})
+#add_dependencies(deletepath_client ${PROJECT_NAME}_gencpp)
 
-add_executable(deletepath_server src/deletepathserver.cpp)
-target_link_libraries(deletepath_server ${catkin_LIBRARIES})
-add_dependencies(deletepath_server ${PROJECT_NAME}_gencpp)
+#add_executable(deletepath_server src/deletepathserver.cpp)
+#target_link_libraries(deletepath_server ${catkin_LIBRARIES})
+#add_dependencies(deletepath_server ${PROJECT_NAME}_gencpp)
+
+add_executable(map_client src/mapclient.cpp)
+target_link_libraries(map_client ${catkin_LIBRARIES})
+add_dependencies(map_client ${PROJECT_NAME}_gencpp)
+
+add_executable(map_server src/mapserver.cpp)
+target_link_libraries(map_server ${catkin_LIBRARIES})
+add_dependencies(map_server ${PROJECT_NAME}_gencpp)
+
+add_executable(pcdviewer src/pcdviewer.cpp)
+target_link_libraries(pcdviewer ${PCL_LIBRARIES} ${catkin_LIBRARIES})
 #############
 ## Install ##
 #############
