@@ -166,3 +166,17 @@ roslaunch graph_tool graph_tool.launch
 * 优化graph_tool使用体验，实现建图过程只使用鼠标
 * 优化graph_tool对点的编号问题，当删去的是最后一点时回收该id，暂时未能解决id跳跃的问题
 * 优化graph_tool保存问题，每次存储新的文件，存储格式为**文件名-当前时间.xml**
+
+##### 20220307
+* 新增lanelet/osmmap模块，解析lanelet2标准osm地图得到ros下的可视化效果
+- 目前完成道路边界显示，道路中心线计算与显示
+```
+roslaunch osmmap osmmap.launch
+```
+
+##### 20220322
+* 优化lanelet/osmmap模块
+- 完成基础A*算法迁移，现阶段基于生成的道路中心线做全局规划，道路信号标志暂未实现与道路中心线关联
+- 支持通过rviz，通过**/initialpose**选取道路起始点，通过**/move_base_simple/goal**选取道路终点
+- 全局路径规划目前只精确到路段，后续优化到具体某一道路中心点
+- 预留GPS接口，后续可以与定位模块联动，接口暂未确定

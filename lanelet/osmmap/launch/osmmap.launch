@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+<!--param name="use_sim_time" value="true"/-->
+<arg name="file_path" default="$(find osmmap)/maps/"/>
+<arg name="file_name" default="bitmap.osm"/>
+<arg name="start_position" default="220"/>
+<arg name="end_position" default="111"/>
+
+<node pkg="osmmap" type="mapio" name="mapio" output="screen" >
+  <param name="file_path" value="$(arg file_path)"/>
+  <param name="file_name" value="$(arg file_name)"/>
+  <param name="start_position" value="$(arg start_position)"/>
+  <param name="end_position" value="$(arg end_position)"/>
+</node>
+
+<node pkg="rviz" type="rviz" name="rviz" args="-d $(find osmmap)/config/osm.rviz"/>
+
+<node pkg="graph_tool" type="pcdviewer" name="pcdviewer" args="$(find osmmap)/maps/bit_mapsmall.pcd"/>
+
+<!--node pkg="tf" type="static_transform_publisher" name="baselink_to_rslidar" args="0 0 0 0 0 0 /base_link /rslidar 100" /-->
+
+</launch>

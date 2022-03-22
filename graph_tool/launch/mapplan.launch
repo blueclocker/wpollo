@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <arg name="map_path" default="$(find graph_tool)/maps/" />
+  <arg name="map_name" default="bitvector"/>
+  <arg name="start_position" default="21"/>
+  <arg name="end_position" default="57"/>
+
+  <node name="mapplan" pkg="graph_tool" type="mapplan" output="screen">
+    <param name="map_path" value="$(arg map_path)"/>
+    <param name="map_name" value="$(arg map_name)"/>
+    <param name="start_position" value="$(arg start_position)"/>
+    <param name="end_position" value="$(arg end_position)"/>
+  </node>
+
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find graph_tool)/maps/bitmap.yaml" />
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find graph_tool)/config/test.rviz"/>
+
+  <node pkg="graph_tool" type="pcdviewer" name="pcdviewer" args="$(find graph_tool)/maps/bit.pcd"/>
+
+</launch>

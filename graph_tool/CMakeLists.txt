@@ -206,6 +206,10 @@ add_dependencies(map_server ${PROJECT_NAME}_gencpp)
 
 add_executable(pcdviewer src/pcdviewer.cpp)
 target_link_libraries(pcdviewer ${PCL_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(mapplan src/globalplan.cpp src/globalplan_node.cpp)
+target_link_libraries(mapplan ${catkin_LIBRARIES} xml_lib_tool)
+add_dependencies(mapplan ${PROJECT_NAME}_gencpp)
 #############
 ## Install ##
 #############
