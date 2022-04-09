@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-06 15:43:53
- * @LastEditTime: 2022-03-19 16:42:35
+ * @LastEditTime: 2022-04-09 19:47:59
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/centerway.h
@@ -95,7 +95,7 @@ struct CenterWay3D
     relation::WayDirection direction;//道路方向
     int source;//起点CenterPoint3D -> ID
     int target;//终点CenterPoint3D -> ID
-    int *centernodeline;
+    int *centernodeline;//CenterPoint3D的id
     bool operator==(const CenterWay3D &a)
     {
         return (this->ID == a.ID);
@@ -126,6 +126,20 @@ struct CenterWay3D
     {
         return length;
     }
+    void Reverse()
+    {
+        std::cout << "centernodeline reverse!" << std::endl;
+        int head = 0;
+        int tail = length-1;
+        while(head < tail)
+        {
+            int temp = centernodeline[head];
+            centernodeline[head] = centernodeline[tail];
+            centernodeline[tail] = temp;
+            ++head;
+            --tail;
+        }
+    }
 };
 
 class CenterWay:public map_base<CenterWay3D>
@@ -146,6 +160,7 @@ public:
     CenterPoint3D* Findcenterpoint(const int id_) {return centerpointmap[id_];}
     //计算两点的三维距离
     double NodeDistance(const node::Point3D *a, const node::Point3D *b);
+    double NodeDistance(const CenterPoint3D *a, const CenterPoint3D *b);
     //计算莫way的长度
     double EdgeLength(node::Node *nodes_, way::Line *line);
     //计算某way的累计长度，返回从0依次到最大长度的vector
@@ -157,6 +172,10 @@ public:
     std::vector<CenterPoint3D> ResamplePoints(node::Node *nodes_, way::Line *line, const int num_segments);
     //生成道路中心线
     std::vector<int> GenerateCenterline(node::Node *nodes_, way::Way *ways_, relation::relationship *relationship_, double resolution = 5.0);
+    //交通标志关联到centerpoint3d
+    void Matchregulatoryelement(node::Node *nodes_, way::Line *line, relation::regulatoryelement* sign_);
+    //当前点到路口的距离(当前点最佳中心线的id)
+    double length2intersection(const int centerpointid_, const std::vector<int> &pathid_);
     void run(node::Node *nodes_, way::Way *ways_, relation::Relation *relations_);
     virtual void CreateOneObject(TiXmlElement *head);
     virtual ~CenterWay();

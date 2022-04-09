@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <node name="dynamicplan" pkg="plan" type="dynamicplan" output="screen"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find plan)/maps/map.yaml" />
+  
+  <!--include file="$(find prius_description)/launch/demo.launch"/-->
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find plan)/config/test.rviz"/>
+
+  <!--node pkg="tf" type="static_transform_publisher" name="map_to_newmap" args="0 0 0 0 0 0 /map /newmap 100"/-->
+</launch>

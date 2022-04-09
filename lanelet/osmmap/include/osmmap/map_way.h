@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:50
- * @LastEditTime: 2022-03-09 21:13:14
+ * @LastEditTime: 2022-03-29 14:16:04
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_way.h
@@ -41,7 +41,7 @@ struct Line
     int ID;
     int size;//最大容量
     int length;//实际元素个数
-    int *nodeline;
+    int *nodeline;//node的id
     WayType type;
     WaySubtype subtype;
     bool operator==(const Line &a)

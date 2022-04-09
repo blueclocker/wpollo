@@ -25,3 +25,34 @@ do
 如果开启列表已经空了, 说明路径不存在.
  
 最后从目标格开始, 沿着每一格的父节点移动直到回到起始格, 这就是路径.
+
+
+D*算法思路
+
+while()
+{
+从OPEN表中取k值最小的节点Y;
+遍历Y的子节点a,计算a的h值 h(a)=h(Y)+Y到子节点a的权重C(Y,a)
+{
+    if(a in OPEN)     比较两个a的h值 
+    if( a的h值小于OPEN表a的h值 )
+    {
+更新OPEN表中a的h值;k值取最小的h值
+          有未受影响的最短路经存在
+          break; 
+    }
+    if(a in CLOSE) 比较两个a的h值 //注意是同一个节点的两个不同路径的估价值
+    if( a的h值小于CLOSE表的h值 )
+    {
+更新CLOSE表中a的h值; k值取最小的h值;将a节点放入OPEN表
+       有未受影响的最短路经存在
+       break;
+    }
+    if(a not in both)
+        将a插入OPEN表中;　//还没有排序
+}
+放Y到CLOSE表；
+OPEN表比较k值大小进行排序；
+}
+
+

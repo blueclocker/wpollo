@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-28 11:22:31
- * @LastEditTime: 2022-01-10 17:06:43
+ * @LastEditTime: 2022-03-22 15:36:37
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /fusion/src/graph_tool/src/tool_core.cpp
@@ -162,8 +162,8 @@ void GraphTool::drawmap()
         point.action = visualization_msgs::Marker::ADD;
         point.id = i;
         point.type = visualization_msgs::Marker::POINTS;
-        point.scale.x = 0.1;
-        point.scale.y = 0.1;
+        point.scale.x = 0.3;
+        point.scale.y = 0.3;
         point.color.r = 1.0;
         point.color.a = 1.0;
         point.pose.orientation.x = 0;
@@ -180,11 +180,11 @@ void GraphTool::drawmap()
         pointtext.action = visualization_msgs::Marker::ADD;
         pointtext.id = i;
         pointtext.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
-        pointtext.scale.z = 0.2;
+        pointtext.scale.z = 0.3;
         pointtext.color.r = 1.0;
         pointtext.color.a = 1.0;
-        pointtext.pose.position.x = nodewithid[i].x_node + 0.1;
-        pointtext.pose.position.y = nodewithid[i].y_node + 0.1;
+        pointtext.pose.position.x = nodewithid[i].x_node + 0.3;
+        pointtext.pose.position.y = nodewithid[i].y_node + 0.3;
         pointtext.pose.position.z = 0;
         pointtext.pose.orientation.w = 1;
         //pointtext.frame_locked = false;

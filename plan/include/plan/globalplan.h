@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-28 19:27:44
- * @LastEditTime: 2021-11-30 09:54:02
+ * @LastEditTime: 2022-04-01 17:19:49
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /fusion/src/plan/include/plan/globalplan.h
@@ -10,6 +10,7 @@
 #define GLOBALPLAN_H_
 
 #include <plan/AStar.h>
+#include <plan/DStar.h>
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/OccupancyGrid.h>
@@ -39,13 +40,18 @@ private:
     ros::Subscriber sub_start;
     ros::Subscriber sub_end;
     ros::Subscriber sub_map;
+    ros::Subscriber sub_point;
     ros::Publisher pub_path;
     ros::Publisher pub_startpoint;
     ros::Publisher pub_endpoint;
+    ros::Publisher pub_map;
+    nav_msgs::OccupancyGrid newmap;
     AStar* astar;
+    DStar* dstar;
     ros::Time currenttime;
     tf::TransformBroadcaster broadcaster;
     tf::Transform baselink2map;
+    void global_point_callback(const geometry_msgs::PointStamped::ConstPtr &msg);
     void global_start_callback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& msg);
     void global_end_callback(const geometry_msgs::PoseStamped::ConstPtr& msg);
     void global_map_callback(const nav_msgs::OccupancyGrid::ConstPtr& msg);

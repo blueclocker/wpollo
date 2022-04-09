@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-05 17:50:11
- * @LastEditTime: 2022-03-20 22:06:57
+ * @LastEditTime: 2022-03-29 15:46:36
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/visualization.cpp
@@ -27,7 +27,7 @@ void MapVisualization::nodes2marker(const node::Point3D *pin_)
 {
     //node
     visualization_msgs::Marker markernode_, markertxt_;
-    markernode_.header.frame_id = "/map";
+    markernode_.header.frame_id = "map";
     markernode_.header.stamp = currenttime;
     markernode_.ns = "edgepoints";
     markernode_.action = visualization_msgs::Marker::ADD;
@@ -51,7 +51,7 @@ void MapVisualization::nodes2marker(const node::Point3D *pin_)
     markernode_.points.push_back(p);
 
     //txt
-    markertxt_.header.frame_id = "/map";
+    markertxt_.header.frame_id = "map";
     markertxt_.header.stamp = currenttime;
     markertxt_.ns = "edgepoints_number";
     markertxt_.action = visualization_msgs::Marker::ADD;
@@ -72,7 +72,7 @@ void MapVisualization::ways2marker(node::Node *nodes_, const way::Line *pin_)
 {
     //way
     visualization_msgs::Marker marker_;
-    marker_.header.frame_id = "/map";
+    marker_.header.frame_id = "map";
     marker_.header.stamp = currenttime;
     marker_.ns = "edge_ways";
     marker_.action = visualization_msgs::Marker::ADD;
@@ -117,7 +117,7 @@ void MapVisualization::centerpoint2marker(centerway::CenterPoint3D *centerpoint_
 {
     //centernode
     visualization_msgs::Marker marker_, markertxt_;
-    marker_.header.frame_id = "/map";
+    marker_.header.frame_id = "map";
     marker_.header.stamp = currenttime;
     marker_.ns = "centerpoints";
     marker_.action = visualization_msgs::Marker::ADD;
@@ -141,7 +141,7 @@ void MapVisualization::centerpoint2marker(centerway::CenterPoint3D *centerpoint_
     marker_.points.push_back(p);
 
     //centertxt
-    markertxt_.header.frame_id = "/map";
+    markertxt_.header.frame_id = "map";
     markertxt_.header.stamp = currenttime;
     markertxt_.ns = "centerpoints_number";
     markertxt_.action = visualization_msgs::Marker::ADD;
@@ -190,7 +190,7 @@ void MapVisualization::centerway2marker(centerway::CenterWay *centerways_, cente
 
     //箭头
     visualization_msgs::Marker marker_;
-    marker_.header.frame_id = "/map";
+    marker_.header.frame_id = "map";
     marker_.header.stamp = currenttime;
     marker_.ns = "center_ways";
     marker_.action = visualization_msgs::Marker::ADD;
@@ -202,7 +202,7 @@ void MapVisualization::centerway2marker(centerway::CenterWay *centerways_, cente
     marker_.color.r = colors[static_cast<int>(species::CENTER)].r;//colors[static_cast<int>(species::WAY)].r
     marker_.color.g = colors[static_cast<int>(species::CENTER)].g;
     marker_.color.b = colors[static_cast<int>(species::CENTER)].b;
-    marker_.color.a = 1.0;
+    marker_.color.a = 0.8;
     marker_.pose.orientation.x = 0;
     marker_.pose.orientation.y = 0;
     marker_.pose.orientation.z = 0;
@@ -221,14 +221,14 @@ void MapVisualization::centerway2marker(centerway::CenterWay *centerways_, cente
         q.z = pointb->ele;
         marker_.id = pointa->ID;
         marker_.points.clear();
-        if(centerway3ds_->source == centerway3ds_->centernodeline[0])
-        {
-            marker_.points.push_back(p);
-            marker_.points.push_back(q);
-        }else{
-            marker_.points.push_back(q);
-            marker_.points.push_back(p);
-        }
+        //if(centerway3ds_->source == centerway3ds_->centernodeline[0])
+        //{
+        marker_.points.push_back(p);
+        marker_.points.push_back(q);
+        //}else{
+            //marker_.points.push_back(q);
+            //marker_.points.push_back(p);
+        //}
         map.markers.push_back(marker_);
     }
 }
@@ -236,7 +236,7 @@ void MapVisualization::centerway2marker(centerway::CenterWay *centerways_, cente
 void MapVisualization::path2marker(centerway::CenterWay *centerways_, std::vector<int> paths_)
 {
     visualization_msgs::Marker marker_;
-    marker_.header.frame_id = "/map";
+    marker_.header.frame_id = "map";
     marker_.header.stamp = currenttime;
     marker_.ns = "plan_ways";
     marker_.action = visualization_msgs::Marker::ADD;
@@ -248,7 +248,7 @@ void MapVisualization::path2marker(centerway::CenterWay *centerways_, std::vecto
     marker_.color.r = colors[static_cast<int>(species::PLAN_LINE)].r;
     marker_.color.g = colors[static_cast<int>(species::PLAN_LINE)].g;
     marker_.color.b = colors[static_cast<int>(species::PLAN_LINE)].b;
-    marker_.color.a = 0.5;
+    marker_.color.a = 0.3;
     marker_.pose.orientation.x = 0;
     marker_.pose.orientation.y = 0;
     marker_.pose.orientation.z = 0;
@@ -286,7 +286,7 @@ void MapVisualization::redgreenlight2marker(node::Node *nodes_, way::Way *ways_,
     way::Line *light_bulbs_line = ways_->Find(relation_->light_bulbs);
     way::Line *refers_line = ways_->Find(relation_->refers);
     visualization_msgs::Marker marker_;
-    marker_.header.frame_id = "/map";
+    marker_.header.frame_id = "map";
     marker_.header.stamp = currenttime;
     marker_.ns = "edgepoints";//redgreenlight
     marker_.action = visualization_msgs::Marker::MODIFY;
@@ -345,6 +345,40 @@ void MapVisualization::redgreenlight2marker(node::Node *nodes_, way::Way *ways_,
         marker_.points.push_back(p);
         map.markers.push_back(marker_);
     }
+}
+
+void MapVisualization::smoothpath2marker(const std::vector<map::centerway::CenterPoint3D> &smoothpath_)
+{
+    visualization_msgs::Marker marker_;
+    marker_.header.frame_id = "map";
+    marker_.header.stamp = currenttime;
+    marker_.ns = "smooth_plan_ways";
+    marker_.action = visualization_msgs::Marker::ADD;
+    //marker_.id = centerway3ds_->ID;
+    marker_.type = visualization_msgs::Marker::LINE_STRIP;
+    marker_.scale.x = 1;
+    //marker_.scale.y = 0.5;
+    //marker_.scale.z = 0;
+    marker_.color.r = colors[static_cast<int>(species::PLAN_LINE)].r;
+    marker_.color.g = colors[static_cast<int>(species::PLAN_LINE)].g;
+    marker_.color.b = colors[static_cast<int>(species::PLAN_LINE)].b;
+    marker_.color.a = 0.6;
+    marker_.pose.orientation.x = 0;
+    marker_.pose.orientation.y = 0;
+    marker_.pose.orientation.z = 0;
+    marker_.pose.orientation.w = 1;
+    marker_.lifetime = ros::Duration(0.1);
+    
+    for(int i = 0; i < smoothpath_.size(); ++i)
+    {
+        geometry_msgs::Point p;
+        p.x = smoothpath_[i].x;
+        p.y = smoothpath_[i].y;
+        p.z = smoothpath_[i].ele;
+        marker_.id = i;
+        marker_.points.push_back(p);
+    }
+    path.markers.push_back(marker_);
 }
 
 void MapVisualization::map2marker(node::Node *nodes_, way::Way *ways_, centerway::CenterWay *centerways_, relation::Relation *relations_)

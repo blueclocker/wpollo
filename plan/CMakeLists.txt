@@ -156,8 +156,11 @@ include_directories(
 add_executable(Astar src/AStar.cpp src/AStar_ros.cpp src/main.cpp)
 target_link_libraries(Astar ${catkin_LIBRARIES})
 
-add_executable(globalplan src/globalplan.cpp src/globalplan_node.cpp src/AStar.cpp)
+add_executable(globalplan src/globalplan.cpp src/globalplan_node.cpp src/AStar.cpp src/Dstar.cpp)
 target_link_libraries(globalplan ${catkin_LIBRARIES})
+
+add_executable(dynamicplan src/dynamicplannode.cpp src/dynamicplan.cpp src/Dstar.cpp)
+target_link_libraries(dynamicplan ${catkin_LIBRARIES})
 
 add_library(xml_lib
     src/tinystr.cpp

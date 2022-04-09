@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:16
- * @LastEditTime: 2022-03-16 19:55:37
+ * @LastEditTime: 2022-04-09 15:02:55
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_relation.cpp
@@ -67,6 +67,13 @@ void Relation::CreateOneObject(TiXmlElement *head)
         }
     }
     Insert(oneobject->ID, oneobject);
+
+    //存储regulatoryelement,在此定义regulatoryelement，在centerway中Matchregulatoryelement(...)函数赋值
+    if(oneobject->type == RelationType::regulatory_element)
+    {
+        regulatoryelement *onetrafficsign = new regulatoryelement(oneobject->ID);
+        TrafficSign[onetrafficsign->ID] = onetrafficsign;
+    }
 }
 
 RelationType Relation::Matchtype(std::string s)
@@ -109,9 +116,41 @@ WayDirection Relation::MatchDirection(std::string s)
     }
 }
 
+bool Relation::isRegulatoryelement(const int id_)
+{
+    bool flag = false;
+    for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
+    {
+        if(id_ == it->second->laneletid)
+        {
+            flag = true;
+            break;
+        }
+    }
+    return flag;
+}
+
+std::vector<regulatoryelement*> Relation::getRegulatoryelement(const int id_)
+{
+    std::vector<regulatoryelement*> res;
+    for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
+    {
+        if(id_ == it->second->laneletid)
+        {
+            res.push_back(it->second);
+        }
+    }
+    return res;
+}
+
 Relation::~Relation()
 {
     //std::cout << "~relation" << std::endl;
+    for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
+    {
+        delete it->second;
+    }
+    TrafficSign.clear();
 }
 
 

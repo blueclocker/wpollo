@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-06 15:44:08
- * @LastEditTime: 2022-03-16 14:32:39
+ * @LastEditTime: 2022-04-09 20:25:49
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/centerway.cpp
@@ -32,6 +32,14 @@ double CenterWay::NodeDistance(const node::Point3D *a, const node::Point3D *b)
     double x = a->local_x - b->local_x;
     double y = a->local_y - b->local_y;
     double z = a->elevation - b->elevation;
+    return std::sqrt(x*x + y*y + z*z);
+}
+
+double CenterWay::NodeDistance(const CenterPoint3D *a, const CenterPoint3D *b)
+{
+    double x = a->x - b->x;
+    double y = a->y - b->y;
+    double z = a->ele - b->ele;
     return std::sqrt(x*x + y*y + z*z);
 }
 
@@ -145,6 +153,82 @@ std::vector<int> CenterWay::GenerateCenterline(node::Node *nodes_, way::Way *way
     return centerpointnumbers;
 }
 
+void CenterWay::Matchregulatoryelement(node::Node *nodes_, way::Line *line, relation::regulatoryelement* sign_)
+{
+    node::Point3D nodea = *nodes_->Find(line->nodeline[0]);
+    node::Point3D nodeb = *nodes_->Find(line->nodeline[1]);
+
+    node::Point3D nodeab;
+    nodeab.local_x = (nodea.local_x + nodeb.local_x) / 2.0;
+    nodeab.local_y = (nodea.local_y + nodeb.local_y) / 2.0;
+    nodeab.elevation = (nodea.elevation + nodeb.elevation) / 2.0;
+    
+    //计算停止线中点与各lanelet道路中心线的终点的距离，取最小距离对应匹配
+    CenterPoint3D centerab = CenterPoint3D(nodeab);
+    double distance_ = 10000.0;
+    int laneletid_ = -1;
+    for(auto it = Begin(); it != End(); ++it)
+    {
+        CenterPoint3D centertarget = *centerpointmap[it->second->target];
+        double distemp = NodeDistance(&centerab, &centertarget);
+        //std::cout << "distance: " << distemp << std::endl;
+        if(distemp < distance_)
+        {
+            distance_ = distemp;
+            laneletid_ = it->second->ID;
+        }
+    }
+    sign_->laneletid = laneletid_;
+    //std::cout << "min distance: " << distance_ << std::endl;
+    //匹配失败
+    if(laneletid_ != -1)
+    {
+        sign_->centerpoint3did = Find(laneletid_)->target;
+    }
+}
+
+double CenterWay::length2intersection(const int centerpointid_, const std::vector<int> &pathid_)
+{
+    if(pathid_.empty()) return -1;
+    std::vector<int> centerwayid_before_turning;
+    int i = 0;
+    //如果当前在弯道，则保留当前弯道，直到下一次转向出现
+    if(Find(pathid_[i])->direction == relation::WayDirection::left || 
+       Find(pathid_[i])->direction == relation::WayDirection::right)
+    {
+        centerwayid_before_turning.push_back(pathid_[i++]);
+    }
+    for(; i < pathid_.size(); ++i)
+    {
+        if(Find(pathid_[i])->direction == relation::WayDirection::straight)
+        {
+            centerwayid_before_turning.push_back(pathid_[i]);
+        }else{
+            break;
+        }
+    }
+    
+    double length_ = 0;
+    for(i = 0; i < centerwayid_before_turning.size(); ++i)
+    {
+        CenterWay3D *centerway_pin = Find(centerwayid_before_turning[i]);
+        bool flag_ = false;
+        for(int j = 0; j < centerway_pin->length - 1; ++j)
+        {
+            //第一段路
+            if(i == 0)
+            {
+                if(centerway_pin->centernodeline[j] == centerpointid_) flag_ = true;
+                if(!flag_) continue;
+                length_ += NodeDistance(centerpointmap[centerway_pin->centernodeline[j]], centerpointmap[centerway_pin->centernodeline[j+1]]);
+            }else{
+                length_ += NodeDistance(centerpointmap[centerway_pin->centernodeline[j]], centerpointmap[centerway_pin->centernodeline[j+1]]);
+            }
+        }
+    }
+    return length_;
+}
+
 void CenterWay::run(node::Node *nodes_, way::Way *ways_, relation::Relation *relations_)
 {
     for(auto it = relations_->Begin(); it != relations_->End(); ++it)
@@ -198,12 +282,44 @@ void CenterWay::run(node::Node *nodes_, way::Way *ways_, relation::Relation *rel
                     oneobject->Changesize();
                 }
             } 
+            if(oneobject->source != *onecenterline.begin()) 
+            {
+                oneobject->Reverse();
+            }
+            //test
+            /*std::cout << "-------------" << std::endl;
+            std::cout << "centerline: " << it->second->ID << std::endl;
+            for(int i = 0; i < oneobject->length; ++i)
+            {
+                std::cout << oneobject->centernodeline[i] << " ";
+            }
+            std::cout << std::endl;
+            std::cout << "-------------" << std::endl;*/
+
             Insert(it->second->ID, oneobject);
             Addnumbers();
             //std::cout << it->second->ID << ": " << Find(it->second->ID)->length << std::endl;
             //std::cout << "centerpointmap " << it->first << " size: " << centerpointmap.size() << std::endl;
         }
     }
+    for(auto it = relations_->regulatoryelementBegin(); it != relations_->regulatoryelementEnd(); ++it)
+    {
+        relation::relationship *relationship_ = relations_->Find(it->second->ID);
+        it->second->subtype = relationship_->subtype;
+        it->second->stoplineid = relationship_->ref_line;
+        //交通信号标志在map_relation中CreateOneObject()函数中声明并开辟存储空间
+        Matchregulatoryelement(nodes_, ways_->Find(it->second->stoplineid), it->second);
+        // std::cout << "traffic id " << it->second->ID << std::endl;
+        // std::cout << "traffic sign in " << it->second->laneletid << std::endl;
+        // std::cout << "traffic sign at " << it->second->centerpoint3did << std::endl;
+    }
+
+    //test
+    // if(relations_->isRegulatoryelement(182))
+    // {
+    //     std::cout << "have" << std::endl;
+    //     std::cout << relations_->getRegulatoryelement(182).size() << std::endl;
+    // }
 }
 
 CenterWay::~CenterWay()

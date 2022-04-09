@@ -100,6 +100,17 @@ roslaunch graph_tool graph_tool.launch
 - rviz可能会出现未识别到用户鼠标点击的情况，建议查看终端输出信息，再酌情处理
 - 不按照使用说明使用本工具，可能造成无法预知的问题
 
+#### Lanelet
+
+##### adam_shan 改进版 ad_with_lanelet2
+
+##### 高精地图ROS全局规划模块 lanelet
+* 启动rviz可视化高精地图以及全局路径规划
+```
+roslaunch osmmap osmmap.launch
+```
+
+
 #### 开发版 test
 **!!!!!bug多!!!!!**
 - 匈牙利算法
@@ -170,13 +181,20 @@ roslaunch graph_tool graph_tool.launch
 ##### 20220307
 * 新增lanelet/osmmap模块，解析lanelet2标准osm地图得到ros下的可视化效果
 - 目前完成道路边界显示，道路中心线计算与显示
-```
-roslaunch osmmap osmmap.launch
-```
 
 ##### 20220322
 * 优化lanelet/osmmap模块
 - 完成基础A*算法迁移，现阶段基于生成的道路中心线做全局规划，道路信号标志暂未实现与道路中心线关联
-- 支持通过rviz，通过**/initialpose**选取道路起始点，通过**/move_base_simple/goal**选取道路终点
+- 支持通过rviz，通过**initialpose**选取道路起始点，通过**move_base_simple/goal**选取道路终点
 - 全局路径规划目前只精确到路段，后续优化到具体某一道路中心点
 - 预留GPS接口，后续可以与定位模块联动，接口暂未确定
+
+##### 20220409
+* 优化lanelet/osmmap模块
+- 全局路径规划可以精确到具体某道路中心线的一点
+- 交通信号标志已经完成与道路中心线的关联，实现关联的程序分布在map_relation.cpp和centerway.cpp
+- 道路中心线的id = 相应的道路边界的id = xml原始relation的id
+- 实现某点到该道路两侧的距离估计
+- 使用三次样条插值实现路径平滑，**缺少车辆动力学约束**
+- 发布导航信息，当前只发布起点所在路段的道路信息，具体信息内容参见navigation.msg
+- 当前重规划存在浪费算力问题，后期考虑优化成基于增量模式，只重规划少部分路径

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <launch>
-  <!--node name="globalplan" pkg="plan" type="globalplan" output="screen"/-->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find plan)/maps/bitmap.yaml" />
+  <node name="globalplan" pkg="plan" type="globalplan" output="screen"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find plan)/maps/map.yaml" />
   
-  <include file="$(find prius_description)/launch/demo.launch"/>
+  <!--include file="$(find prius_description)/launch/demo.launch"/-->
 
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find plan)/config/test.rviz"/>
 

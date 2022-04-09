@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:30:01
- * @LastEditTime: 2022-03-16 19:49:05
+ * @LastEditTime: 2022-04-09 15:04:00
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_relation.h
@@ -56,6 +56,29 @@ struct WayEdge
     Edge edge;
 };
 
+struct regulatoryelement
+{
+    int ID;
+    RelationSubType subtype;//交通标志类型
+    int stoplineid;//stop_line的id
+    int laneletid;//关联lanelet序号
+    int centerpoint3did;//关联到该lanelet的精确的中心点id
+    regulatoryelement() {}
+    regulatoryelement(int id_)
+    {
+        ID = id_;
+        subtype = RelationSubType::unknown;
+        stoplineid = -1;
+        laneletid = -1;
+        centerpoint3did = -1;
+    }
+    bool operator==(regulatoryelement &a)
+    {
+        return (a.ID == this->ID);
+    }
+};
+
+
 struct relationship
 {
     int ID;
@@ -82,6 +105,7 @@ private:
     //std::unordered_map<int, relationship*> Data;
     //int numbers;
     //TiXmlElement *node_root;
+    std::unordered_map<int, regulatoryelement*> TrafficSign;
 public:
     Relation();
     Relation(TiXmlElement *root);
@@ -92,6 +116,13 @@ public:
     RelationType Matchtype(std::string s);
     RelationSubType MatchSubtype(std::string s);
     WayDirection MatchDirection(std::string s);
+    std::unordered_map<int, regulatoryelement*>::iterator regulatoryelementBegin() {return TrafficSign.begin();}
+    std::unordered_map<int, regulatoryelement*>::iterator regulatoryelementEnd() {return TrafficSign.end();}
+    regulatoryelement* findRegulatoryelement(const int id_) {return TrafficSign[id_];}
+    //判断该lanelet是否有交通标志，如果有则返回True，否则False
+    bool isRegulatoryelement(const int id_);
+    //根据lanelet的id寻找与其对应的交通信号标志，返回全部的交通标志信息
+    std::vector<regulatoryelement*> getRegulatoryelement(const int id_);
     virtual ~Relation();
 };
 
