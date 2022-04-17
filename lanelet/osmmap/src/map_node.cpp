@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:28:59
- * @LastEditTime: 2022-03-20 22:04:33
+ * @LastEditTime: 2022-04-17 13:55:02
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_node.cpp
@@ -32,32 +32,32 @@ void Node::CreateOneObject(TiXmlElement *head)
     oneobject->latitude = std::atof(head->Attribute("lat"));
     oneobject->longitude = std::atof(head->Attribute("lon"));
     TiXmlElement *tag_pin = head->FirstChildElement("tag");
-    bool islocalx = false;
-    bool islocaly = false;
+    //bool islocalx = false;
+    //bool islocaly = false;
     for(auto it = tag_pin; it != nullptr; it = it->NextSiblingElement())
     {
         std::string s(it->Attribute("k"));
         if(s == "local_x")
         {
             oneobject->local_x = std::atof(it->Attribute("v"));
-            islocalx = true;
+            //islocalx = true;
         }else if(s == "local_y"){
             oneobject->local_y = std::atof(it->Attribute("v"));
-            islocaly = true;
+            //islocaly = true;
         }else if(s == "ele"){
             oneobject->elevation = std::atof(it->Attribute("v"));
         }else{
             continue;
         }
     }
-    if(!islocalx || !islocaly)
+    /*if(!islocalx || !islocaly)
     {
         MercatorGPS2xy(oneobject);
-    }
+    }*/
     Insert(oneobject->ID, oneobject);
 }
 
-void Node::MercatorGPS2xy(Point3D *pin)
+/*void Node::MercatorGPS2xy(Point3D *pin)
 {
     //std::cout << "mercatorGPS2xy" << std::endl;
     double lat = std::min(89.5, std::max(pin->latitude, -89.5));
@@ -87,7 +87,7 @@ void Node::Mercatorxy2GPS(Point3D *pin)
     const double lon = 180 / M_PI * pin->local_x / RMajor;
     pin->latitude = lat;
     pin->longitude = lon;
-}
+}*/
 
 Node::~Node()
 {

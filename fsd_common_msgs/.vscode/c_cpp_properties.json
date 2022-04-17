@@ -1,0 +1,31 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/swayrich/ROS_for_beginner/Example_ws/devel/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/swayrich/ROS_for_beginner/Example_ws/src/VINS-Mono-master/camera_model/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/fsd_common_msgs/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/imu/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/CAN/ipc_can/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/LeGO-LOAM/LeGO-LOAM/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/lidar/include/**",
+        "/home/swayrich/ROS_for_beginner/Example_ws/src/msckf_vio/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/odometry_publisher/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/GPS/serial/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/service_test/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/CAN/socketcan_bridge/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/CAN/socketcan_interface/include/**",
+        "/home/swayrich/ROS_for_beginner/catkin_ws/src/utbm_pose_estimation/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}

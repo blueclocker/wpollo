@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-13 15:21:15
- * @LastEditTime: 2022-03-29 14:49:08
+ * @LastEditTime: 2022-04-16 14:39:53
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_plan.h
@@ -74,6 +74,7 @@ private:
     //int Atwhichpoint(const map::centerway::CenterPoint3D &a, const map::centerway::CenterWay3D *centerline_);
     bool Isintersect(const map::centerway::CenterPoint3D &a_, const map::centerway::CenterPoint3D &b_, 
                      const map::node::Point3D &c_, const map::node::Point3D &d_);
+    bool isReset(int x, int y);
     void Astar(int x, int y);
     void Dijkstra(int x, int y);
     void Dstar(int x, int y);

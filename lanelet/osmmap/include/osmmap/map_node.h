@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:43
- * @LastEditTime: 2022-03-19 16:28:03
+ * @LastEditTime: 2022-04-17 13:56:27
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_node.h
@@ -10,6 +10,7 @@
 #define MAP_NODE_H_
 
 #include "map_base.h"
+//#include "GeographicLib/LocalCartesian.hpp"
 
 /*node类型元素
 * 把读入数据存储在Point3D中
@@ -115,8 +116,9 @@ public:
     //void CreateObjects(TiXmlElement *tail);
     //int Size() const;
     //Point3D* Find(int id_);
-    void MercatorGPS2xy(Point3D *pin);
-    void Mercatorxy2GPS(Point3D *pin);
+    //取消MercatorGPS2xy投影
+    //void MercatorGPS2xy(Point3D *pin);
+    //void Mercatorxy2GPS(Point3D *pin);
     virtual ~Node();
 };
 

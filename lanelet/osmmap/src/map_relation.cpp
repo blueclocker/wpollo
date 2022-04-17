@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:16
- * @LastEditTime: 2022-04-09 15:02:55
+ * @LastEditTime: 2022-04-16 14:09:09
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_relation.cpp
@@ -117,6 +117,20 @@ WayDirection Relation::MatchDirection(std::string s)
 }
 
 bool Relation::isRegulatoryelement(const int id_)
+{
+    bool flag = false;
+    for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
+    {
+        if(id_ == it->second->laneletid)
+        {
+            flag = true;
+            break;
+        }
+    }
+    return flag;
+}
+
+bool Relation::isStopLine(const int id_)
 {
     bool flag = false;
     for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)

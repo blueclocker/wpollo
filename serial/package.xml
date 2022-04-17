@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<package>
+  <name>serial</name>
+  <version>1.2.1</version>
+  <description>
+    Serial is a cross-platform, simple to use library for using serial ports on computers.  This library provides a C++, object oriented interface for interacting with RS-232 like devices on Linux and Windows.
+  </description>
+
+  <maintainer email="william@osrfoundation.org">William Woodall</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">http://wjwwood.github.com/serial/</url>
+  <url type="repository">https://github.com/wjwwood/serial</url>
+  <url type="bugtracker">https://github.com/wjwwood/serial/issues</url>
+
+  <author email="wjwwood@gmail.com">William Woodall</author>
+  <author email="ash.gti@gmail.com">John Harrison</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <run_depend>roscpp</run_depend>
+  <build_depend>rospy</build_depend>
+  <run_depend>rospy</run_depend>
+  <build_depend>std_msgs</build_depend>
+  <run_depend>std_msgs</run_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <build_depend>message_generation</build_depend>
+  <run_depend>message_generation</run_depend>
+  <build_depend>fsd_common_msgs</build_depend>
+  <run_depend>fsd_common_msgs</run_depend>
+  
+  <test_depend>boost</test_depend>
+
+</package>

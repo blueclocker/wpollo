@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:30:01
- * @LastEditTime: 2022-04-09 15:04:00
+ * @LastEditTime: 2022-04-16 14:08:58
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_relation.h
@@ -121,6 +121,9 @@ public:
     regulatoryelement* findRegulatoryelement(const int id_) {return TrafficSign[id_];}
     //判断该lanelet是否有交通标志，如果有则返回True，否则False
     bool isRegulatoryelement(const int id_);
+    //判断该lanelet是否有停止线，如果有则返回True，否则False
+    //当前只要有交通信号标志即有停止线, 等价于isRegulatoryelement()
+    bool isStopLine(const int id_);
     //根据lanelet的id寻找与其对应的交通信号标志，返回全部的交通标志信息
     std::vector<regulatoryelement*> getRegulatoryelement(const int id_);
     virtual ~Relation();

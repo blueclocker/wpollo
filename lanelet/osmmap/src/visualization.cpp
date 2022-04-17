@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-05 17:50:11
- * @LastEditTime: 2022-03-29 15:46:36
+ * @LastEditTime: 2022-04-16 16:39:28
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/visualization.cpp
@@ -19,7 +19,7 @@ MapVisualization::MapVisualization(ros::NodeHandle &n_):n(n_)
     colors[0] = RGBcolor(1, 1, 1);
     colors[1] = RGBcolor(1, 0, 0);
     colors[2] = RGBcolor(0, 1, 0);
-    colors[3] = RGBcolor(0, 0, 1);
+    colors[3] = RGBcolor(0, 0.8, 1);
     colors[4] = RGBcolor(0, 0, 0);
 }
 
@@ -78,13 +78,19 @@ void MapVisualization::ways2marker(node::Node *nodes_, const way::Line *pin_)
     marker_.action = visualization_msgs::Marker::ADD;
     marker_.id = pin_->ID;
     marker_.type = visualization_msgs::Marker::LINE_STRIP;
-    marker_.scale.x = 0.1;
+    //marker_.scale.x = 0.1;
     marker_.color.a = 1.0;
     marker_.pose.orientation.x = 0;
     marker_.pose.orientation.y = 0;
     marker_.pose.orientation.z = 0;
     marker_.pose.orientation.w = 1;
-    if(pin_->type == way::WayType::line_thin)
+    if(pin_->type == way::WayType::road_border)
+    {
+        marker_.scale.x = 0.1;
+    }else{
+        marker_.scale.x = 0.05;
+    }
+    if(pin_->type == way::WayType::line_thin || pin_->type == way::WayType::road_border)
     {
         marker_.color.r = colors[static_cast<int>(species::EDGE)].r;//colors[static_cast<int>(species::WAY)].r
         marker_.color.g = colors[static_cast<int>(species::EDGE)].g;
@@ -253,7 +259,7 @@ void MapVisualization::path2marker(centerway::CenterWay *centerways_, std::vecto
     marker_.pose.orientation.y = 0;
     marker_.pose.orientation.z = 0;
     marker_.pose.orientation.w = 1;
-    marker_.lifetime = ros::Duration(0.1);
+    marker_.lifetime = ros::Duration(0.2);
     
     for(int i = 0; i < paths_.size(); ++i)
     {
@@ -275,7 +281,7 @@ void MapVisualization::path2marker(centerway::CenterWay *centerways_, std::vecto
             //marker_.points.push_back(q);
         }
     }
-    path.markers.clear();
+    //path.markers.clear();
     path.markers.push_back(marker_);
 }
 
@@ -367,7 +373,7 @@ void MapVisualization::smoothpath2marker(const std::vector<map::centerway::Cente
     marker_.pose.orientation.y = 0;
     marker_.pose.orientation.z = 0;
     marker_.pose.orientation.w = 1;
-    marker_.lifetime = ros::Duration(0.1);
+    marker_.lifetime = ros::Duration(0.2);
     
     for(int i = 0; i < smoothpath_.size(); ++i)
     {
@@ -384,44 +390,43 @@ void MapVisualization::smoothpath2marker(const std::vector<map::centerway::Cente
 void MapVisualization::map2marker(node::Node *nodes_, way::Way *ways_, centerway::CenterWay *centerways_, relation::Relation *relations_)
 {
     currenttime = ros::Time::now();
-    //1st
-    //points
-    /*for(auto it = nodes_->Begin(); it != nodes_->End(); ++it)
-    {
-        nodes2marker(it->second);
-    }
-    //ways
-    for(auto it = ways_->Begin(); it != ways_->End(); ++it)
-    {
-        ways2marker(nodes_, it->second);
-    }
-    //centerpoints
-    for(auto it = centerways_->centerpointBegin(); it != centerways_->centerpointEnd(); ++it)
-    {
-        centerpoint2marker(it->second);
-    }
-    //centerway
-    for(auto it = centerways_->Begin(); it != centerways_->End(); ++it)
-    {
-        centerway2marker(centerways_, it->second);
-    }*/
 
-    //2nd
     //points
     for(auto it = nodes_->Begin(); it != nodes_->End(); ++it)
     {
         nodes2marker(it->second);
     }
+
+    //1st
+    /*//ways
+    for(auto it = ways_->Begin(); it != ways_->End(); ++it)
+    {
+        ways2marker(nodes_, it->second);
+    }*/
+
+    //2nd
     //ways, 由ralations指引
     for(auto it = relations_->Begin(); it != relations_->End(); ++it)
     {
         if(it->second->type == relation::RelationType::lanelet)
         {
-            ways2marker(nodes_, ways_->Find(it->second->leftedge.ID));
-            //ROS_INFO("leftedge id = %d", it->second->leftedge.ID);
-            ways2marker(nodes_, ways_->Find(it->second->rightedge.ID));
+            if(!ways_->Find(it->second->leftedge.ID)->isVisual)
+            {
+                ways2marker(nodes_, ways_->Find(it->second->leftedge.ID));
+                //ROS_INFO("leftedge id = %d", it->second->leftedge.ID);
+                ways_->Find(it->second->leftedge.ID)->isVisual = true;
+            }
+
+            if(!ways_->Find(it->second->rightedge.ID)->isVisual)
+            {
+                ways2marker(nodes_, ways_->Find(it->second->rightedge.ID));
+                ways_->Find(it->second->rightedge.ID)->isVisual = true;
+            }
+            
         }else if(it->second->subtype == relation::RelationSubType::traffic_light){
             redgreenlight2marker(nodes_, ways_, it->second);
+        }else if(it->second->subtype == relation::RelationSubType::traffic_sign){
+            ways2marker(nodes_, ways_->Find(it->second->ref_line));
         }else{
             continue;
         }
@@ -437,6 +442,11 @@ void MapVisualization::map2marker(node::Node *nodes_, way::Way *ways_, centerway
         centerway2marker(centerways_, it->second);
         //std::cout << "centerway source: " << it->second->source << ", target: " << it->second->target << std::endl;
     }
+}
+
+void MapVisualization::pathmarkerclear()
+{
+    path.markers.clear();
 }
 
 void MapVisualization::run(node::Node *nodes_, way::Way *ways_, centerway::CenterWay *centerways_, relation::Relation *relations_)

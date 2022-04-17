@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-05 17:50:28
- * @LastEditTime: 2022-03-22 21:42:45
+ * @LastEditTime: 2022-04-16 14:29:24
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/visualization.h
@@ -82,6 +82,8 @@ public:
     void path2marker(centerway::CenterWay *centerways_, std::vector<int> paths_);
     //路径平滑可视化
     void smoothpath2marker(const std::vector<map::centerway::CenterPoint3D> &smoothpath_);
+    //清空path的markerarray
+    void pathmarkerclear();
     //发布markerarray
     void run(node::Node *nodes_, way::Way *ways_, centerway::CenterWay *centerways_, relation::Relation *relations_);
     ~MapVisualization();

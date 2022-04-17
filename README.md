@@ -110,6 +110,40 @@ roslaunch graph_tool graph_tool.launch
 roslaunch osmmap osmmap.launch
 ```
 
+#####  串口读取模块  serial
+* 打开USB串口权限，如果需要，目前GPS不能从USB读取数据，原因不明
+```
+sudo chmod 777 /ttyUSB0
+rosrun serial serialPort
+```
+
+#####  串口数据转标准GPS数据格式模块 odometry_publisher
+* 全部GPS/IMU信息，发布fsd_common_msgs::comb, topic = "/comb"
+* 里程计信息，发布fsd_common_msgs::Gnss, topic = "/gnss_odom"
+* IMU，发布sensor_msgs::Imu, topic = "/gnss_imu"
+* ROS标准GPS格式，发布sensor_msgs::NavSatFix, topic = "/gps/fix"
+```
+rosrun odometry_publishergnss_odom_pub
+```
+
+#####  各种自定义msg fsd_common_msgs
+* 各种msg，在CmakeList.txt和package.xml设置依赖可以实现跨包调用
+- CmakeList.txt
+```
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  std_msgs
+  geometry_msgs
+  nav_msgs
+  fsd_common_msgs
+)
+```
+- package.xml
+```
+<build_depend>fsd_common_msgs</build_depend>
+<exec_depend>fsd_common_msgs</exec_depend>
+```
 
 #### 开发版 test
 **!!!!!bug多!!!!!**
@@ -198,3 +232,14 @@ roslaunch osmmap osmmap.launch
 - 使用三次样条插值实现路径平滑，**缺少车辆动力学约束**
 - 发布导航信息，当前只发布起点所在路段的道路信息，具体信息内容参见navigation.msg
 - 当前重规划存在浪费算力问题，后期考虑优化成基于增量模式，只重规划少部分路径
+
+##### 20220417
+* 新增serial、odometry_publisher和fsd_common_msgs
+- 用于实时从串口读取GPS数据
+* 优化lanelet/osmmap模块
+- 部分解决重规划问题，如果原始的规划数据满足要求则不再重复A*，但不能更新cost权重
+- 修正原node模块墨卡托投影问题，现使用GeographicLib库，已集成到osmmap模块，坐标转换接口在mapio内
+- 优化原始点经度、维度、高度数据输入方式，现在launch文件中设置
+- 本模块初步具有实时全局规划并提供导航信息的能力，但还存在一些细节问题，比如：当车走到最后一段路时，全局路径实效
+- 新增地图若干，有多车道、双向等场景
+- 在lanelet定位具体点坐标的方式存在缺陷，在环形道路会出现问题

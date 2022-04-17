@@ -1,0 +1,2421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm generator="VMB">
+  <MetaInfo format_version="1" map_version="2"/>
+  <node id="8" lat="39.7440142403091" lon="115.83274809194464">
+    <tag k="mgrs_code" v="50SMK0-10-1"/>
+    <tag k="local_x" v="-8.6075"/>
+    <tag k="local_y" v="-2.6989"/>
+    <tag k="ele" v="-2.2109"/>
+  </node>
+  <node id="9" lat="39.744021739111936" lon="115.83317174964974">
+    <tag k="mgrs_code" v="50SMK0000-1"/>
+    <tag k="local_x" v="27.7027"/>
+    <tag k="local_y" v="-2.3394"/>
+    <tag k="ele" v="-2.1491"/>
+  </node>
+  <node id="11" lat="39.74404576406331" lon="115.83274720283964">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-8.6381"/>
+    <tag k="local_y" v="0.8009"/>
+    <tag k="ele" v="-2.2109"/>
+  </node>
+  <node id="12" lat="39.74405268357161" lon="115.83317964726952">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="28.4241"/>
+    <tag k="local_y" v="1.0863"/>
+    <tag k="ele" v="-2.1491"/>
+  </node>
+  <node id="15" lat="39.74401346000415" lon="115.83322651643805">
+    <tag k="mgrs_code" v="50SMK0000-1"/>
+    <tag k="local_x" v="32.3832"/>
+    <tag k="local_y" v="-3.3194"/>
+    <tag k="ele" v="-2.177"/>
+  </node>
+  <node id="17" lat="39.74404498758546" lon="115.8332271727564">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="32.485"/>
+    <tag k="local_y" v="0.1791"/>
+    <tag k="ele" v="-2.177"/>
+  </node>
+  <node id="20" lat="39.74398106984373" lon="115.83583685434678">
+    <tag k="mgrs_code" v="50SMK0020-1"/>
+    <tag k="local_x" v="255.9925"/>
+    <tag k="local_y" v="-9.8235"/>
+    <tag k="ele" v="-2.1546"/>
+  </node>
+  <node id="22" lat="39.744012593743676" lon="115.83583777335274">
+    <tag k="mgrs_code" v="50SMK0020-1"/>
+    <tag k="local_x" v="256.1167"/>
+    <tag k="local_y" v="-6.3257"/>
+    <tag k="ele" v="-2.1546"/>
+  </node>
+  <node id="25" lat="39.743977955849516" lon="115.83601614973743">
+    <tag k="mgrs_code" v="50SMK0020-1"/>
+    <tag k="local_x" v="271.3502"/>
+    <tag k="local_y" v="-10.3687"/>
+    <tag k="ele" v="-2.1595"/>
+  </node>
+  <node id="27" lat="39.74400948256827" lon="115.83601690071217">
+    <tag k="mgrs_code" v="50SMK0020-1"/>
+    <tag k="local_x" v="271.46"/>
+    <tag k="local_y" v="-6.8704"/>
+    <tag k="ele" v="-2.1595"/>
+  </node>
+  <node id="30" lat="39.74396229712413" lon="115.83711828520963">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="365.7596"/>
+    <tag k="local_y" v="-13.3328"/>
+    <tag k="ele" v="-2.2078"/>
+  </node>
+  <node id="32" lat="39.743993823843134" lon="115.83711903668691">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="365.8694"/>
+    <tag k="local_y" v="-9.8345"/>
+    <tag k="ele" v="-2.2078"/>
+  </node>
+  <node id="43" lat="39.74396395204821" lon="115.83714749377116">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="368.2646"/>
+    <tag k="local_y" v="-13.1816"/>
+    <tag k="ele" v="-2.1958"/>
+  </node>
+  <node id="45" lat="39.74396872164039" lon="115.83717175273296">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="370.35"/>
+    <tag k="local_y" v="-12.6792"/>
+    <tag k="ele" v="-2.1766"/>
+  </node>
+  <node id="46" lat="39.74397852098269" lon="115.83719434802921">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="372.3001"/>
+    <tag k="local_y" v="-11.6167"/>
+    <tag k="ele" v="-2.1815"/>
+  </node>
+  <node id="47" lat="39.74399345753388" lon="115.83721512379765">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="374.1017"/>
+    <tag k="local_y" v="-9.982"/>
+    <tag k="ele" v="-2.178"/>
+  </node>
+  <node id="48" lat="39.74402042936497" lon="115.83723139408094">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="375.5346"/>
+    <tag k="local_y" v="-7.0065"/>
+    <tag k="ele" v="-2.2145"/>
+  </node>
+  <node id="49" lat="39.74406170392589" lon="115.837233861981">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="375.8055"/>
+    <tag k="local_y" v="-2.4282"/>
+    <tag k="ele" v="-2.2303"/>
+  </node>
+  <node id="50" lat="39.74399586708815" lon="115.83714446776347">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="368.0513"/>
+    <tag k="local_y" v="-9.636"/>
+    <tag k="ele" v="-2.1857"/>
+  </node>
+  <node id="52" lat="39.74400001339892" lon="115.83716362055263">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="369.6983"/>
+    <tag k="local_y" v="-9.1971"/>
+    <tag k="ele" v="-2.1923"/>
+  </node>
+  <node id="53" lat="39.74400915012027" lon="115.83718069017091">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="371.174"/>
+    <tag k="local_y" v="-8.202"/>
+    <tag k="ele" v="-2.2004"/>
+  </node>
+  <node id="54" lat="39.74402466478485" lon="115.83719387927003">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="372.3264"/>
+    <tag k="local_y" v="-6.4947"/>
+    <tag k="ele" v="-2.2058"/>
+  </node>
+  <node id="55" lat="39.744061177667106" lon="115.83719302269813">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="372.3056"/>
+    <tag k="local_y" v="-2.4412"/>
+    <tag k="ele" v="-2.2303"/>
+  </node>
+  <node id="57" lat="39.744336936983935" lon="115.83722791520043">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="375.6924"/>
+    <tag k="local_y" v="28.1264"/>
+    <tag k="ele" v="-2.4037"/>
+  </node>
+  <node id="59" lat="39.744336410720706" lon="115.83718707575518">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="372.1925"/>
+    <tag k="local_y" v="28.1134"/>
+    <tag k="ele" v="-2.4037"/>
+  </node>
+  <node id="62" lat="39.744368108114536" lon="115.83722285107102">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="375.3034"/>
+    <tag k="local_y" v="31.5917"/>
+    <tag k="ele" v="-2.4269"/>
+  </node>
+  <node id="64" lat="39.74438941953954" lon="115.8372108402049">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="374.305"/>
+    <tag k="local_y" v="33.9704"/>
+    <tag k="ele" v="-2.444"/>
+  </node>
+  <node id="65" lat="39.7444048553521" lon="115.8371888184382">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="372.4404"/>
+    <tag k="local_y" v="35.7081"/>
+    <tag k="ele" v="-2.4213"/>
+  </node>
+  <node id="66" lat="39.74441521038895" lon="115.83716309824517">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="370.2516"/>
+    <tag k="local_y" v="36.886"/>
+    <tag k="ele" v="-2.4181"/>
+  </node>
+  <node id="67" lat="39.74441712150253" lon="115.83714116727964">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="368.3753"/>
+    <tag k="local_y" v="37.1225"/>
+    <tag k="ele" v="-2.4198"/>
+  </node>
+  <node id="71" lat="39.74435055958027" lon="115.83718417567965">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="371.9644"/>
+    <tag k="local_y" v="29.687"/>
+    <tag k="ele" v="-2.4115"/>
+  </node>
+  <node id="73" lat="39.744366692903085" lon="115.83717691803278">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="371.3658"/>
+    <tag k="local_y" v="31.4857"/>
+    <tag k="ele" v="-2.4121"/>
+  </node>
+  <node id="74" lat="39.74437534745022" lon="115.83716861197986">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="370.6666"/>
+    <tag k="local_y" v="32.4555"/>
+    <tag k="ele" v="-2.4123"/>
+  </node>
+  <node id="75" lat="39.74438160380084" lon="115.8371570012527">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="369.6808"/>
+    <tag k="local_y" v="33.1628"/>
+    <tag k="ele" v="-2.4257"/>
+  </node>
+  <node id="76" lat="39.74438562636657" lon="115.8371431183304">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="368.4971"/>
+    <tag k="local_y" v="33.6247"/>
+    <tag k="ele" v="-2.4198"/>
+  </node>
+  <node id="78" lat="39.744409262999376" lon="115.8369283112603">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="350.1264"/>
+    <tag k="local_y" v="36.487"/>
+    <tag k="ele" v="-2.2887"/>
+  </node>
+  <node id="80" lat="39.74437787663714" lon="115.83693221551817">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="350.4157"/>
+    <tag k="local_y" v="32.9991"/>
+    <tag k="ele" v="-2.2887"/>
+  </node>
+  <node id="85" lat="39.74440192444093" lon="115.8368293174376">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="341.634"/>
+    <tag k="local_y" v="35.7826"/>
+    <tag k="ele" v="-2.2301"/>
+  </node>
+  <node id="87" lat="39.74437040481764" lon="115.83683044271497">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="341.685"/>
+    <tag k="local_y" v="32.283"/>
+    <tag k="ele" v="-2.2301"/>
+  </node>
+  <node id="90" lat="39.74438418370712" lon="115.83599579374405">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="270.1918"/>
+    <tag k="local_y" v="34.741"/>
+    <tag k="ele" v="-2.2731"/>
+  </node>
+  <node id="92" lat="39.74435266409734" lon="115.83599691940061">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="270.2428"/>
+    <tag k="local_y" v="31.2414"/>
+    <tag k="ele" v="-2.2731"/>
+  </node>
+  <node id="102" lat="39.74438556605673" lon="115.83598144281639">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="268.9642"/>
+    <tag k="local_y" v="34.9104"/>
+    <tag k="ele" v="-2.2689"/>
+  </node>
+  <node id="104" lat="39.7443893257273" lon="115.83596678460852">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="267.7137"/>
+    <tag k="local_y" v="35.344"/>
+    <tag k="ele" v="-2.2676"/>
+  </node>
+  <node id="105" lat="39.744397758490415" lon="115.83595604750462">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="266.8059"/>
+    <tag k="local_y" v="36.2919"/>
+    <tag k="ele" v="-2.2716"/>
+  </node>
+  <node id="106" lat="39.744409836291304" lon="115.83594761132373">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="266.1005"/>
+    <tag k="local_y" v="37.6418"/>
+    <tag k="ele" v="-2.2767"/>
+  </node>
+  <node id="107" lat="39.74442395745619" lon="115.83594383961223">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="265.7977"/>
+    <tag k="local_y" v="39.2133"/>
+    <tag k="ele" v="-2.3451"/>
+  </node>
+  <node id="108" lat="39.74435496176149" lon="115.83597788806706">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="268.6155"/>
+    <tag k="local_y" v="31.5176"/>
+    <tag k="ele" v="-2.3694"/>
+  </node>
+  <node id="110" lat="39.74436014500843" lon="115.83596026708092">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="267.1132"/>
+    <tag k="local_y" v="32.1125"/>
+    <tag k="ele" v="-2.3846"/>
+  </node>
+  <node id="111" lat="39.7443673477242" lon="115.83594295174053">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="265.64"/>
+    <tag k="local_y" v="32.9312"/>
+    <tag k="ele" v="-2.3933"/>
+  </node>
+  <node id="112" lat="39.744376754098624" lon="115.83592876572872">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="264.4381"/>
+    <tag k="local_y" v="33.991"/>
+    <tag k="ele" v="-2.3822"/>
+  </node>
+  <node id="113" lat="39.744388153648764" lon="115.83591639606702">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="263.3947"/>
+    <tag k="local_y" v="35.27"/>
+    <tag k="ele" v="-2.3709"/>
+  </node>
+  <node id="114" lat="39.74440357162383" lon="115.83590861094649">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="262.7499"/>
+    <tag k="local_y" v="36.9899"/>
+    <tag k="ele" v="-2.3717"/>
+  </node>
+  <node id="115" lat="39.744423567655545" lon="115.83590299666506">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="262.2977"/>
+    <tag k="local_y" v="39.2155"/>
+    <tag k="ele" v="-2.3451"/>
+  </node>
+  <node id="117" lat="39.74485838619193" lon="115.83593687629903">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="265.8275"/>
+    <tag k="local_y" v="87.4381"/>
+    <tag k="ele" v="-2.2757"/>
+  </node>
+  <node id="119" lat="39.74485799638513" lon="115.83589603309545">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="262.3275"/>
+    <tag k="local_y" v="87.4403"/>
+    <tag k="ele" v="-2.2757"/>
+  </node>
+  <node id="126" lat="39.74487431171616" lon="115.83594035012034">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="266.1481"/>
+    <tag k="local_y" v="89.2018"/>
+    <tag k="ele" v="-2.2612"/>
+  </node>
+  <node id="128" lat="39.74488311277623" lon="115.83594594314827">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="266.64"/>
+    <tag k="local_y" v="90.1724"/>
+    <tag k="ele" v="-2.2175"/>
+  </node>
+  <node id="129" lat="39.74488957725494" lon="115.83595662453365">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="267.5645"/>
+    <tag k="local_y" v="90.878"/>
+    <tag k="ele" v="-2.2005"/>
+  </node>
+  <node id="130" lat="39.744896497424755" lon="115.83597752703876">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="269.3654"/>
+    <tag k="local_y" v="91.6228"/>
+    <tag k="ele" v="-2.2019"/>
+  </node>
+  <node id="131" lat="39.74490723166787" lon="115.83600402014113">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="271.6508"/>
+    <tag k="local_y" v="92.7847"/>
+    <tag k="ele" v="-2.2125"/>
+  </node>
+  <node id="132" lat="39.744920164874834" lon="115.8360262570464">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="273.5747"/>
+    <tag k="local_y" v="94.1954"/>
+    <tag k="ele" v="-2.2231"/>
+  </node>
+  <node id="133" lat="39.74494029410434" lon="115.8360367995306">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="274.507"/>
+    <tag k="local_y" v="96.4178"/>
+    <tag k="ele" v="-2.19"/>
+  </node>
+  <node id="134" lat="39.744978546051385" lon="115.83603569130314">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="274.4672"/>
+    <tag k="local_y" v="100.6646"/>
+    <tag k="ele" v="-2.1445"/>
+  </node>
+  <node id="135" lat="39.74507446414277" lon="115.83601853671456">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="273.1357"/>
+    <tag k="local_y" v="111.3296"/>
+    <tag k="ele" v="-2.1296"/>
+  </node>
+  <node id="136" lat="39.745092580499346" lon="115.83601272060967">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="272.6635"/>
+    <tag k="local_y" v="113.3468"/>
+    <tag k="ele" v="-2.116"/>
+  </node>
+  <node id="137" lat="39.74511325208205" lon="115.83599019706983">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="270.7635"/>
+    <tag k="local_y" v="115.6662"/>
+    <tag k="ele" v="-2.1022"/>
+  </node>
+  <node id="138" lat="39.74511476797338" lon="115.83594855483223">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="267.1978"/>
+    <tag k="local_y" v="115.8808"/>
+    <tag k="ele" v="-2.1401"/>
+  </node>
+  <node id="139" lat="39.745101912035736" lon="115.83580134270595">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="254.5662"/>
+    <tag k="local_y" v="114.6178"/>
+    <tag k="ele" v="-2.1951"/>
+  </node>
+  <node id="140" lat="39.74508690150777" lon="115.83577168972913">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="252.0039"/>
+    <tag k="local_y" v="112.9848"/>
+    <tag k="ele" v="-2.2534"/>
+  </node>
+  <node id="141" lat="39.74506467901746" lon="115.8357602243134">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="250.9895"/>
+    <tag k="local_y" v="110.5311"/>
+    <tag k="ele" v="-2.2356"/>
+  </node>
+  <node id="142" lat="39.745041726127766" lon="115.8357581304884">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="250.777"/>
+    <tag k="local_y" v="107.9859"/>
+    <tag k="ele" v="-2.2699"/>
+  </node>
+  <node id="143" lat="39.745014734788406" lon="115.83575816930886">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="250.7414"/>
+    <tag k="local_y" v="104.9901"/>
+    <tag k="ele" v="-2.2682"/>
+  </node>
+  <node id="144" lat="39.745003484809224" lon="115.83574152503057">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="249.2991"/>
+    <tag k="local_y" v="103.76"/>
+    <tag k="ele" v="-2.2037"/>
+  </node>
+  <node id="145" lat="39.745002306686544" lon="115.83569575334809">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="245.3757"/>
+    <tag k="local_y" v="103.6802"/>
+    <tag k="ele" v="-2.2904"/>
+  </node>
+  <node id="146" lat="39.74487438536806" lon="115.83589855372685">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="262.5671"/>
+    <tag k="local_y" v="89.2565"/>
+    <tag k="ele" v="-2.2259"/>
+  </node>
+  <node id="148" lat="39.74488383510166" lon="115.83590144791685">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="262.8287"/>
+    <tag k="local_y" v="90.3021"/>
+    <tag k="ele" v="-2.2057"/>
+  </node>
+  <node id="149" lat="39.744894274269534" lon="115.83590813032122">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="263.4163"/>
+    <tag k="local_y" v="91.4533"/>
+    <tag k="ele" v="-2.2272"/>
+  </node>
+  <node id="150" lat="39.74490618975307" lon="115.83592142072057">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="264.5722"/>
+    <tag k="local_y" v="92.761"/>
+    <tag k="ele" v="-2.2191"/>
+  </node>
+  <node id="151" lat="39.744916649567365" lon="115.83594049311002">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="266.2214"/>
+    <tag k="local_y" v="93.9007"/>
+    <tag k="ele" v="-2.2243"/>
+  </node>
+  <node id="152" lat="39.74492396514054" lon="115.83596273000799">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="268.1372"/>
+    <tag k="local_y" v="94.6879"/>
+    <tag k="ele" v="-2.2317"/>
+  </node>
+  <node id="153" lat="39.74493532603926" lon="115.8359854065375">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="270.0965"/>
+    <tag k="local_y" v="95.9236"/>
+    <tag k="ele" v="-2.2175"/>
+  </node>
+  <node id="154" lat="39.74494660945551" lon="115.83599838079623">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="271.2244"/>
+    <tag k="local_y" v="97.1615"/>
+    <tag k="ele" v="-2.2057"/>
+  </node>
+  <node id="155" lat="39.74496155738753" lon="115.83600230176104">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="271.5819"/>
+    <tag k="local_y" v="98.8162"/>
+    <tag k="ele" v="-2.175"/>
+  </node>
+  <node id="156" lat="39.74506798220919" lon="115.83598401325997">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="270.1684"/>
+    <tag k="local_y" v="110.6486"/>
+    <tag k="ele" v="-2.138"/>
+  </node>
+  <node id="157" lat="39.745079043977604" lon="115.83597650330007">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="269.5409"/>
+    <tag k="local_y" v="111.8847"/>
+    <tag k="ele" v="-2.1636"/>
+  </node>
+  <node id="158" lat="39.745085531694194" lon="115.83596443676939">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="268.5164"/>
+    <tag k="local_y" v="112.6182"/>
+    <tag k="ele" v="-2.1446"/>
+  </node>
+  <node id="159" lat="39.74508575605231" lon="115.83594880615672">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="267.1775"/>
+    <tag k="local_y" v="112.6605"/>
+    <tag k="ele" v="-2.1484"/>
+  </node>
+  <node id="160" lat="39.7450747162875" lon="115.83583597663885">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="257.4944"/>
+    <tag k="local_y" v="111.5608"/>
+    <tag k="ele" v="-2.2056"/>
+  </node>
+  <node id="161" lat="39.745070914147135" lon="115.83582025856984">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="256.1422"/>
+    <tag k="local_y" v="111.1563"/>
+    <tag k="ele" v="-2.21"/>
+  </node>
+  <node id="162" lat="39.74506205542457" lon="115.83580658173827">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="254.9576"/>
+    <tag k="local_y" v="110.1883"/>
+    <tag k="ele" v="-2.2116"/>
+  </node>
+  <node id="163" lat="39.745048354562925" lon="115.83580159406378">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="254.5105"/>
+    <tag k="local_y" v="108.6732"/>
+    <tag k="ele" v="-2.2115"/>
+  </node>
+  <node id="164" lat="39.745027707573634" lon="115.83579943807078">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="254.296"/>
+    <tag k="local_y" v="106.384"/>
+    <tag k="ele" v="-2.2161"/>
+  </node>
+  <node id="165" lat="39.7450095601391" lon="115.83579703459107">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="254.0639"/>
+    <tag k="local_y" v="104.3725"/>
+    <tag k="ele" v="-2.2073"/>
+  </node>
+  <node id="167" lat="39.7449938283564" lon="115.83579266584205">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="253.6669"/>
+    <tag k="local_y" v="102.6313"/>
+    <tag k="ele" v="-2.202"/>
+  </node>
+  <node id="168" lat="39.74498333639415" lon="115.8357833255937">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="252.8515"/>
+    <tag k="local_y" v="101.4772"/>
+    <tag k="ele" v="-2.1948"/>
+  </node>
+  <node id="169" lat="39.744975532316985" lon="115.83576421901293">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="251.2032"/>
+    <tag k="local_y" v="100.6323"/>
+    <tag k="ele" v="-2.2638"/>
+  </node>
+  <node id="170" lat="39.74497078143275" lon="115.83569658513463">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="245.4015"/>
+    <tag k="local_y" v="100.1803"/>
+    <tag k="ele" v="-2.2904"/>
+  </node>
+  <node id="172" lat="39.74499028855582" lon="115.8349316621393">
+    <tag k="mgrs_code" v="50SMK001001"/>
+    <tag k="local_x" v="179.8913"/>
+    <tag k="local_y" v="103.1973"/>
+    <tag k="ele" v="-2.3134"/>
+  </node>
+  <node id="174" lat="39.74495919000353" lon="115.83492491703116">
+    <tag k="mgrs_code" v="50SMK001000"/>
+    <tag k="local_x" v="179.2685"/>
+    <tag k="local_y" v="99.7532"/>
+    <tag k="ele" v="-2.3134"/>
+  </node>
+  <node id="177" lat="39.745115516136714" lon="115.83597311521628">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="269.3032"/>
+    <tag k="local_y" v="115.9365"/>
+    <tag k="ele" v="-2.1644"/>
+  </node>
+  <node id="178" lat="39.74510370362521" lon="115.83600315311787">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="271.8598"/>
+    <tag k="local_y" v="114.592"/>
+    <tag k="ele" v="-2.1337"/>
+  </node>
+  <node id="179" lat="39.74509530457202" lon="115.83578449187267">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="253.1129"/>
+    <tag k="local_y" v="113.9032"/>
+    <tag k="ele" v="-2.2216"/>
+  </node>
+  <node id="180" lat="39.745076014187916" lon="115.83576326532834">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="251.2664"/>
+    <tag k="local_y" v="111.7858"/>
+    <tag k="ele" v="-2.2794"/>
+  </node>
+  <node id="181" lat="39.74500402698073" lon="115.83575003601602">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="250.0291"/>
+    <tag k="local_y" v="103.8107"/>
+    <tag k="ele" v="-2.2577"/>
+  </node>
+  <node id="182" lat="39.7450242596881" lon="115.83575804750008">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="250.7447"/>
+    <tag k="local_y" v="106.0474"/>
+    <tag k="ele" v="-2.1908"/>
+  </node>
+  <node id="183" lat="39.745008106490054" lon="115.8357560388039">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="250.5493"/>
+    <tag k="local_y" v="104.2568"/>
+    <tag k="ele" v="-2.2592"/>
+  </node>
+  <node id="184" lat="39.74497821454602" lon="115.83577391946895">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="252.0382"/>
+    <tag k="local_y" v="100.9192"/>
+    <tag k="ele" v="-2.2647"/>
+  </node>
+  <node id="185" lat="39.745009577865396" lon="115.83478241267936">
+    <tag k="mgrs_code" v="50SMK001001"/>
+    <tag k="local_x" v="167.1315"/>
+    <tag k="local_y" v="105.5045"/>
+    <tag k="ele" v="-2.3464"/>
+  </node>
+  <node id="187" lat="39.7449780673273" lon="115.83478390173329">
+    <tag k="mgrs_code" v="50SMK001001"/>
+    <tag k="local_x" v="167.2136"/>
+    <tag k="local_y" v="102.0055"/>
+    <tag k="ele" v="-2.3464"/>
+  </node>
+  <node id="190" lat="39.74497849068775" lon="115.83367898955339">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="72.5457"/>
+    <tag k="local_y" v="103.2842"/>
+    <tag k="ele" v="-2.3608"/>
+  </node>
+  <node id="192" lat="39.74494698017095" lon="115.83368047910868">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="72.6278"/>
+    <tag k="local_y" v="99.7852"/>
+    <tag k="ele" v="-2.3608"/>
+  </node>
+  <node id="195" lat="39.74497506698473" lon="115.83366491674576">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="71.335"/>
+    <tag k="local_y" v="102.9199"/>
+    <tag k="ele" v="-2.3325"/>
+  </node>
+  <node id="197" lat="39.74497037904761" lon="115.83365432582146">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="70.4208"/>
+    <tag k="local_y" v="102.4114"/>
+    <tag k="ele" v="-2.336"/>
+  </node>
+  <node id="198" lat="39.74496563903052" lon="115.83364446990642">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="69.5695"/>
+    <tag k="local_y" v="101.8963"/>
+    <tag k="ele" v="-2.316"/>
+  </node>
+  <node id="199" lat="39.7449604491631" lon="115.83362490515744">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="67.8857"/>
+    <tag k="local_y" v="101.3421"/>
+    <tag k="ele" v="-2.3153"/>
+  </node>
+  <node id="200" lat="39.744960917841084" lon="115.83359425872317">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="65.2606"/>
+    <tag k="local_y" v="101.4283"/>
+    <tag k="ele" v="-2.2845"/>
+  </node>
+  <node id="201" lat="39.744966758299064" lon="115.83357734061089">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="63.8195"/>
+    <tag k="local_y" v="102.0954"/>
+    <tag k="ele" v="-2.2905"/>
+  </node>
+  <node id="202" lat="39.74497645761374" lon="115.83356113356714">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="62.4449"/>
+    <tag k="local_y" v="103.19"/>
+    <tag k="ele" v="-2.2967"/>
+  </node>
+  <node id="203" lat="39.74498277782929" lon="115.83354874168882">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="61.3923"/>
+    <tag k="local_y" v="103.9053"/>
+    <tag k="ele" v="-2.2742"/>
+  </node>
+  <node id="204" lat="39.74498808464449" lon="115.83353072261849">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="59.8561"/>
+    <tag k="local_y" v="104.5144"/>
+    <tag k="ele" v="-2.1833"/>
+  </node>
+  <node id="205" lat="39.7449930024466" lon="115.83351308359019">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="58.3519"/>
+    <tag k="local_y" v="105.0799"/>
+    <tag k="ele" v="-2.1853"/>
+  </node>
+  <node id="206" lat="39.74499229721953" lon="115.83348495811607">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="55.9411"/>
+    <tag k="local_y" v="105.033"/>
+    <tag k="ele" v="-2.185"/>
+  </node>
+  <node id="207" lat="39.74494457739613" lon="115.83367107981732">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="71.819"/>
+    <tag k="local_y" v="99.529"/>
+    <tag k="ele" v="-2.3093"/>
+  </node>
+  <node id="209" lat="39.744940284108154" lon="115.83366156651304">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="70.9977"/>
+    <tag k="local_y" v="99.0631"/>
+    <tag k="ele" v="-2.3067"/>
+  </node>
+  <node id="210" lat="39.74493712853324" lon="115.83365140260393">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="70.1223"/>
+    <tag k="local_y" v="98.7242"/>
+    <tag k="ele" v="-2.3177"/>
+  </node>
+  <node id="211" lat="39.744935162819125" lon="115.83364129449541">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="69.2534"/>
+    <tag k="local_y" v="98.5173"/>
+    <tag k="ele" v="-2.3425"/>
+  </node>
+  <node id="212" lat="39.74493395860792" lon="115.83362304443568">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="67.688"/>
+    <tag k="local_y" v="98.404"/>
+    <tag k="ele" v="-2.3287"/>
+  </node>
+  <node id="213" lat="39.74493506300737" lon="115.83359496083034">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="65.2834"/>
+    <tag k="local_y" v="98.5579"/>
+    <tag k="ele" v="-2.3333"/>
+  </node>
+  <node id="214" lat="39.74493812379536" lon="115.83357596774418">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="63.6605"/>
+    <tag k="local_y" v="98.9188"/>
+    <tag k="ele" v="-2.3179"/>
+  </node>
+  <node id="215" lat="39.74494614253423" lon="115.8335546267993">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="61.8436"/>
+    <tag k="local_y" v="99.8326"/>
+    <tag k="ele" v="-2.3002"/>
+  </node>
+  <node id="216" lat="39.74495192426733" lon="115.83353814151857">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="60.4395"/>
+    <tag k="local_y" v="100.4927"/>
+    <tag k="ele" v="-2.3016"/>
+  </node>
+  <node id="217" lat="39.74495844418622" lon="115.83352293930876">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="59.1464"/>
+    <tag k="local_y" v="101.2333"/>
+    <tag k="ele" v="-2.3038"/>
+  </node>
+  <node id="218" lat="39.74496177652771" lon="115.8335089136399">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="57.9495"/>
+    <tag k="local_y" v="101.6188"/>
+    <tag k="ele" v="-2.3083"/>
+  </node>
+  <node id="219" lat="39.74496082248292" lon="115.83348740771108">
+    <tag k="mgrs_code" v="50SMK000001"/>
+    <tag k="local_x" v="56.1055"/>
+    <tag k="local_y" v="101.5369"/>
+    <tag k="ele" v="-2.185"/>
+  </node>
+  <node id="221" lat="39.74495642419075" lon="115.83271152332318">
+    <tag k="mgrs_code" v="50SMK0-1001"/>
+    <tag k="local_x" v="-10.3784"/>
+    <tag k="local_y" v="101.9145"/>
+    <tag k="ele" v="-2.3281"/>
+  </node>
+  <node id="223" lat="39.74492494947537" lon="115.83271397326811">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-10.214"/>
+    <tag k="local_y" v="98.4184"/>
+    <tag k="ele" v="-2.3281"/>
+  </node>
+  <node id="226" lat="39.74495419368754" lon="115.8326824408852">
+    <tag k="mgrs_code" v="50SMK0-1001"/>
+    <tag k="local_x" v="-12.8734"/>
+    <tag k="local_y" v="101.6994"/>
+    <tag k="ele" v="-2.3604"/>
+  </node>
+  <node id="228" lat="39.744951524913134" lon="115.83266317446889">
+    <tag k="mgrs_code" v="50SMK0-1001"/>
+    <tag k="local_x" v="-14.528"/>
+    <tag k="local_y" v="101.4247"/>
+    <tag k="ele" v="-2.3535"/>
+  </node>
+  <node id="229" lat="39.74494554035523" lon="115.83263986152726">
+    <tag k="mgrs_code" v="50SMK0-1001"/>
+    <tag k="local_x" v="-16.5341"/>
+    <tag k="local_y" v="100.7865"/>
+    <tag k="ele" v="-2.3123"/>
+  </node>
+  <node id="230" lat="39.744933468642145" lon="115.83261367279177">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-18.7954"/>
+    <tag k="local_y" v="99.4759"/>
+    <tag k="ele" v="-2.2862"/>
+  </node>
+  <node id="231" lat="39.74491510568201" lon="115.83258500970908">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-21.2778"/>
+    <tag k="local_y" v="97.4698"/>
+    <tag k="ele" v="-2.32"/>
+  </node>
+  <node id="232" lat="39.74489050210242" lon="115.83256159320884">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-23.3197"/>
+    <tag k="local_y" v="94.7652"/>
+    <tag k="ele" v="-2.3419"/>
+  </node>
+  <node id="233" lat="39.74486615133178" lon="115.8325490688396">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-24.428"/>
+    <tag k="local_y" v="92.0765"/>
+    <tag k="ele" v="-2.3513"/>
+  </node>
+  <node id="234" lat="39.74481570406027" lon="115.83254125666608">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-25.1703"/>
+    <tag k="local_y" v="86.4861"/>
+    <tag k="ele" v="-2.3402"/>
+  </node>
+  <node id="235" lat="39.74492246442743" lon="115.83268797988204">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-12.4447"/>
+    <tag k="local_y" v="98.1716"/>
+    <tag k="ele" v="-2.3416"/>
+  </node>
+  <node id="237" lat="39.74492055829646" lon="115.83267421882672">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-13.6265"/>
+    <tag k="local_y" v="97.9754"/>
+    <tag k="ele" v="-2.3327"/>
+  </node>
+  <node id="238" lat="39.74491689160085" lon="115.83265875195248">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-14.957"/>
+    <tag k="local_y" v="97.5857"/>
+    <tag k="ele" v="-2.3407"/>
+  </node>
+  <node id="239" lat="39.74490991428739" lon="115.83263903538617">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-16.6564"/>
+    <tag k="local_y" v="96.8333"/>
+    <tag k="ele" v="-2.3419"/>
+  </node>
+  <node id="240" lat="39.74489514835755" lon="115.83261900092829">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-18.3943"/>
+    <tag k="local_y" v="95.2168"/>
+    <tag k="ele" v="-2.3469"/>
+  </node>
+  <node id="241" lat="39.744876713394156" lon="115.83260163228465">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-19.9091"/>
+    <tag k="local_y" v="93.1901"/>
+    <tag k="ele" v="-2.3099"/>
+  </node>
+  <node id="242" lat="39.744857135138155" lon="115.83259277969555">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-20.6959"/>
+    <tag k="local_y" v="91.027"/>
+    <tag k="ele" v="-2.3088"/>
+  </node>
+  <node id="243" lat="39.74481593558798" lon="115.83258210132105">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-21.6704"/>
+    <tag k="local_y" v="86.4662"/>
+    <tag k="ele" v="-2.3402"/>
+  </node>
+  <node id="245" lat="39.74414561512311" lon="115.83254763199376">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-25.5931"/>
+    <tag k="local_y" v="12.1061"/>
+    <tag k="ele" v="-2.2903"/>
+  </node>
+  <node id="247" lat="39.744145846642816" lon="115.83258847625315">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-22.0932"/>
+    <tag k="local_y" v="12.0862"/>
+    <tag k="ele" v="-2.2903"/>
+  </node>
+  <node id="250" lat="39.744123925607255" lon="115.83255111662388">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-25.3259"/>
+    <tag k="local_y" v="9.6949"/>
+    <tag k="ele" v="-2.2527"/>
+  </node>
+  <node id="252" lat="39.74410107401403" lon="115.83255632253051">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-24.9129"/>
+    <tag k="local_y" v="7.1528"/>
+    <tag k="ele" v="-2.2269"/>
+  </node>
+  <node id="253" lat="39.7440692862737" lon="115.83256733396468">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-24.0154"/>
+    <tag k="local_y" v="3.6124"/>
+    <tag k="ele" v="-2.2189"/>
+  </node>
+  <node id="254" lat="39.74404332171904" lon="115.8325820297501">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-22.7938"/>
+    <tag k="local_y" v="0.7142"/>
+    <tag k="ele" v="-2.1238"/>
+  </node>
+  <node id="255" lat="39.74402586173038" lon="115.8326029229633">
+    <tag k="mgrs_code" v="50SMK0-10-1"/>
+    <tag k="local_x" v="-21.0289"/>
+    <tag k="local_y" v="-1.247"/>
+    <tag k="ele" v="-2.1395"/>
+  </node>
+  <node id="256" lat="39.74401866008571" lon="115.83264430342547">
+    <tag k="mgrs_code" v="50SMK0-10-1"/>
+    <tag k="local_x" v="-17.4938"/>
+    <tag k="local_y" v="-2.0925"/>
+    <tag k="ele" v="-2.1549"/>
+  </node>
+  <node id="257" lat="39.74401424124513" lon="115.8327480954302">
+    <tag k="mgrs_code" v="50SMK0-10-1"/>
+    <tag k="local_x" v="-8.6072"/>
+    <tag k="local_y" v="-2.6988"/>
+    <tag k="ele" v="-2.2109"/>
+  </node>
+  <node id="258" lat="39.74412387821385" lon="115.8325914625476">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-21.8691"/>
+    <tag k="local_y" v="9.6446"/>
+    <tag k="ele" v="-2.2596"/>
+  </node>
+  <node id="260" lat="39.744107324006066" lon="115.83259527482114">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-21.5664"/>
+    <tag k="local_y" v="7.803"/>
+    <tag k="ele" v="-2.2386"/>
+  </node>
+  <node id="261" lat="39.744083189913816" lon="115.83260366642672">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-20.8823"/>
+    <tag k="local_y" v="5.115"/>
+    <tag k="ele" v="-2.2297"/>
+  </node>
+  <node id="262" lat="39.74406734254536" lon="115.83261263128257">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-20.1371"/>
+    <tag k="local_y" v="3.3461"/>
+    <tag k="ele" v="-2.2188"/>
+  </node>
+  <node id="263" lat="39.744053232651616" lon="115.8326289792046">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-18.7568"/>
+    <tag k="local_y" v="1.7618"/>
+    <tag k="ele" v="-2.2175"/>
+  </node>
+  <node id="264" lat="39.74404784720446" lon="115.83265367886494">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-16.6483"/>
+    <tag k="local_y" v="1.1365"/>
+    <tag k="ele" v="-2.2034"/>
+  </node>
+  <node id="265" lat="39.74404576998186" lon="115.83274716422473">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-8.6414"/>
+    <tag k="local_y" v="0.8016"/>
+    <tag k="ele" v="-2.2633"/>
+  </node>
+  <node id="267" lat="39.744077290055984" lon="115.83274644674769">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-8.6573"/>
+    <tag k="local_y" v="4.3008"/>
+    <tag k="ele" v="-2.2109"/>
+  </node>
+  <node id="268" lat="39.74408354454698" lon="115.83318802365756">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="29.1864"/>
+    <tag k="local_y" v="4.5022"/>
+    <tag k="ele" v="-2.1491"/>
+  </node>
+  <node id="275" lat="39.74407642818463" lon="115.83322787022435">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="32.5902"/>
+    <tag k="local_y" v="3.6679"/>
+    <tag k="ele" v="-2.177"/>
+  </node>
+  <node id="278" lat="39.74407651515487" lon="115.83322782790803">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="32.5867"/>
+    <tag k="local_y" v="3.6776"/>
+    <tag k="ele" v="-2.177"/>
+  </node>
+  <node id="279" lat="39.74404412499995" lon="115.8358381681974">
+    <tag k="mgrs_code" v="50SMK0020-1"/>
+    <tag k="local_x" v="256.196"/>
+    <tag k="local_y" v="-2.8265"/>
+    <tag k="ele" v="-2.177"/>
+  </node>
+  <node id="282" lat="39.744044117631745" lon="115.83583869119224">
+    <tag k="mgrs_code" v="50SMK0020-1"/>
+    <tag k="local_x" v="256.2408"/>
+    <tag k="local_y" v="-2.8279"/>
+    <tag k="ele" v="-2.1546"/>
+  </node>
+  <node id="283" lat="39.7440410036371" lon="115.8360179867464">
+    <tag k="mgrs_code" v="50SMK0020-1"/>
+    <tag k="local_x" v="271.5985"/>
+    <tag k="local_y" v="-3.3731"/>
+    <tag k="ele" v="-2.1546"/>
+  </node>
+  <node id="290" lat="39.74404100929856" lon="115.83601765285414">
+    <tag k="mgrs_code" v="50SMK0020-1"/>
+    <tag k="local_x" v="271.5699"/>
+    <tag k="local_y" v="-3.3721"/>
+    <tag k="ele" v="-2.1595"/>
+  </node>
+  <node id="291" lat="39.74402535057368" lon="115.83711978933147">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="365.9793"/>
+    <tag k="local_y" v="-6.3362"/>
+    <tag k="ele" v="-2.1595"/>
+  </node>
+  <node id="294" lat="39.74406065229479" lon="115.83715218340107">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="368.8057"/>
+    <tag k="local_y" v="-2.4541"/>
+    <tag k="ele" v="-2.2303"/>
+  </node>
+  <node id="295" lat="39.744335885343965" lon="115.83714623629575">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="368.6926"/>
+    <tag k="local_y" v="28.1005"/>
+    <tag k="ele" v="-2.2303"/>
+  </node>
+  <node id="298" lat="39.74402611171884" lon="115.83712858363903">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="366.7339"/>
+    <tag k="local_y" v="-6.2615"/>
+    <tag k="ele" v="-2.2214"/>
+  </node>
+  <node id="300" lat="39.744029024702606" lon="115.83713848555071">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="367.5865"/>
+    <tag k="local_y" v="-5.9492"/>
+    <tag k="ele" v="-2.2358"/>
+  </node>
+  <node id="301" lat="39.744034804375815" lon="115.8371463843402">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="368.2716"/>
+    <tag k="local_y" v="-5.3165"/>
+    <tag k="ele" v="-2.2526"/>
+  </node>
+  <node id="302" lat="39.74404505408658" lon="115.83715178970583">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="368.7495"/>
+    <tag k="local_y" v="-4.1849"/>
+    <tag k="ele" v="-2.2217"/>
+  </node>
+  <node id="303" lat="39.74406050968116" lon="115.83715233752457">
+    <tag k="mgrs_code" v="50SMK0030-1"/>
+    <tag k="local_x" v="368.8187"/>
+    <tag k="local_y" v="-2.4701"/>
+    <tag k="ele" v="-2.2499"/>
+  </node>
+  <node id="305" lat="39.744352991949604" lon="115.83712191404511">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="366.6333"/>
+    <tag k="local_y" v="30.0262"/>
+    <tag k="ele" v="-2.4198"/>
+  </node>
+  <node id="306" lat="39.74434627255002" lon="115.83693219488187">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="350.3684"/>
+    <tag k="local_y" v="29.4914"/>
+    <tag k="ele" v="-2.4198"/>
+  </node>
+  <node id="315" lat="39.744346208790056" lon="115.83693212592632">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="350.3624"/>
+    <tag k="local_y" v="29.4844"/>
+    <tag k="ele" v="-2.2887"/>
+  </node>
+  <node id="316" lat="39.744338857092515" lon="115.83683164082544">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="341.7422"/>
+    <tag k="local_y" v="28.7802"/>
+    <tag k="ele" v="-2.2887"/>
+  </node>
+  <node id="320" lat="39.74433888519415" lon="115.83683156799097">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="341.736"/>
+    <tag k="local_y" v="28.7834"/>
+    <tag k="ele" v="-2.2301"/>
+  </node>
+  <node id="321" lat="39.744321144487365" lon="115.83599804505582">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="270.2938"/>
+    <tag k="local_y" v="27.7418"/>
+    <tag k="ele" v="-2.2301"/>
+  </node>
+  <node id="324" lat="39.74442317693969" lon="115.83586215373384">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="258.7977"/>
+    <tag k="local_y" v="39.2176"/>
+    <tag k="ele" v="-2.3451"/>
+  </node>
+  <node id="325" lat="39.74485760566313" lon="115.83585518990786">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="258.8275"/>
+    <tag k="local_y" v="87.4424"/>
+    <tag k="ele" v="-2.3451"/>
+  </node>
+  <node id="328" lat="39.74432449940853" lon="115.83596252310693">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="267.2551"/>
+    <tag k="local_y" v="28.1537"/>
+    <tag k="ele" v="-2.2935"/>
+  </node>
+  <node id="330" lat="39.74433223143309" lon="115.83592970875537">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="264.4547"/>
+    <tag k="local_y" v="29.0484"/>
+    <tag k="ele" v="-2.3072"/>
+  </node>
+  <node id="331" lat="39.74434613074392" lon="115.83589698901453">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="261.6713"/>
+    <tag k="local_y" v="30.6275"/>
+    <tag k="ele" v="-2.3696"/>
+  </node>
+  <node id="332" lat="39.7443626842542" lon="115.83587899225714">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="260.1532"/>
+    <tag k="local_y" v="32.4848"/>
+    <tag k="ele" v="-2.3678"/>
+  </node>
+  <node id="333" lat="39.744382065549644" lon="115.8358667940432">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="259.136"/>
+    <tag k="local_y" v="34.6495"/>
+    <tag k="ele" v="-2.3642"/>
+  </node>
+  <node id="334" lat="39.74442303008039" lon="115.83586215387126">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="258.7975"/>
+    <tag k="local_y" v="39.2013"/>
+    <tag k="ele" v="-2.2269"/>
+  </node>
+  <node id="336" lat="39.744939255429586" lon="115.83569734223587">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="245.4209"/>
+    <tag k="local_y" v="96.6804"/>
+    <tag k="ele" v="-2.2904"/>
+  </node>
+  <node id="337" lat="39.74492723731932" lon="115.8349332517229">
+    <tag k="mgrs_code" v="50SMK001000"/>
+    <tag k="local_x" v="179.9365"/>
+    <tag k="local_y" v="96.1975"/>
+    <tag k="ele" v="-2.2904"/>
+  </node>
+  <node id="340" lat="39.744884403351804" lon="115.83585066557895">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="258.4785"/>
+    <tag k="local_y" v="90.4217"/>
+    <tag k="ele" v="-2.2104"/>
+  </node>
+  <node id="342" lat="39.74490369903474" lon="115.83584286764129">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="257.8382"/>
+    <tag k="local_y" v="92.572"/>
+    <tag k="ele" v="-2.2403"/>
+  </node>
+  <node id="343" lat="39.74492022779552" lon="115.8358262670352">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="256.4397"/>
+    <tag k="local_y" v="94.425"/>
+    <tag k="ele" v="-2.2137"/>
+  </node>
+  <node id="344" lat="39.74493184822789" lon="115.83580007930189">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="254.2127"/>
+    <tag k="local_y" v="95.7439"/>
+    <tag k="ele" v="-2.2653"/>
+  </node>
+  <node id="345" lat="39.74493759550553" lon="115.83576359939124">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="251.0954"/>
+    <tag k="local_y" v="96.4224"/>
+    <tag k="ele" v="-2.2085"/>
+  </node>
+  <node id="346" lat="39.74493915016236" lon="115.8356976264551">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="245.4451"/>
+    <tag k="local_y" v="96.6684"/>
+    <tag k="ele" v="-2.403"/>
+  </node>
+  <node id="347" lat="39.74489321329507" lon="115.83588966306621">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="261.8325"/>
+    <tag k="local_y" v="91.3561"/>
+    <tag k="ele" v="-2.2113"/>
+  </node>
+  <node id="349" lat="39.7449120796931" lon="115.83588200308267">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="261.2034"/>
+    <tag k="local_y" v="93.4586"/>
+    <tag k="ele" v="-2.2164"/>
+  </node>
+  <node id="350" lat="39.7449306375183" lon="115.83586702333434">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="259.9467"/>
+    <tag k="local_y" v="95.535"/>
+    <tag k="ele" v="-2.1842"/>
+  </node>
+  <node id="351" lat="39.74494543522642" lon="115.83584671352064">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="258.2279"/>
+    <tag k="local_y" v="97.2"/>
+    <tag k="ele" v="-2.163"/>
+  </node>
+  <node id="352" lat="39.744957762119924" lon="115.83581640206408">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="255.6486"/>
+    <tag k="local_y" v="98.6019"/>
+    <tag k="ele" v="-2.2013"/>
+  </node>
+  <node id="353" lat="39.74496566274768" lon="115.83577560950299">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="252.1649"/>
+    <tag k="local_y" v="99.5242"/>
+    <tag k="ele" v="-2.2645"/>
+  </node>
+  <node id="354" lat="39.74496808318448" lon="115.835746545543">
+    <tag k="mgrs_code" v="50SMK002000"/>
+    <tag k="local_x" v="249.6782"/>
+    <tag k="local_y" v="99.8252"/>
+    <tag k="ele" v="-2.2436"/>
+  </node>
+  <node id="355" lat="39.74497071667808" lon="115.83569659672888">
+    <tag k="mgrs_code" v="50SMK002001"/>
+    <tag k="local_x" v="245.4024"/>
+    <tag k="local_y" v="100.1731"/>
+    <tag k="ele" v="-2.2166"/>
+  </node>
+  <node id="357" lat="39.7449465568007" lon="115.83478539195244">
+    <tag k="mgrs_code" v="50SMK001000"/>
+    <tag k="local_x" v="167.2958"/>
+    <tag k="local_y" v="98.5065"/>
+    <tag k="ele" v="-2.3464"/>
+  </node>
+  <node id="358" lat="39.744915469665685" lon="115.83368196982921">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="72.71"/>
+    <tag k="local_y" v="96.2862"/>
+    <tag k="ele" v="-2.3464"/>
+  </node>
+  <node id="361" lat="39.74494648079584" lon="115.8347857188642">
+    <tag k="mgrs_code" v="50SMK001000"/>
+    <tag k="local_x" v="167.3237"/>
+    <tag k="local_y" v="98.4977"/>
+    <tag k="ele" v="-2.331"/>
+  </node>
+  <node id="364" lat="39.74492934774604" lon="115.83348985730348">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="56.2699"/>
+    <tag k="local_y" v="98.0408"/>
+    <tag k="ele" v="-2.185"/>
+  </node>
+  <node id="365" lat="39.74489347475977" lon="115.83271642321046">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-10.0496"/>
+    <tag k="local_y" v="94.9223"/>
+    <tag k="ele" v="-2.185"/>
+  </node>
+  <node id="368" lat="39.74492799408244" lon="115.83350631459044">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="57.678"/>
+    <tag k="local_y" v="97.8722"/>
+    <tag k="ele" v="-2.3645"/>
+  </node>
+  <node id="370" lat="39.74492574162645" lon="115.83352164557431">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="58.9883"/>
+    <tag k="local_y" v="97.6051"/>
+    <tag k="ele" v="-2.3668"/>
+  </node>
+  <node id="371" lat="39.74492144176131" lon="115.83353792612051">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="60.377"/>
+    <tag k="local_y" v="97.1097"/>
+    <tag k="ele" v="-2.3596"/>
+  </node>
+  <node id="372" lat="39.74491578944528" lon="115.8335520480935">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="61.5788"/>
+    <tag k="local_y" v="96.4666"/>
+    <tag k="ele" v="-2.3498"/>
+  </node>
+  <node id="373" lat="39.744910077945065" lon="115.83356826023712">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="62.9596"/>
+    <tag k="local_y" v="95.8146"/>
+    <tag k="ele" v="-2.2416"/>
+  </node>
+  <node id="374" lat="39.744907229536665" lon="115.83359036598955">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="64.8495"/>
+    <tag k="local_y" v="95.4738"/>
+    <tag k="ele" v="-2.2344"/>
+  </node>
+  <node id="375" lat="39.744906451107546" lon="115.83361780332875">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="67.1992"/>
+    <tag k="local_y" v="95.3568"/>
+    <tag k="ele" v="-2.2364"/>
+  </node>
+  <node id="376" lat="39.74490644300942" lon="115.8336465850576">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="69.6652"/>
+    <tag k="local_y" v="95.3238"/>
+    <tag k="ele" v="-2.2119"/>
+  </node>
+  <node id="377" lat="39.74491546335985" lon="115.83368196993554">
+    <tag k="mgrs_code" v="50SMK000000"/>
+    <tag k="local_x" v="72.71"/>
+    <tag k="local_y" v="96.2855"/>
+    <tag k="ele" v="-2.2068"/>
+  </node>
+  <node id="379" lat="39.74481616710129" lon="115.83262294597667">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-18.1705"/>
+    <tag k="local_y" v="86.4463"/>
+    <tag k="ele" v="-2.3402"/>
+  </node>
+  <node id="380" lat="39.74414607814815" lon="115.83262932051318">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-18.5933"/>
+    <tag k="local_y" v="12.0663"/>
+    <tag k="ele" v="-2.3402"/>
+  </node>
+  <node id="392" lat="39.744127816515466" lon="115.83263223139744">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-18.3703"/>
+    <tag k="local_y" v="10.0362"/>
+    <tag k="ele" v="-2.2808"/>
+  </node>
+  <node id="394" lat="39.74410803085019" lon="115.83263850013749">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-17.8618"/>
+    <tag k="local_y" v="7.8332"/>
+    <tag k="ele" v="-2.2829"/>
+  </node>
+  <node id="395" lat="39.74408803543243" lon="115.83265365538584">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-16.5922"/>
+    <tag k="local_y" v="5.597"/>
+    <tag k="ele" v="-2.2738"/>
+  </node>
+  <node id="396" lat="39.74408040712482" lon="115.83267751873264">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-14.5586"/>
+    <tag k="local_y" v="4.7237"/>
+    <tag k="ele" v="-2.2499"/>
+  </node>
+  <node id="397" lat="39.744077010868835" lon="115.83274610015509">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-8.6874"/>
+    <tag k="local_y" v="4.2702"/>
+    <tag k="ele" v="-2.2542"/>
+  </node>
+  <node id="398" lat="39.74407832051987" lon="115.83271085312423">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-11.7055"/>
+    <tag k="local_y" v="4.4549"/>
+    <tag k="ele" v="-2.2452"/>
+  </node>
+  <node id="400" lat="39.74434804853636" lon="115.83713903021393">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="368.0927"/>
+    <tag k="local_y" v="29.4585"/>
+    <tag k="ele" v="-2.3812"/>
+  </node>
+  <node id="402" lat="39.74433593846918" lon="115.83714632293717">
+    <tag k="mgrs_code" v="50SMK003000"/>
+    <tag k="local_x" v="368.7001"/>
+    <tag k="local_y" v="28.1063"/>
+    <tag k="ele" v="-2.3956"/>
+  </node>
+  <node id="405" lat="39.744842346521196" lon="115.83262674667503">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-17.807"/>
+    <tag k="local_y" v="89.3477"/>
+    <tag k="ele" v="-2.3119"/>
+  </node>
+  <node id="407" lat="39.74486252899852" lon="115.83263592404244">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-16.9915"/>
+    <tag k="local_y" v="91.5775"/>
+    <tag k="ele" v="-2.3272"/>
+  </node>
+  <node id="408" lat="39.74487896400291" lon="115.83265331594076">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-15.4776"/>
+    <tag k="local_y" v="93.3822"/>
+    <tag k="ele" v="-2.3549"/>
+  </node>
+  <node id="409" lat="39.74488977927095" lon="115.83267999622329">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-13.176"/>
+    <tag k="local_y" v="94.5528"/>
+    <tag k="ele" v="-2.2582"/>
+  </node>
+  <node id="410" lat="39.74489371778788" lon="115.83271648913727">
+    <tag k="mgrs_code" v="50SMK0-1000"/>
+    <tag k="local_x" v="-10.0436"/>
+    <tag k="local_y" v="94.9492"/>
+    <tag k="ele" v="-2.2972"/>
+  </node>
+  <way id="10">
+    <nd ref="8"/>
+    <nd ref="9"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="13">
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="16">
+    <nd ref="9"/>
+    <nd ref="15"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="18">
+    <nd ref="12"/>
+    <nd ref="17"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="21">
+    <nd ref="15"/>
+    <nd ref="20"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="23">
+    <nd ref="17"/>
+    <nd ref="22"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="26">
+    <nd ref="20"/>
+    <nd ref="25"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="28">
+    <nd ref="22"/>
+    <nd ref="27"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="31">
+    <nd ref="25"/>
+    <nd ref="30"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="33">
+    <nd ref="27"/>
+    <nd ref="32"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="44">
+    <nd ref="30"/>
+    <nd ref="43"/>
+    <nd ref="45"/>
+    <nd ref="46"/>
+    <nd ref="47"/>
+    <nd ref="48"/>
+    <nd ref="49"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="51">
+    <nd ref="32"/>
+    <nd ref="50"/>
+    <nd ref="52"/>
+    <nd ref="53"/>
+    <nd ref="54"/>
+    <nd ref="55"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="58">
+    <nd ref="49"/>
+    <nd ref="57"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="60">
+    <nd ref="55"/>
+    <nd ref="59"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="63">
+    <nd ref="57"/>
+    <nd ref="62"/>
+    <nd ref="64"/>
+    <nd ref="65"/>
+    <nd ref="66"/>
+    <nd ref="67"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="72">
+    <nd ref="59"/>
+    <nd ref="71"/>
+    <nd ref="73"/>
+    <nd ref="74"/>
+    <nd ref="75"/>
+    <nd ref="76"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="79">
+    <nd ref="67"/>
+    <nd ref="78"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="81">
+    <nd ref="76"/>
+    <nd ref="80"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="86">
+    <nd ref="78"/>
+    <nd ref="85"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="88">
+    <nd ref="80"/>
+    <nd ref="87"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="91">
+    <nd ref="85"/>
+    <nd ref="90"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="93">
+    <nd ref="87"/>
+    <nd ref="92"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="103">
+    <nd ref="90"/>
+    <nd ref="102"/>
+    <nd ref="104"/>
+    <nd ref="105"/>
+    <nd ref="106"/>
+    <nd ref="107"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="109">
+    <nd ref="92"/>
+    <nd ref="108"/>
+    <nd ref="110"/>
+    <nd ref="111"/>
+    <nd ref="112"/>
+    <nd ref="113"/>
+    <nd ref="114"/>
+    <nd ref="115"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="118">
+    <nd ref="107"/>
+    <nd ref="117"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="120">
+    <nd ref="115"/>
+    <nd ref="119"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="127">
+    <nd ref="117"/>
+    <nd ref="126"/>
+    <nd ref="128"/>
+    <nd ref="129"/>
+    <nd ref="130"/>
+    <nd ref="131"/>
+    <nd ref="132"/>
+    <nd ref="133"/>
+    <nd ref="134"/>
+    <nd ref="135"/>
+    <nd ref="136"/>
+    <nd ref="178"/>
+    <nd ref="137"/>
+    <nd ref="177"/>
+    <nd ref="138"/>
+    <nd ref="139"/>
+    <nd ref="179"/>
+    <nd ref="140"/>
+    <nd ref="180"/>
+    <nd ref="141"/>
+    <nd ref="142"/>
+    <nd ref="182"/>
+    <nd ref="143"/>
+    <nd ref="183"/>
+    <nd ref="181"/>
+    <nd ref="144"/>
+    <nd ref="145"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="147">
+    <nd ref="119"/>
+    <nd ref="146"/>
+    <nd ref="148"/>
+    <nd ref="149"/>
+    <nd ref="150"/>
+    <nd ref="151"/>
+    <nd ref="152"/>
+    <nd ref="153"/>
+    <nd ref="154"/>
+    <nd ref="155"/>
+    <nd ref="156"/>
+    <nd ref="157"/>
+    <nd ref="158"/>
+    <nd ref="159"/>
+    <nd ref="160"/>
+    <nd ref="161"/>
+    <nd ref="162"/>
+    <nd ref="163"/>
+    <nd ref="164"/>
+    <nd ref="165"/>
+    <nd ref="167"/>
+    <nd ref="168"/>
+    <nd ref="184"/>
+    <nd ref="169"/>
+    <nd ref="170"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="173">
+    <nd ref="145"/>
+    <nd ref="172"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="175">
+    <nd ref="170"/>
+    <nd ref="174"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="186">
+    <nd ref="172"/>
+    <nd ref="185"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="188">
+    <nd ref="174"/>
+    <nd ref="187"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="191">
+    <nd ref="185"/>
+    <nd ref="190"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="193">
+    <nd ref="187"/>
+    <nd ref="192"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="196">
+    <nd ref="190"/>
+    <nd ref="195"/>
+    <nd ref="197"/>
+    <nd ref="198"/>
+    <nd ref="199"/>
+    <nd ref="200"/>
+    <nd ref="201"/>
+    <nd ref="202"/>
+    <nd ref="203"/>
+    <nd ref="204"/>
+    <nd ref="205"/>
+    <nd ref="206"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="208">
+    <nd ref="192"/>
+    <nd ref="207"/>
+    <nd ref="209"/>
+    <nd ref="210"/>
+    <nd ref="211"/>
+    <nd ref="212"/>
+    <nd ref="213"/>
+    <nd ref="214"/>
+    <nd ref="215"/>
+    <nd ref="216"/>
+    <nd ref="217"/>
+    <nd ref="218"/>
+    <nd ref="219"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="222">
+    <nd ref="206"/>
+    <nd ref="221"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="224">
+    <nd ref="219"/>
+    <nd ref="223"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="227">
+    <nd ref="221"/>
+    <nd ref="226"/>
+    <nd ref="228"/>
+    <nd ref="229"/>
+    <nd ref="230"/>
+    <nd ref="231"/>
+    <nd ref="232"/>
+    <nd ref="233"/>
+    <nd ref="234"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="236">
+    <nd ref="223"/>
+    <nd ref="235"/>
+    <nd ref="237"/>
+    <nd ref="238"/>
+    <nd ref="239"/>
+    <nd ref="240"/>
+    <nd ref="241"/>
+    <nd ref="242"/>
+    <nd ref="243"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="246">
+    <nd ref="234"/>
+    <nd ref="245"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="248">
+    <nd ref="243"/>
+    <nd ref="247"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="251">
+    <nd ref="245"/>
+    <nd ref="250"/>
+    <nd ref="252"/>
+    <nd ref="253"/>
+    <nd ref="254"/>
+    <nd ref="255"/>
+    <nd ref="256"/>
+    <nd ref="257"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="259">
+    <nd ref="247"/>
+    <nd ref="258"/>
+    <nd ref="260"/>
+    <nd ref="261"/>
+    <nd ref="262"/>
+    <nd ref="263"/>
+    <nd ref="264"/>
+    <nd ref="265"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="269">
+    <nd ref="267"/>
+    <nd ref="268"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="276">
+    <nd ref="268"/>
+    <nd ref="275"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="280">
+    <nd ref="278"/>
+    <nd ref="279"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="284">
+    <nd ref="282"/>
+    <nd ref="283"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="292">
+    <nd ref="290"/>
+    <nd ref="291"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="296">
+    <nd ref="294"/>
+    <nd ref="295"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="299">
+    <nd ref="291"/>
+    <nd ref="298"/>
+    <nd ref="300"/>
+    <nd ref="301"/>
+    <nd ref="302"/>
+    <nd ref="303"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="307">
+    <nd ref="305"/>
+    <nd ref="306"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="317">
+    <nd ref="315"/>
+    <nd ref="316"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="322">
+    <nd ref="320"/>
+    <nd ref="321"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="326">
+    <nd ref="324"/>
+    <nd ref="325"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="329">
+    <nd ref="321"/>
+    <nd ref="328"/>
+    <nd ref="330"/>
+    <nd ref="331"/>
+    <nd ref="332"/>
+    <nd ref="333"/>
+    <nd ref="334"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="338">
+    <nd ref="336"/>
+    <nd ref="337"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="341">
+    <nd ref="325"/>
+    <nd ref="340"/>
+    <nd ref="342"/>
+    <nd ref="343"/>
+    <nd ref="344"/>
+    <nd ref="345"/>
+    <nd ref="346"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="348">
+    <nd ref="119"/>
+    <nd ref="347"/>
+    <nd ref="349"/>
+    <nd ref="350"/>
+    <nd ref="351"/>
+    <nd ref="352"/>
+    <nd ref="353"/>
+    <nd ref="354"/>
+    <nd ref="355"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="359">
+    <nd ref="357"/>
+    <nd ref="358"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="362">
+    <nd ref="337"/>
+    <nd ref="361"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="366">
+    <nd ref="364"/>
+    <nd ref="365"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="369">
+    <nd ref="364"/>
+    <nd ref="368"/>
+    <nd ref="370"/>
+    <nd ref="371"/>
+    <nd ref="372"/>
+    <nd ref="373"/>
+    <nd ref="374"/>
+    <nd ref="375"/>
+    <nd ref="376"/>
+    <nd ref="377"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="381">
+    <nd ref="379"/>
+    <nd ref="380"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="393">
+    <nd ref="380"/>
+    <nd ref="392"/>
+    <nd ref="394"/>
+    <nd ref="395"/>
+    <nd ref="396"/>
+    <nd ref="398"/>
+    <nd ref="397"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="401">
+    <nd ref="305"/>
+    <nd ref="400"/>
+    <nd ref="402"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="406">
+    <nd ref="379"/>
+    <nd ref="405"/>
+    <nd ref="407"/>
+    <nd ref="408"/>
+    <nd ref="409"/>
+    <nd ref="410"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <relation id="14">
+    <member type="way" role="left" ref="13"/>
+    <member type="way" role="right" ref="10"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="19">
+    <member type="way" role="left" ref="18"/>
+    <member type="way" role="right" ref="16"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="24">
+    <member type="way" role="left" ref="23"/>
+    <member type="way" role="right" ref="21"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="29">
+    <member type="way" role="left" ref="28"/>
+    <member type="way" role="right" ref="26"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="34">
+    <member type="way" role="left" ref="33"/>
+    <member type="way" role="right" ref="31"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="56">
+    <member type="way" role="left" ref="51"/>
+    <member type="way" role="right" ref="44"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="61">
+    <member type="way" role="left" ref="60"/>
+    <member type="way" role="right" ref="58"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="77">
+    <member type="way" role="left" ref="72"/>
+    <member type="way" role="right" ref="63"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="82">
+    <member type="way" role="left" ref="81"/>
+    <member type="way" role="right" ref="79"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="89">
+    <member type="way" role="left" ref="88"/>
+    <member type="way" role="right" ref="86"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="94">
+    <member type="way" role="left" ref="93"/>
+    <member type="way" role="right" ref="91"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="116">
+    <member type="way" role="left" ref="109"/>
+    <member type="way" role="right" ref="103"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="121">
+    <member type="way" role="left" ref="120"/>
+    <member type="way" role="right" ref="118"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="171">
+    <member type="way" role="left" ref="147"/>
+    <member type="way" role="right" ref="127"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="176">
+    <member type="way" role="left" ref="175"/>
+    <member type="way" role="right" ref="173"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="189">
+    <member type="way" role="left" ref="188"/>
+    <member type="way" role="right" ref="186"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="194">
+    <member type="way" role="left" ref="193"/>
+    <member type="way" role="right" ref="191"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="220">
+    <member type="way" role="left" ref="208"/>
+    <member type="way" role="right" ref="196"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="225">
+    <member type="way" role="left" ref="224"/>
+    <member type="way" role="right" ref="222"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="244">
+    <member type="way" role="left" ref="236"/>
+    <member type="way" role="right" ref="227"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="249">
+    <member type="way" role="left" ref="248"/>
+    <member type="way" role="right" ref="246"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="266">
+    <member type="way" role="left" ref="259"/>
+    <member type="way" role="right" ref="251"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="270">
+    <member type="way" role="left" ref="13"/>
+    <member type="way" role="right" ref="269"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="277">
+    <member type="way" role="left" ref="18"/>
+    <member type="way" role="right" ref="276"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="281">
+    <member type="way" role="left" ref="23"/>
+    <member type="way" role="right" ref="280"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="285">
+    <member type="way" role="left" ref="28"/>
+    <member type="way" role="right" ref="284"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="293">
+    <member type="way" role="left" ref="33"/>
+    <member type="way" role="right" ref="292"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="297">
+    <member type="way" role="left" ref="60"/>
+    <member type="way" role="right" ref="296"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="304">
+    <member type="way" role="left" ref="51"/>
+    <member type="way" role="right" ref="299"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="308">
+    <member type="way" role="left" ref="81"/>
+    <member type="way" role="right" ref="307"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="318">
+    <member type="way" role="left" ref="88"/>
+    <member type="way" role="right" ref="317"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="323">
+    <member type="way" role="left" ref="93"/>
+    <member type="way" role="right" ref="322"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="327">
+    <member type="way" role="left" ref="120"/>
+    <member type="way" role="right" ref="326"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="335">
+    <member type="way" role="left" ref="109"/>
+    <member type="way" role="right" ref="329"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="339">
+    <member type="way" role="left" ref="175"/>
+    <member type="way" role="right" ref="338"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="356">
+    <member type="way" role="left" ref="348"/>
+    <member type="way" role="right" ref="341"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="360">
+    <member type="way" role="left" ref="193"/>
+    <member type="way" role="right" ref="359"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="363">
+    <member type="way" role="left" ref="188"/>
+    <member type="way" role="right" ref="362"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="367">
+    <member type="way" role="left" ref="224"/>
+    <member type="way" role="right" ref="366"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="378">
+    <member type="way" role="left" ref="208"/>
+    <member type="way" role="right" ref="369"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="382">
+    <member type="way" role="left" ref="248"/>
+    <member type="way" role="right" ref="381"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="399">
+    <member type="way" role="left" ref="259"/>
+    <member type="way" role="right" ref="393"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="403">
+    <member type="way" role="left" ref="72"/>
+    <member type="way" role="right" ref="401"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+  <relation id="411">
+    <member type="way" role="left" ref="236"/>
+    <member type="way" role="right" ref="406"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="speed_limit" v="10"/>
+    <tag k="location" v="urban"/>
+    <tag k="one_way" v="yes"/>
+  </relation>
+</osm>

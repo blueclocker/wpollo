@@ -175,8 +175,14 @@ add_library(map_lib
     src/map_plan.cpp
 )
 
+add_library(geographicLib
+    GeographicLib/Geocentric.cpp
+    GeographicLib/LocalCartesian.cpp
+    GeographicLib/Math.cpp
+)
+
 add_executable(mapio src/map_io.cpp src/main.cpp)
-target_link_libraries(mapio ${catkin_LIBRARIES} map_lib)
+target_link_libraries(mapio ${catkin_LIBRARIES} map_lib geographicLib)
 add_dependencies(mapio ${PROJECT_NAME}_gencpp)
 
 #############

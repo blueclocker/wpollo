@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:24:25
- * @LastEditTime: 2022-04-09 20:46:33
+ * @LastEditTime: 2022-04-17 14:54:00
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_io.cpp
@@ -15,8 +15,10 @@ Map::Map(ros::NodeHandle n_):n(n_)
 {
     n.getParam("file_path", file_path_);
     n.getParam("file_name", file_name_);
-    //n.getParam("start_position", start_position_);
-    //n.getParam("end_position", end_position_);
+    n.getParam("origin_lat", origin_lat);
+    n.getParam("origin_lon", origin_lon);
+    n.getParam("origin_ele", origin_ele);
+    gpspath_pub = n.advertise<nav_msgs::Path>("gpspath_info", 1);
     navigation_pub = n.advertise<osmmap::navigation>("navigation_info", 1);
 
     std::string file = file_path_ + file_name_;
@@ -70,9 +72,10 @@ Map::Map(ros::NodeHandle n_):n(n_)
     //基准点设置，默认初始时不存在起点、终点
     isstart_path_exist = false;
     isend_path_exist = false;
-    basicpoint = new node::Point3D(origin_lat, origin_lon, origin_ele);
+    //basicpoint = new node::Point3D(origin_lat, origin_lon, origin_ele);
     atnowpoint = new node::Point3D(0, 0);
-    nodes->MercatorGPS2xy(basicpoint);
+    //nodes->MercatorGPS2xy(basicpoint);
+    geo_converter = new GeographicLib::LocalCartesian(origin_lat, origin_lon, origin_ele);
     std::cout << "origin has set already!" << std::endl;
     //std::cout << "origin x: " << basicpoint->local_x << ", origin y: " << basicpoint->local_y << std::endl;
     
@@ -99,7 +102,7 @@ Map::Map(ros::NodeHandle n_):n(n_)
         visualmap->run(nodes, ways, centerways, relations);
         startpoint_sub = n.subscribe("/initialpose", 10, &Map::startpoint_callback, this);
         goalpoint_sub = n.subscribe("/move_base_simple/goal", 10, &Map::goalpoint_callback, this);
-        //gps_pub = n.subscribe("/gps/fix", 10, &Map::gps_callback, this);
+        gps_sub = n.subscribe("/comb", 10, &Map::gps_callback, this);
         // navigation_pub.publish(laneletinfo);
         r.sleep();
         ros::spinOnce();
@@ -169,7 +172,8 @@ void Map::fullNavigationInfo()
     laneletinfo.SpeedLimits = relation_temp_->speed_limit;
     laneletinfo.ToLeftDistance = leftdis;
     laneletinfo.ToRightDistance = rightdis;
-    laneletinfo.IntersectionDistance = centerways->length2intersection(start_centerpoint_id_, paths);
+    laneletinfo.direction = static_cast<int>(relation_temp_->turn_direction);
+    laneletinfo.IntersectionDistance = centerways->length2intersection(start_centerpoint_id_, paths, relations);
     
     std::vector<map::relation::regulatoryelement*> trafficsigninfo = relations->getRegulatoryelement(start_path_);
     for(int i = 0; i < trafficsigninfo.size(); ++i)
@@ -203,21 +207,24 @@ void Map::startpoint_callback(const geometry_msgs::PoseWithCovarianceStamped::Co
         ROS_INFO("start point is at %d", start_centerpoint_id_);
         if(isend_path_exist)
         {
+            visualmap->pathmarkerclear();
             paths.clear();
             paths = globalplans->run(start_path_, end_path_);
-            visualmap->path2marker(centerways, paths);
-            Smoothpath(paths);
-            //可视化
-            visualmap->smoothpath2marker(smoothpathnode);
+            if(!paths.empty())
+            {
+                visualmap->path2marker(centerways, paths);
+                Smoothpath(paths);
+                //可视化
+                visualmap->smoothpath2marker(smoothpathnode);
+                //发布导航信息
+                fullNavigationInfo();
+                navigation_pub.publish(laneletinfo);
+            }
 
             //该点到下一个路口(下一次转向)距离测试
             //double intersectiondis = centerways->length2intersection(start_centerpoint_id_, paths);
             //std::cout << "distance to next intersection is " << intersectiondis << std::endl;
             std::cout << "---------------------------------------------------" << std::endl;
-
-            //发布导航信息
-            fullNavigationInfo();
-            navigation_pub.publish(laneletinfo);
 
         }else{
             ROS_WARN("goal point has not set!");
@@ -254,20 +261,24 @@ void Map::goalpoint_callback(const geometry_msgs::PoseStamped::ConstPtr &msg)
         ROS_INFO("goal point is at %d", end_centerpoint_id_);
         if(isstart_path_exist)
         {
+            visualmap->pathmarkerclear();
             paths.clear();
             paths = globalplans->run(start_path_, end_path_);
-            visualmap->path2marker(centerways, paths);
-            Smoothpath(paths);
-            visualmap->smoothpath2marker(smoothpathnode);
+            if(!paths.empty())
+            {
+                visualmap->path2marker(centerways, paths);
+                Smoothpath(paths);
+                visualmap->smoothpath2marker(smoothpathnode);
+
+                //发布导航信息
+                fullNavigationInfo();
+                navigation_pub.publish(laneletinfo);
+            }
 
             //该点到下一个路口(下一次转向)距离测试, 无视终点，直到在地图找到第一个转向路段s
             //double intersectiondis = centerways->length2intersection(start_centerpoint_id_, paths);
             //std::cout << "distance to next intersection is " << intersectiondis << std::endl;
             std::cout << "---------------------------------------------------" << std::endl;
-
-            //发布导航信息
-            fullNavigationInfo();
-            navigation_pub.publish(laneletinfo);
             
         }else{
             ROS_WARN("start point has not set!");
@@ -278,15 +289,17 @@ void Map::goalpoint_callback(const geometry_msgs::PoseStamped::ConstPtr &msg)
     
 }
 
-void Map::gps_callback(const sensor_msgs::NavSatFix::ConstPtr &msg)
+void Map::gps_callback(const fsd_common_msgs::comb::ConstPtr &msg)
 {
-    atnowpoint->elevation = msg->altitude;
-    atnowpoint->latitude = msg->latitude;
-    atnowpoint->longitude = msg->longitude;
-    nodes->MercatorGPS2xy(atnowpoint);
-    atnowpoint->elevation -= basicpoint->elevation;
-    atnowpoint->local_x -= basicpoint->local_x;
-    atnowpoint->local_y -= basicpoint->local_y; 
+    atnowpoint->elevation = msg->Altitude;
+    atnowpoint->latitude = msg->Lattitude;
+    atnowpoint->longitude = msg->Longitude;
+    // nodes->MercatorGPS2xy(atnowpoint);
+    // atnowpoint->elevation -= basicpoint->elevation;
+    // atnowpoint->local_x -= basicpoint->local_x;
+    // atnowpoint->local_y -= basicpoint->local_y; 
+    geo_converter->Forward(atnowpoint->latitude, atnowpoint->longitude, atnowpoint->elevation, 
+                           atnowpoint->local_x, atnowpoint->local_y, atnowpoint->elevation);
 
     //当前点定位到路段
     centerway::CenterPoint3D atnowcenterpoint = centerway::CenterPoint3D(*atnowpoint);
@@ -299,20 +312,23 @@ void Map::gps_callback(const sensor_msgs::NavSatFix::ConstPtr &msg)
         start_centerpoint_id_ = globalplans->Atwhichpoint(atnowcenterpoint, centerways->Find(atnowcenterway));
         if(isend_path_exist)
         {
+            visualmap->pathmarkerclear();
             paths.clear();
             paths = globalplans->run(start_path_, end_path_);
-            visualmap->path2marker(centerways, paths);
-            Smoothpath(paths);
-            visualmap->smoothpath2marker(smoothpathnode);
+            if(!paths.empty())
+            {
+                visualmap->path2marker(centerways, paths);
+                Smoothpath(paths);
+                visualmap->smoothpath2marker(smoothpathnode);
+                //发布导航信息
+                fullNavigationInfo();
+                navigation_pub.publish(laneletinfo);
+            }
 
             //该点到下一个路口(下一次转向)距离测试
-            double intersectiondis = centerways->length2intersection(start_centerpoint_id_, paths);
-            std::cout << "distance to next intersection is " << intersectiondis << std::endl;
+            //double intersectiondis = centerways->length2intersection(start_centerpoint_id_, paths, relations);
+            //std::cout << "distance to next intersection is " << intersectiondis << std::endl;
             std::cout << "---------------------------------------------------" << std::endl;
-
-            //发布导航信息
-            fullNavigationInfo();
-            navigation_pub.publish(laneletinfo);
 
         }else{
             ROS_WARN("goal point has not set!");
@@ -322,18 +338,32 @@ void Map::gps_callback(const sensor_msgs::NavSatFix::ConstPtr &msg)
     }
 
     //tf
-    /*tf::Quaternion q;
-    q.setRPY(0, 0, 0);
+    tf::Quaternion q;
+    q.setRPY((msg->Roll)/180*3.14159, (msg->Pitch)/180*3.14159, (msg->Heading + 90)/180*3.14159);
     baselink2map.setRotation(q);
     baselink2map.setOrigin(tf::Vector3(atnowpoint->local_x, atnowpoint->local_y, atnowpoint->elevation));
     broadcaster.sendTransform(tf::StampedTransform(baselink2map, ros::Time::now(), "map", "base_link"));
     std::cout << "atnowpoint update" << std::endl;
-    std::cout << "now x: " << atnowpoint->local_x << ", now y: " << atnowpoint->local_y << ", now z: " << atnowpoint->elevation << std::endl;*/
+    std::cout << "now x: " << atnowpoint->local_x << ", now y: " << atnowpoint->local_y << ", now z: " << atnowpoint->elevation << std::endl;
+
+    //path
+    gpspath.header.frame_id = "map";
+    gpspath.header.stamp = ros::Time::now();
+    geometry_msgs::PoseStamped pose_stamped;
+    pose_stamped.pose.position.x = atnowpoint->local_x;
+    pose_stamped.pose.position.y = atnowpoint->local_y;
+    pose_stamped.pose.position.z = atnowpoint->elevation;
+    pose_stamped.pose.orientation.x = q.x();
+    pose_stamped.pose.orientation.y = q.y();
+    pose_stamped.pose.orientation.z = q.z();
+    pose_stamped.pose.orientation.w = q.w();
+    gpspath.poses.push_back(pose_stamped);
+    gpspath_pub.publish(gpspath);
 }
 
 Map::~Map()
 {
-    delete basicpoint;
+    //delete basicpoint;
     delete atnowpoint;
     delete nodes;
     delete ways;
@@ -341,6 +371,7 @@ Map::~Map()
     delete visualmap;
     delete centerways;
     delete globalplans;
+    delete geo_converter;
 }
 
 

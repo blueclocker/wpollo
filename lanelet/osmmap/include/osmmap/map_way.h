@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:50
- * @LastEditTime: 2022-03-29 14:16:04
+ * @LastEditTime: 2022-04-16 16:31:29
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_way.h
@@ -27,7 +27,8 @@ enum class WayType
     stop_line = 2,
     traffic_sign = 3,
     traffic_light = 4,
-    light_bulbs = 5
+    light_bulbs = 5,
+    road_border = 6
 };
 
 enum class WaySubtype
@@ -44,6 +45,7 @@ struct Line
     int *nodeline;//node的id
     WayType type;
     WaySubtype subtype;
+    bool isVisual;
     bool operator==(const Line &a)
     {
         return (this->ID == a.ID);
@@ -55,6 +57,7 @@ struct Line
         nodeline = new int[size];
         type = WayType::unknown;
         subtype = WaySubtype::unknown;
+        isVisual = false;
     }
     void Changesize()
     {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-06 15:44:08
- * @LastEditTime: 2022-04-09 20:25:49
+ * @LastEditTime: 2022-04-16 13:30:21
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/centerway.cpp
@@ -55,6 +55,8 @@ double CenterWay::EdgeLength(node::Node *nodes_, way::Line *line)
 
 std::vector<double> CenterWay::CalculateAccumulatedLengths(node::Node *nodes_, way::Line *line)
 {
+    //1st
+    /*
     std::vector<double> accumulated_lengths;
     double res = 0;
     accumulated_lengths.push_back(0);
@@ -63,6 +65,24 @@ std::vector<double> CenterWay::CalculateAccumulatedLengths(node::Node *nodes_, w
         res += NodeDistance(nodes_->Find(line->nodeline[i]), nodes_->Find(line->nodeline[i+1]));
         accumulated_lengths.push_back(res);
     }
+    return accumulated_lengths;*/
+
+    //2nd
+    std::vector<double> segment_distances;
+    segment_distances.reserve(line->length - 1);
+
+    for (int i = 1; i < line->length; ++i) 
+    {
+        const auto distance = NodeDistance(nodes_->Find(line->nodeline[i]), nodes_->Find(line->nodeline[i-1]));
+        segment_distances.push_back(distance);
+    }
+
+    std::vector<double> accumulated_lengths{0};
+    accumulated_lengths.reserve(segment_distances.size() + 1);
+    std::partial_sum(
+        std::begin(segment_distances), std::end(segment_distances),
+        std::back_inserter(accumulated_lengths));
+
     return accumulated_lengths;
 }
 
@@ -187,7 +207,7 @@ void CenterWay::Matchregulatoryelement(node::Node *nodes_, way::Line *line, rela
     }
 }
 
-double CenterWay::length2intersection(const int centerpointid_, const std::vector<int> &pathid_)
+double CenterWay::length2intersection(const int centerpointid_, const std::vector<int> &pathid_, relation::Relation *relations_)
 {
     if(pathid_.empty()) return -1;
     std::vector<int> centerwayid_before_turning;
@@ -203,6 +223,7 @@ double CenterWay::length2intersection(const int centerpointid_, const std::vecto
         if(Find(pathid_[i])->direction == relation::WayDirection::straight)
         {
             centerwayid_before_turning.push_back(pathid_[i]);
+            if(relations_->isStopLine(pathid_[i])) break;
         }else{
             break;
         }

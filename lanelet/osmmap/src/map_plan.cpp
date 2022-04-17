@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-13 15:21:33
- * @LastEditTime: 2022-04-09 16:28:12
+ * @LastEditTime: 2022-04-16 15:15:11
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_plan.cpp
@@ -402,7 +402,6 @@ void Globalplan::Astar(int x, int y)
     }
     std::cout << "---------------------------------------------------" << std::endl;
     std::cout << "not find" << std::endl;
-    std::cout << "---------------------------------------------------" << std::endl;
     return;
 }
 
@@ -463,7 +462,6 @@ void Globalplan::Dijkstra(int x, int y)
     }
     std::cout << "---------------------------------------------------" << std::endl;
     std::cout << "not find" << std::endl;
-    std::cout << "---------------------------------------------------" << std::endl;
     return;
 }
 
@@ -474,6 +472,7 @@ void Globalplan::Dstar(int x, int y)
 
 void Globalplan::Reset()
 {
+    std::cout << "replan ..." << std::endl;
     openlist.clear();
     closelist.clear();
     plan_path.clear();
@@ -487,6 +486,32 @@ void Globalplan::Reset()
     }
 }
 
+bool Globalplan::isReset(int x, int y)
+{
+    if(plan_path.empty()) return true;
+    
+    bool flag = true;
+    int i = y;
+    std::vector<int> plan_path_new;
+    while(plan_ways_map[i]->parent != -1)
+    {
+        plan_path_new.push_back(i);
+        i = plan_ways_map[i]->parent;
+        if(i == x)
+        {
+            plan_path_new.push_back(i);
+            std::reverse(plan_path_new.begin(), plan_path_new.end());
+            plan_path.clear();
+            plan_path = plan_path_new;
+            flag = false;
+            std::cout << "not necessary to replan!" << std::endl;
+            std::cout << "---------------------------------------------------" << std::endl;
+            break;
+        }
+    }
+    return flag;
+}
+
 std::vector<int> Globalplan::run(int x, int y)
 {
     //test
@@ -494,8 +519,14 @@ std::vector<int> Globalplan::run(int x, int y)
     int testares = Inwhichcenterway(testa);
     std::cout << "testa is in " << testares << " path" << std::endl;*/
 
-    Reset();
-    Astar(x, y);
+    //replan
+    if(isReset(x, y))
+    {
+        Reset();
+        Astar(x, y);
+    }
+
+    //feedback
     if(isfindpath)
     {
         std::cout << "start point in path: " << plan_path[0] << 
@@ -512,7 +543,7 @@ std::vector<int> Globalplan::run(int x, int y)
             }
         }
         std::cout << std::endl;
-        std::cout << "cost: " << plan_ways_map[*(--plan_path.end())]->F << std::endl;
+        //std::cout << "cost: " << plan_ways_map[*(--plan_path.end())]->F << std::endl;
     }
     return plan_path;
 }

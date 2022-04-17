@@ -1,0 +1,7 @@
+<!-- -->
+<launch>
+  <node pkg="serial" type="serialPort" name="serialPort" output="screen"/>
+  
+  <node pkg="odometry_publisher" type="gnss_odom_pub" name="gnss_odom_pub" output="screen"/>
+
+</launch>
