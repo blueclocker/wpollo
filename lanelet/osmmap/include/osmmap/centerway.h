@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-06 15:43:53
- * @LastEditTime: 2022-04-16 13:29:47
+ * @LastEditTime: 2022-04-19 21:15:25
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/centerway.h
@@ -13,6 +13,7 @@
 #include "map_way.h"
 #include "map_relation.h"
 #include <numeric>  // std::partial_sum
+#include <utility>      // std::pair
 
 /*根据node, way, relation计算得到的道路中心线
 * 计算得到的道路中心点存储在CenterPoint3D中，并全部存储在类CenterWay的centerpointmap中
@@ -97,6 +98,7 @@ struct CenterWay3D
     int source;//起点CenterPoint3D -> ID
     int target;//终点CenterPoint3D -> ID
     int *centernodeline;//CenterPoint3D的id
+    std::pair<int, int> neighbours;//value = 左侧车道id，右侧车道id，若没有则为-1
     bool operator==(const CenterWay3D &a)
     {
         return (this->ID == a.ID);
@@ -111,6 +113,9 @@ struct CenterWay3D
         target = -1;
         //isturn = true;
         direction = relation::WayDirection::unknown;
+        // neighbours.first = -1;
+        // neighbours.second = -1;
+        neighbours = std::pair<int, int>(-1, -1);
     }
     void Changesize()
     {
@@ -147,6 +152,8 @@ class CenterWay:public map_base<CenterWay3D>
 {
 private:
     std::unordered_map<int, CenterPoint3D*> centerpointmap;
+    void findNeighborleft(int centerwayid_, std::vector<int> &neighbors_);
+    void findNeighborright(int centerwayid_, std::vector<int> &neighbors_);
 public:
     CenterWay();
     CenterWay(TiXmlElement *root);
@@ -177,6 +184,12 @@ public:
     void Matchregulatoryelement(node::Node *nodes_, way::Line *line, relation::regulatoryelement* sign_);
     //当前点到路口的距离(当前点最佳中心线的id)
     double length2intersection(const int centerpointid_, const std::vector<int> &pathid_, relation::Relation *relations_);
+    //绑定相邻车道
+    std::pair<int, int> createNeighbor(const int centerwayid_, relation::Relation *relations_, way::Way *ways_);
+    //获取相邻车道
+    void findNeighbor(int centerwayid_, std::vector<int> &neighbors_);
+    //判断a、b车道是否相邻
+    bool isNeighbor(const int a, const int b);
     void run(node::Node *nodes_, way::Way *ways_, relation::Relation *relations_);
     virtual void CreateOneObject(TiXmlElement *head);
     virtual ~CenterWay();

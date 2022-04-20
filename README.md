@@ -113,7 +113,7 @@ roslaunch osmmap osmmap.launch
 #####  串口读取模块  serial
 * 打开USB串口权限，如果需要，目前GPS不能从USB读取数据，原因不明
 ```
-sudo chmod 777 /ttyUSB0
+sudo chmod 777 /dev/ttyUSB0
 rosrun serial serialPort
 ```
 
@@ -138,7 +138,10 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   fsd_common_msgs
 )
+
+add_dependencies(serialPort ${PROJECT_NAME} fsd_common_msgs_gencpp)
 ```
+
 - package.xml
 ```
 <build_depend>fsd_common_msgs</build_depend>
@@ -240,6 +243,15 @@ find_package(catkin REQUIRED COMPONENTS
 - 部分解决重规划问题，如果原始的规划数据满足要求则不再重复A*，但不能更新cost权重
 - 修正原node模块墨卡托投影问题，现使用GeographicLib库，已集成到osmmap模块，坐标转换接口在mapio内
 - 优化原始点经度、维度、高度数据输入方式，现在launch文件中设置
-- 本模块初步具有实时全局规划并提供导航信息的能力，但还存在一些细节问题，比如：当车走到最后一段路时，全局路径实效
+- 本模块初步具有实时全局规划并提供导航信息的能力，但还存在一些细节问题，比如：当车走到最后一段路时，全局路径失效
 - 新增地图若干，有多车道、双向等场景
 - 在lanelet定位具体点坐标的方式存在缺陷，在环形道路会出现问题
+
+##### 20220420
+* 优化lanelet/osmmap模块
+- 优化全局路径搜索，如果当前点与目标点在同一路段，可以获得该路段的具体中心点的导航
+- 支持同向多车道，发布的导航信息会包括当前路段的可行相邻路段
+- 初步增加换道功能，目前只能在某些固定点换道
+- 新增停车区接口，但还没连接到地图上
+- lanelet定位具体点的方式不变，只需绘制地图时弯道转角不超过180度，则当前程序可行
+- 优化部分接口

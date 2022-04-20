@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:16
- * @LastEditTime: 2022-04-16 14:09:09
+ * @LastEditTime: 2022-04-19 21:48:30
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_relation.cpp
@@ -74,6 +74,14 @@ void Relation::CreateOneObject(TiXmlElement *head)
         regulatoryelement *onetrafficsign = new regulatoryelement(oneobject->ID);
         TrafficSign[onetrafficsign->ID] = onetrafficsign;
     }
+
+    if(oneobject->subtype == RelationSubType::park)
+    {
+        parkspace *onepark = new parkspace(oneobject->ID);
+        onepark->leftID = oneobject->leftedge.ID;
+        onepark->rightID = oneobject->rightedge.ID;
+        ParkLots[onepark->ID] = onepark; 
+    }
 }
 
 RelationType Relation::Matchtype(std::string s)
@@ -97,6 +105,8 @@ RelationSubType Relation::MatchSubtype(std::string s)
         return RelationSubType::traffic_sign;
     }else if(s == "traffic_light"){
         return RelationSubType::traffic_light;
+    }else if(s == "park"){
+        return RelationSubType::park;
     }else{
         return RelationSubType::unknown;
     }
@@ -165,6 +175,11 @@ Relation::~Relation()
         delete it->second;
     }
     TrafficSign.clear();
+    for(auto it = ParkLots.begin(); it != ParkLots.end(); ++it)
+    {
+        delete it->second;
+    }
+    ParkLots.clear();
 }
 
 

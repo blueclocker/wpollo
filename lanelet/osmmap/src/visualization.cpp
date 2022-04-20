@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-05 17:50:11
- * @LastEditTime: 2022-04-16 16:39:28
+ * @LastEditTime: 2022-04-19 21:04:19
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/visualization.cpp
@@ -264,6 +264,8 @@ void MapVisualization::path2marker(centerway::CenterWay *centerways_, std::vecto
     for(int i = 0; i < paths_.size(); ++i)
     {
         centerway::CenterWay3D *away = centerways_->Find(paths_[i]);
+        marker_.id = away->ID;
+        marker_.points.clear();
         for(int j = 0; j < away->length; ++j)
         {
             geometry_msgs::Point p;
@@ -275,14 +277,14 @@ void MapVisualization::path2marker(centerway::CenterWay *centerways_, std::vecto
             //q.x = pointb->x;
             //q.y = pointb->y;
             //q.z = pointb->ele;
-            marker_.id = pointa->ID;
+            //marker_.id = away->ID;
             //marker_.points.clear();
             marker_.points.push_back(p);
-            //marker_.points.push_back(q);
         }
+        path.markers.push_back(marker_);
     }
     //path.markers.clear();
-    path.markers.push_back(marker_);
+    //path.markers.push_back(marker_);
 }
 
 void MapVisualization::redgreenlight2marker(node::Node *nodes_, way::Way *ways_, relation::relationship *relation_)

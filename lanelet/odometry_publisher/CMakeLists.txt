@@ -167,6 +167,7 @@ add_subdirectory(third_party/GeographicLib)
 
 add_executable(gnss_odom_pub src/gnss_odom_pub.cpp)
 target_link_libraries(gnss_odom_pub ${catkin_LIBRARIES} libGeographiccc)
+add_dependencies(gnss_odom_pub fsd_common_msgs_gencpp)
 
 
 #############

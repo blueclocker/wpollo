@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:30:01
- * @LastEditTime: 2022-04-16 14:08:58
+ * @LastEditTime: 2022-04-19 21:53:14
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_relation.h
@@ -39,7 +39,8 @@ enum class RelationSubType
     unknown = 0,
     road = 1,
     traffic_sign = 2,
-    traffic_light = 3
+    traffic_light = 3,
+    park = 4
 };
 
 enum class WayDirection
@@ -98,6 +99,25 @@ struct relationship
     }
 };
 
+struct parkspace
+{
+    int ID;
+    int leftID;
+    int rightID;
+    parkspace() {}
+    parkspace(int id_)
+    {
+        ID = id_;
+        leftID = -1;
+        rightID = -1;
+    }
+    bool operator==(const parkspace &a)
+    {
+        return (this->ID == a.ID);
+    }
+};
+
+
 
 class Relation: public map_base<relationship>
 {
@@ -106,6 +126,10 @@ private:
     //int numbers;
     //TiXmlElement *node_root;
     std::unordered_map<int, regulatoryelement*> TrafficSign;
+    std::unordered_map<int, parkspace*> ParkLots;
+    RelationType Matchtype(std::string s);
+    RelationSubType MatchSubtype(std::string s);
+    WayDirection MatchDirection(std::string s);
 public:
     Relation();
     Relation(TiXmlElement *root);
@@ -113,9 +137,6 @@ public:
     //virtual void CreateObjects(TiXmlElement *tail);
     //virtual int Size() const;
     //virtual relationship* Find(int id_);
-    RelationType Matchtype(std::string s);
-    RelationSubType MatchSubtype(std::string s);
-    WayDirection MatchDirection(std::string s);
     std::unordered_map<int, regulatoryelement*>::iterator regulatoryelementBegin() {return TrafficSign.begin();}
     std::unordered_map<int, regulatoryelement*>::iterator regulatoryelementEnd() {return TrafficSign.end();}
     regulatoryelement* findRegulatoryelement(const int id_) {return TrafficSign[id_];}

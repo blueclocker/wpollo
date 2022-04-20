@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:50
- * @LastEditTime: 2022-04-16 16:31:29
+ * @LastEditTime: 2022-04-19 21:52:50
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_way.h
@@ -83,6 +83,8 @@ private:
     //std::unordered_map<int, Line*> Data;
     //int numbers;
     //TiXmlElement *node_root;
+    WayType Matchtype(std::string s);
+    WaySubtype MatchSubtype(std::string s);
 public:
     Way();
     Way(TiXmlElement *root);
@@ -90,8 +92,6 @@ public:
     //virtual void CreateObjects(TiXmlElement *tail);
     //virtual int Size() const;
     //virtual Line* Find(int id_);
-    WayType Matchtype(std::string s);
-    WaySubtype MatchSubtype(std::string s);
     virtual ~Way();
 };
 

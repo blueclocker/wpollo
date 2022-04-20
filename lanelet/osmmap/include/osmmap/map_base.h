@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:30:09
- * @LastEditTime: 2022-03-09 21:09:29
+ * @LastEditTime: 2022-04-18 20:28:20
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_base.h
@@ -51,7 +51,9 @@ public:
     //哈系表插入元素
     void Insert(int id_, T* x) {Data[id_] = x;}
     //根据索引（某类元素的ID号）从哈系表查找对应的具体数据
-    T* Find(int id_) {return Data[id_];}
+    T* Find(const int id_) {return Data[id_];}
+    //判断id是否存在
+    bool isExist(const int id_) {return !(Data.find(id_) == Data.end());}
     //返回哈系表第一个元素的指针
     typename std::unordered_map<int, T*>::iterator Begin() {return Data.begin();}
     //返回哈系表元素的最后一个元素指针

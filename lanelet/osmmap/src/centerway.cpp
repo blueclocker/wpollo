@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-06 15:44:08
- * @LastEditTime: 2022-04-16 13:30:21
+ * @LastEditTime: 2022-04-19 22:10:24
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/centerway.cpp
@@ -250,6 +250,97 @@ double CenterWay::length2intersection(const int centerpointid_, const std::vecto
     return length_;
 }
 
+std::pair<int, int> CenterWay::createNeighbor(const int centerwayid_, relation::Relation *relations_, way::Way *ways_)
+{
+    std::pair<int, int> neighbor_;
+    int thisleftid = relations_->Find(centerwayid_)->leftedge.ID;
+    int thisrightid = relations_->Find(centerwayid_)->rightedge.ID;
+    bool findleft = false;
+    bool findright = false;
+    //如果左右边线是road_border，则不存在相邻车道
+    if(ways_->Find(thisleftid)->type == way::WayType::road_border)
+    {
+        neighbor_.first = -1;
+        findleft = true;
+    }
+    if(ways_->Find(thisrightid)->type == way::WayType::road_border)
+    {
+        neighbor_.second = -1;
+        findright = true;
+    }
+
+    for(auto it = relations_->Begin(); it != relations_->End(); ++it)
+    {
+        if(!findleft)
+        {
+            if(thisleftid == it->second->rightedge.ID)
+            {
+                neighbor_.first = it->second->ID;
+                findleft = true;
+            }
+        }
+        if(!findright)
+        {
+            if(thisrightid == it->second->leftedge.ID)
+            {
+                neighbor_.second = it->second->ID;
+                findright = true;
+            }
+        }
+        if(findleft && findright)
+        {
+            break;
+        }
+    }
+
+    return neighbor_;
+}
+
+void CenterWay::findNeighborleft(int centerwayid_, std::vector<int> &neighbors_)
+{
+    if(centerwayid_ != -1)
+    {
+        findNeighborleft(Find(centerwayid_)->neighbours.first, neighbors_);
+        neighbors_.push_back(centerwayid_);
+        //std::cout << centerwayid_ << std::endl;
+    }
+}
+
+void CenterWay::findNeighborright(int centerwayid_, std::vector<int> &neighbors_)
+{
+    if(centerwayid_ != -1)
+    {
+        neighbors_.push_back(centerwayid_);
+        //std::cout << centerwayid_ << std::endl;
+        findNeighborright(Find(centerwayid_)->neighbours.second, neighbors_);
+    }
+}
+
+void CenterWay::findNeighbor(int centerwayid_, std::vector<int> &neighbors_)
+{
+    if(!isExist(centerwayid_))
+    {
+        std::cout << "out of map" << std::endl;
+        return;
+    }
+    findNeighborleft(centerwayid_, neighbors_);
+    neighbors_.pop_back();
+    findNeighborright(centerwayid_, neighbors_);
+}
+
+bool CenterWay::isNeighbor(const int a, const int b)
+{
+    if(!isExist(a) || !isExist(b))
+    {
+        return false;
+    }
+    if(Find(a)->neighbours.first == b || Find(a)->neighbours.second == b)
+    {
+        return true;
+    }
+    return false;
+}
+
 void CenterWay::run(node::Node *nodes_, way::Way *ways_, relation::Relation *relations_)
 {
     for(auto it = relations_->Begin(); it != relations_->End(); ++it)
@@ -295,6 +386,7 @@ void CenterWay::run(node::Node *nodes_, way::Way *ways_, relation::Relation *rel
                 oneobject->source = *(onecenterline.end() - 1);
             }
             
+            //如果元素过多则倍增数组容量
             for(int i = 0; i < onecenterline.size(); ++i)
             {
                 oneobject->centernodeline[oneobject->length++] = onecenterline[i];
@@ -303,6 +395,7 @@ void CenterWay::run(node::Node *nodes_, way::Way *ways_, relation::Relation *rel
                     oneobject->Changesize();
                 }
             } 
+            //反转oneobject->centernodeline顺序，使其首个元素与source保持一致
             if(oneobject->source != *onecenterline.begin()) 
             {
                 oneobject->Reverse();
@@ -316,6 +409,12 @@ void CenterWay::run(node::Node *nodes_, way::Way *ways_, relation::Relation *rel
             }
             std::cout << std::endl;
             std::cout << "-------------" << std::endl;*/
+
+            //寻找相邻车道
+            std::pair<int, int> neighbor_temp = createNeighbor(oneobject->ID, relations_, ways_);
+            oneobject->neighbours.first = neighbor_temp.first;
+            oneobject->neighbours.second = neighbor_temp.second;
+            //std::cout << "path " << oneobject->ID << ", left: " << neighbor_temp.first << ", right: " << neighbor_temp.second << std::endl;
 
             Insert(it->second->ID, oneobject);
             Addnumbers();

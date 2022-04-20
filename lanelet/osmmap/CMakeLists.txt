@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf
   message_generation
+  fsd_common_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -183,7 +184,7 @@ add_library(geographicLib
 
 add_executable(mapio src/map_io.cpp src/main.cpp)
 target_link_libraries(mapio ${catkin_LIBRARIES} map_lib geographicLib)
-add_dependencies(mapio ${PROJECT_NAME}_gencpp)
+add_dependencies(mapio ${PROJECT_NAME}_gencpp fsd_common_msgs_gencpp)
 
 #############
 ## Install ##

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-13 15:21:33
- * @LastEditTime: 2022-04-16 15:15:11
+ * @LastEditTime: 2022-04-19 22:13:05
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_plan.cpp
@@ -83,7 +83,16 @@ double Globalplan::Calculateg(int x, int idg)
     {
         return 0;
     }else{
-        return plan_ways_map[plan_ways_map[idg]->parent]->G + Centerwaylength(plan_centerways->Find(idg));
+        double g_;
+        g_ = plan_ways_map[plan_ways_map[idg]->parent]->G + Centerwaylength(plan_centerways->Find(idg));
+        //加换道损失，改进H计算方式
+        //如果是相邻路段，则在H上附加换道损失-----换道
+        if(plan_centerways->isNeighbor(idg, plan_ways_map[idg]->parent))
+        {
+            g_ += 10;//换道损失暂定10m
+            //std::cout << "change lane" << std::endl;
+        }
+        return g_;
     }
 }
 
@@ -123,6 +132,21 @@ std::vector<int> Globalplan::Getnextnode(int idx)
         if(!Isinlist(it->thisway->ID, closelist))
         {
             res.push_back(it->thisway->ID);
+        }
+    }
+    //看当前路段的左右路段是否可行------换道
+    if(plan_centerways->Find(idx)->neighbours.first != -1)
+    {
+        if(!Isinlist(plan_centerways->Find(idx)->neighbours.first, closelist))
+        {
+            res.push_back(plan_centerways->Find(idx)->neighbours.first);
+        }
+    }
+    if(plan_centerways->Find(idx)->neighbours.second != -1)
+    {
+        if(!Isinlist(plan_centerways->Find(idx)->neighbours.second, closelist))
+        {
+            res.push_back(plan_centerways->Find(idx)->neighbours.second);
         }
     }
     return res;
@@ -344,6 +368,16 @@ double Globalplan::Point2edgedistance(const map::centerway::CenterPoint3D &a, ma
 //cost: 从x路段的target到y路段的target长度
 void Globalplan::Astar(int x, int y)
 {
+    if(x == y)
+    {
+        plan_path.clear();
+        plan_path.push_back(x);
+        isfindpath = true;
+        std::cout << "---------------------------------------------------" << std::endl;
+        std::cout << "find!" << std::endl;
+        return;
+    }
+
     openlist.clear();
     closelist.clear();
     //放入起点

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:24:25
- * @LastEditTime: 2022-04-17 14:54:00
+ * @LastEditTime: 2022-04-19 22:15:32
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_io.cpp
@@ -72,6 +72,8 @@ Map::Map(ros::NodeHandle n_):n(n_)
     //基准点设置，默认初始时不存在起点、终点
     isstart_path_exist = false;
     isend_path_exist = false;
+    start_centerpoint_id_ = -1;
+    end_centerpoint_id_ = -2;
     //basicpoint = new node::Point3D(origin_lat, origin_lon, origin_ele);
     atnowpoint = new node::Point3D(0, 0);
     //nodes->MercatorGPS2xy(basicpoint);
@@ -94,6 +96,15 @@ Map::Map(ros::NodeHandle n_):n(n_)
     visualmap->map2marker(nodes, ways, centerways, relations);
     //visualmap->path2marker(centerways, paths);
     //visualmap->run(nodes, ways, centerways, relations);
+
+    //test findNeighbor()
+    // std::vector<int> neighbors;
+    // centerways->findNeighbor(14, neighbors);
+    // for(int i = 0; i < neighbors.size(); ++i)
+    // {
+    //     std::cout << neighbors[i] << " ";
+    // }
+    // std::cout << std::endl;
     
     //main loop
     ros::Rate r(10);
@@ -104,6 +115,16 @@ Map::Map(ros::NodeHandle n_):n(n_)
         goalpoint_sub = n.subscribe("/move_base_simple/goal", 10, &Map::goalpoint_callback, this);
         gps_sub = n.subscribe("/comb", 10, &Map::gps_callback, this);
         // navigation_pub.publish(laneletinfo);
+        //到达终点退出程序
+        if(start_centerpoint_id_ == end_centerpoint_id_)
+        {
+            std::cout << "***************************************************" << std::endl;
+            std::cout << std::endl;
+            std::cout << "               arrvied at goal point               " << std::endl;
+            std::cout << std::endl;
+            std::cout << "***************************************************" << std::endl;
+            break;
+        }
         r.sleep();
         ros::spinOnce();
     }
@@ -111,33 +132,141 @@ Map::Map(ros::NodeHandle n_):n(n_)
 
 void Map::Smoothpath(std::vector<int> pathid_)
 {
-    if(pathid_.empty()) return;
     //std::vector<centerway::CenterPoint3D> smoothpathnode;
     smoothpathnode.clear();
+    if(pathid_.empty()) return;
     //B样条插值
-    for(int i = 0; i < pathid_.size(); ++i)
+    if(pathid_.size() == 1)
+    {
+        //只有一条路段
+        centerway::CenterWay3D *oneway = centerways->Find(pathid_[0]);
+        
+        bool flag_ = false;
+        for(int j = 0; j < oneway->length - 1; ++j)
+        {
+            if(oneway->centernodeline[j] == start_centerpoint_id_) flag_ = true;
+            if(!flag_) continue;
+            smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
+            if(oneway->centernodeline[j] == end_centerpoint_id_) break;
+        }
+    }else{
+        //第一条路段到倒数第二条路段
+        for(int i = 0; i < pathid_.size() - 1; ++i)
+        {
+            centerway::CenterWay3D *oneway = centerways->Find(pathid_[i]);
+
+            //如果换道
+            if(centerways->isNeighbor(pathid_[i], pathid_[i+1]))
+            {
+                //i -> i+1 换道
+                //i走到倒数第二点，i+1只保留最后一点
+                bool flag_ = false;
+                if(i == pathid_.size()-2)
+                {
+                    //最后一段路
+                    if(i == 0)
+                    {
+                        if(start_centerpoint_id_%100 >= end_centerpoint_id_%100) return;
+                        smoothpathnode.push_back(*centerways->Findcenterpoint(start_centerpoint_id_));
+                        oneway = centerways->Find(end_centerpoint_id_/100);
+                        //借用相邻车道的中心线id基本一致，不严谨
+                        for(int j = start_centerpoint_id_%100 + 1; j < oneway->length - 1; ++j)
+                        {
+                            smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
+                            if(oneway->centernodeline[j] == end_centerpoint_id_) break;
+                        }
+                    }else{
+                        smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[0]));
+                        oneway = centerways->Find(pathid_[pathid_.size()-1]);
+                        for(int j = 1; j < oneway->length - 1; ++j)
+                        {
+                            smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
+                            if(oneway->centernodeline[j] == end_centerpoint_id_) break;
+                        }
+                    }
+                }else if(i == 0){
+                    //第一段路
+                    for(int j = 0; j < oneway->length - 2; ++j)
+                    {
+                        if(oneway->centernodeline[j] == start_centerpoint_id_) flag_ = true;
+                        if(!flag_) continue;
+                        smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
+                    }
+                    oneway = centerways->Find(pathid_[++i]);
+                    smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[oneway->length-1]));
+                }else{
+                    //中间
+                    for(int j = 0; j < oneway->length - 2; ++j)
+                    {
+                        smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
+                    }
+                    oneway = centerways->Find(pathid_[++i]);
+                    smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[oneway->length-1]));
+                }
+            }else{
+                bool flag_ = false;
+                for(int j = 0; j < oneway->length - 1; ++j)
+                {
+                    if(i == 0)
+                    {
+                        //第一段路
+                        if(oneway->centernodeline[j] == start_centerpoint_id_) flag_ = true;
+                        if(!flag_) continue;
+                        smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
+                    }else{
+                        //中间
+                        smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
+                    }
+                }
+            }
+        
+        }
+        
+        //最后一条路段
+        if(!centerways->isNeighbor(pathid_[pathid_.size()-1], pathid_[pathid_.size()-2]))
+        {
+            centerway::CenterWay3D *oneway = centerways->Find(pathid_[pathid_.size()-1]);
+            for(int j = 0; j < oneway->length - 1; ++j)
+            {
+                smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
+                if(oneway->centernodeline[j] == end_centerpoint_id_) break;
+            }
+        }
+    }
+    
+    /*for(int i = 0; i < pathid_.size(); ++i)
     {
         centerway::CenterWay3D *oneway = centerways->Find(pathid_[i]);
         
         bool flag_ = false;
         for(int j = 0; j < oneway->length - 1; ++j)
         {
-            if(i == 0)
+            if(i == pathid_.size() - 1)
             {
+                //最后一段路
+                if(i == 0)
+                {
+                    //同时也是第一段路
+                    if(oneway->centernodeline[j] == start_centerpoint_id_) flag_ = true;
+                    if(!flag_) continue;
+                    smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
+                    if(oneway->centernodeline[j] == end_centerpoint_id_) break;
+                }else{
+                    smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
+                    if(oneway->centernodeline[j] == end_centerpoint_id_) break;
+                }
+            }else if(i == 0){
                 //第一段路
                 if(oneway->centernodeline[j] == start_centerpoint_id_) flag_ = true;
                 if(!flag_) continue;
                 smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
-            }else if(i == pathid_.size() - 1){
-                //最后一段路
-                smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
-                if(oneway->centernodeline[j] == end_centerpoint_id_) break;
             }else{
                 //中间
                 smoothpathnode.push_back(*centerways->Findcenterpoint(oneway->centernodeline[j]));
             }
         }
-    }
+    }*/
+    
     //std::cout << "smoothpathnode size: " << smoothpathnode.size() << std::endl;
     int *intnum = new int[smoothpathnode.size() - 1];
     for(int i = 0; i < smoothpathnode.size() - 1; ++i)
@@ -161,13 +290,18 @@ void Map::fullNavigationInfo()
     double rightdis = globalplans->Point2edgedistance(startpoint_, nodes, ways->Find(relation_temp_->rightedge.ID), start_path_);
     //std::cout << "start point to left distance: " << leftdis << ", to right distence: " << rightdis << std::endl;
 
+    std::vector<int> outneighbors;
+    centerways->findNeighbor(start_path_, outneighbors);
     //填充laneletinfo
     laneletinfo.CurrentSequenceIDs.clear();
     laneletinfo.TrafficSign.clear();
 
     laneletinfo.header.frame_id = "map";
     laneletinfo.header.stamp = ros::Time::now();
-    laneletinfo.CurrentSequenceIDs.push_back(start_path_);
+    for(int i = 0; i < outneighbors.size(); ++i)
+    {
+        laneletinfo.CurrentSequenceIDs.push_back(outneighbors[i]);
+    }
     laneletinfo.TargetSequeceIDs = start_path_;
     laneletinfo.SpeedLimits = relation_temp_->speed_limit;
     laneletinfo.ToLeftDistance = leftdis;
@@ -306,13 +440,14 @@ void Map::gps_callback(const fsd_common_msgs::comb::ConstPtr &msg)
     //当前路段精确定位到某点
     int atnowcenterway = globalplans->Inwhichcenterway(atnowcenterpoint, nodes, ways, relations);
     //plan
+    visualmap->pathmarkerclear();
     if(atnowcenterway != -1)
     {
         start_path_ = atnowcenterway;
         start_centerpoint_id_ = globalplans->Atwhichpoint(atnowcenterpoint, centerways->Find(atnowcenterway));
         if(isend_path_exist)
         {
-            visualmap->pathmarkerclear();
+            //visualmap->pathmarkerclear();
             paths.clear();
             paths = globalplans->run(start_path_, end_path_);
             if(!paths.empty())
@@ -334,7 +469,7 @@ void Map::gps_callback(const fsd_common_msgs::comb::ConstPtr &msg)
             ROS_WARN("goal point has not set!");
         } 
     }else{
-        ROS_WARN("start point out of HD-map!");
+        ROS_WARN("gps point out of HD-map!");
     }
 
     //tf
@@ -342,7 +477,8 @@ void Map::gps_callback(const fsd_common_msgs::comb::ConstPtr &msg)
     q.setRPY((msg->Roll)/180*3.14159, (msg->Pitch)/180*3.14159, (msg->Heading + 90)/180*3.14159);
     baselink2map.setRotation(q);
     baselink2map.setOrigin(tf::Vector3(atnowpoint->local_x, atnowpoint->local_y, atnowpoint->elevation));
-    broadcaster.sendTransform(tf::StampedTransform(baselink2map, ros::Time::now(), "map", "base_link"));
+    //map->rslidar->base_link
+    broadcaster.sendTransform(tf::StampedTransform(baselink2map, ros::Time::now(), "map", "rslidar"));
     std::cout << "atnowpoint update" << std::endl;
     std::cout << "now x: " << atnowpoint->local_x << ", now y: " << atnowpoint->local_y << ", now z: " << atnowpoint->elevation << std::endl;
 
