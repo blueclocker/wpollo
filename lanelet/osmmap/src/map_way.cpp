@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:06
- * @LastEditTime: 2022-04-16 16:32:34
+ * @LastEditTime: 2022-04-23 19:43:51
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_way.cpp
@@ -54,7 +54,7 @@ void Way::CreateOneObject(TiXmlElement *head)
     Insert(oneobject->ID, oneobject);
 }
 
-WayType Way::Matchtype(std::string s)
+WayType Way::Matchtype(const std::string s) const
 {
     if(s == "line_thin")
     {
@@ -75,7 +75,7 @@ WayType Way::Matchtype(std::string s)
 
 }
 
-WaySubtype Way::MatchSubtype(std::string s)
+WaySubtype Way::MatchSubtype(const std::string s) const
 {
     if(s == "solid")
     {

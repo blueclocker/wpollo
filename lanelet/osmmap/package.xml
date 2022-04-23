@@ -65,6 +65,8 @@
   <exec_depend>message_runtime</exec_depend>
   <build_depend>fsd_common_msgs</build_depend>
   <exec_depend>fsd_common_msgs</exec_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <exec_depend>geometry_msgs</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

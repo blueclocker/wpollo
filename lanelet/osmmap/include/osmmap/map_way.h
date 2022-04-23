@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:50
- * @LastEditTime: 2022-04-19 21:52:50
+ * @LastEditTime: 2022-04-23 19:43:37
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_way.h
@@ -46,7 +46,7 @@ struct Line
     WayType type;
     WaySubtype subtype;
     bool isVisual;
-    bool operator==(const Line &a)
+    bool operator==(const Line &a) const
     {
         return (this->ID == a.ID);
     }
@@ -71,7 +71,7 @@ struct Line
         nodeline = nodelinenew;
         
     }
-    int Length()
+    int Length() const
     {
         return length;
     }
@@ -83,8 +83,8 @@ private:
     //std::unordered_map<int, Line*> Data;
     //int numbers;
     //TiXmlElement *node_root;
-    WayType Matchtype(std::string s);
-    WaySubtype MatchSubtype(std::string s);
+    WayType Matchtype(const std::string s) const;
+    WaySubtype MatchSubtype(const std::string s) const;
 public:
     Way();
     Way(TiXmlElement *root);

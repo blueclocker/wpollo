@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-06 15:44:08
- * @LastEditTime: 2022-04-19 22:10:24
+ * @LastEditTime: 2022-04-23 10:26:44
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/centerway.cpp
@@ -27,7 +27,7 @@ void CenterWay::CreateOneObject(TiXmlElement *head)
     return;
 }
 
-double CenterWay::NodeDistance(const node::Point3D *a, const node::Point3D *b)
+double CenterWay::NodeDistance(const node::Point3D *a, const node::Point3D *b) const
 {
     double x = a->local_x - b->local_x;
     double y = a->local_y - b->local_y;
@@ -35,15 +35,15 @@ double CenterWay::NodeDistance(const node::Point3D *a, const node::Point3D *b)
     return std::sqrt(x*x + y*y + z*z);
 }
 
-double CenterWay::NodeDistance(const CenterPoint3D *a, const CenterPoint3D *b)
+double CenterWay::NodeDistance(const CenterPoint3D *a, const CenterPoint3D *b) const
 {
     double x = a->x - b->x;
     double y = a->y - b->y;
     double z = a->ele - b->ele;
     return std::sqrt(x*x + y*y + z*z);
 }
-
-double CenterWay::EdgeLength(node::Node *nodes_, way::Line *line)
+ 
+double CenterWay::EdgeLength(const node::Node *nodes_, const way::Line *line) const 
 {
     double res = 0;
     for(int i = 0; i < line->Length() - 1; ++i)
@@ -53,7 +53,7 @@ double CenterWay::EdgeLength(node::Node *nodes_, way::Line *line)
     return res;
 }
 
-std::vector<double> CenterWay::CalculateAccumulatedLengths(node::Node *nodes_, way::Line *line)
+std::vector<double> CenterWay::CalculateAccumulatedLengths(const node::Node *nodes_, const way::Line *line) const 
 {
     //1st
     /*
@@ -87,7 +87,7 @@ std::vector<double> CenterWay::CalculateAccumulatedLengths(node::Node *nodes_, w
 }
 
 std::pair<size_t, size_t> CenterWay::FindNearestIndexPair(const std::vector<double> & accumulated_lengths, 
-                                                          const double target_length)
+                                                          const double target_length) const 
 {
     // 累加道路长度的数组的元素个数
     int N = accumulated_lengths.size();
@@ -114,7 +114,7 @@ std::pair<size_t, size_t> CenterWay::FindNearestIndexPair(const std::vector<doub
     }
 }
 
-std::vector<CenterPoint3D> CenterWay::ResamplePoints(node::Node *nodes_, way::Line *line, const int num_segments)
+std::vector<CenterPoint3D> CenterWay::ResamplePoints(const node::Node *nodes_, const way::Line *line, const int num_segments) const 
 {
     double line_length = EdgeLength(nodes_, line);
     std::vector<double> accumulated_lengths = CalculateAccumulatedLengths(nodes_, line);
@@ -148,7 +148,7 @@ std::vector<CenterPoint3D> CenterWay::ResamplePoints(node::Node *nodes_, way::Li
     
 }
 
-std::vector<int> CenterWay::GenerateCenterline(node::Node *nodes_, way::Way *ways_, relation::relationship *relationship_, double resolution)
+std::vector<int> CenterWay::GenerateCenterline(const node::Node *nodes_, const way::Way *ways_, const relation::relationship *relationship_, const double resolution)
 {
     // 寻找左右边界更长的一个
     double left_length = EdgeLength(nodes_, ways_->Find(relationship_->leftedge.ID));
@@ -173,7 +173,7 @@ std::vector<int> CenterWay::GenerateCenterline(node::Node *nodes_, way::Way *way
     return centerpointnumbers;
 }
 
-void CenterWay::Matchregulatoryelement(node::Node *nodes_, way::Line *line, relation::regulatoryelement* sign_)
+void CenterWay::Matchregulatoryelement(const node::Node *nodes_, const way::Line *line, relation::regulatoryelement* sign_) const 
 {
     node::Point3D nodea = *nodes_->Find(line->nodeline[0]);
     node::Point3D nodeb = *nodes_->Find(line->nodeline[1]);
@@ -189,7 +189,7 @@ void CenterWay::Matchregulatoryelement(node::Node *nodes_, way::Line *line, rela
     int laneletid_ = -1;
     for(auto it = Begin(); it != End(); ++it)
     {
-        CenterPoint3D centertarget = *centerpointmap[it->second->target];
+        CenterPoint3D centertarget = *centerpointmap.at(it->second->target);
         double distemp = NodeDistance(&centerab, &centertarget);
         //std::cout << "distance: " << distemp << std::endl;
         if(distemp < distance_)
@@ -207,7 +207,7 @@ void CenterWay::Matchregulatoryelement(node::Node *nodes_, way::Line *line, rela
     }
 }
 
-double CenterWay::length2intersection(const int centerpointid_, const std::vector<int> &pathid_, relation::Relation *relations_)
+double CenterWay::length2intersection(const int centerpointid_, const std::vector<int> &pathid_, const relation::Relation *relations_) const
 {
     if(pathid_.empty()) return -1;
     std::vector<int> centerwayid_before_turning;
@@ -241,16 +241,16 @@ double CenterWay::length2intersection(const int centerpointid_, const std::vecto
             {
                 if(centerway_pin->centernodeline[j] == centerpointid_) flag_ = true;
                 if(!flag_) continue;
-                length_ += NodeDistance(centerpointmap[centerway_pin->centernodeline[j]], centerpointmap[centerway_pin->centernodeline[j+1]]);
+                length_ += NodeDistance(centerpointmap.at(centerway_pin->centernodeline[j]), centerpointmap.at(centerway_pin->centernodeline[j+1]));
             }else{
-                length_ += NodeDistance(centerpointmap[centerway_pin->centernodeline[j]], centerpointmap[centerway_pin->centernodeline[j+1]]);
+                length_ += NodeDistance(centerpointmap.at(centerway_pin->centernodeline[j]), centerpointmap.at(centerway_pin->centernodeline[j+1]));
             }
         }
     }
     return length_;
 }
 
-std::pair<int, int> CenterWay::createNeighbor(const int centerwayid_, relation::Relation *relations_, way::Way *ways_)
+std::pair<int, int> CenterWay::createNeighbor(const int centerwayid_, const relation::Relation *relations_, const way::Way *ways_) const
 {
     std::pair<int, int> neighbor_;
     int thisleftid = relations_->Find(centerwayid_)->leftedge.ID;
@@ -296,7 +296,7 @@ std::pair<int, int> CenterWay::createNeighbor(const int centerwayid_, relation::
     return neighbor_;
 }
 
-void CenterWay::findNeighborleft(int centerwayid_, std::vector<int> &neighbors_)
+void CenterWay::findNeighborleft(const int centerwayid_, std::vector<int> &neighbors_) const
 {
     if(centerwayid_ != -1)
     {
@@ -306,7 +306,7 @@ void CenterWay::findNeighborleft(int centerwayid_, std::vector<int> &neighbors_)
     }
 }
 
-void CenterWay::findNeighborright(int centerwayid_, std::vector<int> &neighbors_)
+void CenterWay::findNeighborright(const int centerwayid_, std::vector<int> &neighbors_) const
 {
     if(centerwayid_ != -1)
     {
@@ -316,7 +316,7 @@ void CenterWay::findNeighborright(int centerwayid_, std::vector<int> &neighbors_
     }
 }
 
-void CenterWay::findNeighbor(int centerwayid_, std::vector<int> &neighbors_)
+void CenterWay::findNeighbor(const int centerwayid_, std::vector<int> &neighbors_) const
 {
     if(!isExist(centerwayid_))
     {
@@ -328,7 +328,7 @@ void CenterWay::findNeighbor(int centerwayid_, std::vector<int> &neighbors_)
     findNeighborright(centerwayid_, neighbors_);
 }
 
-bool CenterWay::isNeighbor(const int a, const int b)
+bool CenterWay::isNeighbor(const int a, const int b) const
 {
     if(!isExist(a) || !isExist(b))
     {
@@ -341,7 +341,7 @@ bool CenterWay::isNeighbor(const int a, const int b)
     return false;
 }
 
-void CenterWay::run(node::Node *nodes_, way::Way *ways_, relation::Relation *relations_)
+void CenterWay::run(const node::Node *nodes_, const way::Way *ways_, const relation::Relation *relations_)
 {
     for(auto it = relations_->Begin(); it != relations_->End(); ++it)
     {

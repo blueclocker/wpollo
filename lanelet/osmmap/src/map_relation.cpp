@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:16
- * @LastEditTime: 2022-04-19 21:48:30
+ * @LastEditTime: 2022-04-23 19:44:41
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_relation.cpp
@@ -84,7 +84,7 @@ void Relation::CreateOneObject(TiXmlElement *head)
     }
 }
 
-RelationType Relation::Matchtype(std::string s)
+RelationType Relation::Matchtype(const std::string s) const
 {
     if(s == "lanelet")
     {
@@ -96,7 +96,7 @@ RelationType Relation::Matchtype(std::string s)
     }
 }
 
-RelationSubType Relation::MatchSubtype(std::string s)
+RelationSubType Relation::MatchSubtype(const std::string s) const
 {
     if(s == "road")
     {
@@ -112,7 +112,7 @@ RelationSubType Relation::MatchSubtype(std::string s)
     }
 }
 
-WayDirection Relation::MatchDirection(std::string s)
+WayDirection Relation::MatchDirection(const std::string s) const
 {
     if(s == "straight")
     {
@@ -126,7 +126,7 @@ WayDirection Relation::MatchDirection(std::string s)
     }
 }
 
-bool Relation::isRegulatoryelement(const int id_)
+bool Relation::isRegulatoryelement(const int id_) const
 {
     bool flag = false;
     for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
@@ -140,7 +140,7 @@ bool Relation::isRegulatoryelement(const int id_)
     return flag;
 }
 
-bool Relation::isStopLine(const int id_)
+bool Relation::isStopLine(const int id_) const
 {
     bool flag = false;
     for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
@@ -154,7 +154,7 @@ bool Relation::isStopLine(const int id_)
     return flag;
 }
 
-std::vector<regulatoryelement*> Relation::getRegulatoryelement(const int id_)
+std::vector<regulatoryelement*> Relation::getRegulatoryelement(const int id_) const
 {
     std::vector<regulatoryelement*> res;
     for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)

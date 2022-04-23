@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-13 15:21:15
- * @LastEditTime: 2022-04-16 14:39:53
+ * @LastEditTime: 2022-04-23 10:35:00
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_plan.h
@@ -60,31 +60,31 @@ private:
     std::list<int> closelist;
     std::vector<int> plan_path;
     bool isfindpath;
-    double Centerpoint3d_distance(const map::centerway::CenterPoint3D *a, const map::centerway::CenterPoint3D *b);
-    double Centerwaylength(map::centerway::CenterWay3D *centerway_);
-    std::vector<int> Findnextcenterway(int plan_centerway_target_);
+    double Centerpoint3d_distance(const map::centerway::CenterPoint3D *a, const map::centerway::CenterPoint3D *b) const;
+    double Centerwaylength(const map::centerway::CenterWay3D *centerway_) const;
+    std::vector<int> Findnextcenterway(const int plan_centerway_target_) const;
     void CreatePlanmap();
-    double Calculateg(int x, int idg);
-    double Calculateh(int y, int idh);
-    double Calculatef(int idf);
-    int Findleastf(const std::list<int> &listx);
-    std::vector<int> Getnextnode(int idx);
-    bool Isinlist(const int x, const std::list<int> &listx);
+    double Calculateg(const int x, const int idg) const;
+    double Calculateh(const int y, const int idh) const;
+    double Calculatef(const int idf) const;
+    int Findleastf(const std::list<int> &listx) const;
+    std::vector<int> Getnextnode(const int idx) const;
+    bool Isinlist(const int x, const std::list<int> &listx) const;
     //int Inwhichcenterway(map::centerway::CenterPoint3D a);
     //int Atwhichpoint(const map::centerway::CenterPoint3D &a, const map::centerway::CenterWay3D *centerline_);
     bool Isintersect(const map::centerway::CenterPoint3D &a_, const map::centerway::CenterPoint3D &b_, 
-                     const map::node::Point3D &c_, const map::node::Point3D &d_);
-    bool isReset(int x, int y);
-    void Astar(int x, int y);
-    void Dijkstra(int x, int y);
+                     const map::node::Point3D &c_, const map::node::Point3D &d_) const;
+    bool isReset(const int x, const int y);
+    void Astar(const int x, const int y);
+    void Dijkstra(const int x, const int y);
     void Dstar(int x, int y);
 public:
     Globalplan(map::centerway::CenterWay *plan_centerways_);
     ~Globalplan();
-    std::vector<int> run(int x, int y);//返回plan_path
-    int Inwhichcenterway(const map::centerway::CenterPoint3D &a, map::node::Node *nodes_, map::way::Way *ways_, map::relation::Relation *relations_);
-    int Atwhichpoint(const map::centerway::CenterPoint3D &a, const map::centerway::CenterWay3D *centerline_);
-    double Point2edgedistance(const map::centerway::CenterPoint3D &a, map::node::Node *nodes_, map::way::Line *line_, int pathid_);
+    std::vector<int> run(const int x, const int y);//返回plan_path
+    int Inwhichcenterway(const map::centerway::CenterPoint3D &a, const map::node::Node *nodes_, const map::way::Way *ways_, const map::relation::Relation *relations_) const;
+    int Atwhichpoint(const map::centerway::CenterPoint3D &a, const map::centerway::CenterWay3D *centerline_) const;
+    double Point2edgedistance(const map::centerway::CenterPoint3D &a, const map::node::Node *nodes_, map::way::Line *line_, int pathid_) const;
     void Reset();//重置邻接表，openlist，closelist等
 };
 

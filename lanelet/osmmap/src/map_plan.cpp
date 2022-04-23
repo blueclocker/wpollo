@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-13 15:21:33
- * @LastEditTime: 2022-04-19 22:13:05
+ * @LastEditTime: 2022-04-23 19:15:47
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/map_plan.cpp
@@ -23,7 +23,7 @@ Globalplan::Globalplan(map::centerway::CenterWay *plan_centerways_):plan_centerw
     CreatePlanmap();
 }
 
-double Globalplan::Centerpoint3d_distance(const map::centerway::CenterPoint3D *a, const map::centerway::CenterPoint3D *b)
+double Globalplan::Centerpoint3d_distance(const map::centerway::CenterPoint3D *a, const map::centerway::CenterPoint3D *b) const 
 {
     double xx = a->x - b->x;
     double yy = a->y - b->y;
@@ -31,7 +31,7 @@ double Globalplan::Centerpoint3d_distance(const map::centerway::CenterPoint3D *a
     return std::sqrt(xx*xx + yy*yy + zz*zz);
 }
 
-double Globalplan::Centerwaylength(map::centerway::CenterWay3D *centerway_)
+double Globalplan::Centerwaylength(const map::centerway::CenterWay3D *centerway_) const 
 {
     double sum = 0;
     for(int i = 0; i < centerway_->length - 1; ++i)
@@ -44,7 +44,7 @@ double Globalplan::Centerwaylength(map::centerway::CenterWay3D *centerway_)
 }
 
 //当前way->target找下一条way->source
-std::vector<int> Globalplan::Findnextcenterway(int plan_centerway_target_)
+std::vector<int> Globalplan::Findnextcenterway(const int plan_centerway_target_) const 
 {
     std::vector<int> nextwayvector;
     for(auto it = plan_centerways->Begin(); it != plan_centerways->End(); ++it)
@@ -77,45 +77,45 @@ void Globalplan::CreatePlanmap()
     }
 }
 
-double Globalplan::Calculateg(int x, int idg)
+double Globalplan::Calculateg(const int x, const int idg) const 
 {
-    if(plan_ways_map[idg]->parent == -1)
+    if(plan_ways_map.at(idg)->parent == -1)
     {
         return 0;
     }else{
         double g_;
-        g_ = plan_ways_map[plan_ways_map[idg]->parent]->G + Centerwaylength(plan_centerways->Find(idg));
+        g_ = plan_ways_map.at(plan_ways_map.at(idg)->parent)->G + Centerwaylength(plan_centerways->Find(idg));
         //加换道损失，改进H计算方式
         //如果是相邻路段，则在H上附加换道损失-----换道
-        if(plan_centerways->isNeighbor(idg, plan_ways_map[idg]->parent))
+        if(plan_centerways->isNeighbor(idg, plan_ways_map.at(idg)->parent))
         {
-            g_ += 10;//换道损失暂定10m
+            g_ += 1;//换道损失暂定10m
             //std::cout << "change lane" << std::endl;
         }
         return g_;
     }
 }
 
-double Globalplan::Calculateh(int y, int idh)
+double Globalplan::Calculateh(const int y, const int idh) const 
 {
-    map::centerway::CenterPoint3D pointy = *plan_centerways->Findcenterpoint(plan_ways_map[y]->plan_ways->target);
-    map::centerway::CenterPoint3D pointidh = *plan_centerways->Findcenterpoint(plan_ways_map[idh]->plan_ways->target);
+    map::centerway::CenterPoint3D pointy = *plan_centerways->Findcenterpoint(plan_ways_map.at(y)->plan_ways->target);
+    map::centerway::CenterPoint3D pointidh = *plan_centerways->Findcenterpoint(plan_ways_map.at(idh)->plan_ways->target);
     return std::abs(pointy.x - pointidh.x) + std::abs(pointy.y - pointidh.y) + std::abs(pointy.ele - pointidh.ele);
 }
 
-double Globalplan::Calculatef(int idf)
+double Globalplan::Calculatef(const int idf) const 
 {
-    return plan_ways_map[idf]->G + plan_ways_map[idf]->H;
+    return plan_ways_map.at(idf)->G + plan_ways_map.at(idf)->H;
 }
 
-int Globalplan::Findleastf(const std::list<int> &listx)
+int Globalplan::Findleastf(const std::list<int> &listx) const 
 {
     if(listx.empty()) return -1;
     int idres = listx.front();
     for(auto it = listx.begin(); it != listx.end(); ++it)
     {
         //std::cout << plan_ways_map[*it].F << std::endl;
-        if(plan_ways_map[*it]->F < plan_ways_map[idres]->F)
+        if(plan_ways_map.at(*it)->F < plan_ways_map.at(idres)->F)
         {
             idres = *it;
         }
@@ -123,10 +123,10 @@ int Globalplan::Findleastf(const std::list<int> &listx)
     return idres;
 }
 
-std::vector<int> Globalplan::Getnextnode(int idx)
+std::vector<int> Globalplan::Getnextnode(const int idx) const 
 {
     std::vector<int> res;
-    for(auto it = plan_ways_map[idx]->next; it != nullptr; it = it->next)
+    for(auto it = plan_ways_map.at(idx)->next; it != nullptr; it = it->next)
     {
         //如果该点不在关闭列表,把它加入待选点列表
         if(!Isinlist(it->thisway->ID, closelist))
@@ -152,7 +152,7 @@ std::vector<int> Globalplan::Getnextnode(int idx)
     return res;
 }
 
-bool Globalplan::Isinlist(const int x, const std::list<int> &listx)
+bool Globalplan::Isinlist(const int x, const std::list<int> &listx) const 
 {
     bool resflag = false;
     for(auto it = listx.begin(); it != listx.end(); ++it)
@@ -166,7 +166,7 @@ bool Globalplan::Isinlist(const int x, const std::list<int> &listx)
     return resflag;
 }
 
-int Globalplan::Atwhichpoint(const map::centerway::CenterPoint3D &a, const map::centerway::CenterWay3D *centerline_)
+int Globalplan::Atwhichpoint(const map::centerway::CenterPoint3D &a, const map::centerway::CenterWay3D *centerline_) const
 {
     for(int i = 0; i < centerline_->length - 1; ++i)
     {
@@ -180,13 +180,13 @@ int Globalplan::Atwhichpoint(const map::centerway::CenterPoint3D &a, const map::
         double ap1x = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->x - a.x;
         double ap1y = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->y - a.y;
         //#1 * #2 与 #1 * #3异号
-        if((oyx*ap0x + oyy*ap0y) * (oyx*ap1x + oyy*ap1y) < 0) return centerline_->centernodeline[i];
+        if((oyx*ap0x + oyy*ap0y) * (oyx*ap1x + oyy*ap1y) < 0) return centerline_->centernodeline[i+1];
     }
     return -1;
 }
 
 bool Globalplan::Isintersect(const map::centerway::CenterPoint3D &a_, const map::centerway::CenterPoint3D &b_, 
-                             const map::node::Point3D &c_, const map::node::Point3D &d_)
+                             const map::node::Point3D &c_, const map::node::Point3D &d_) const
 {
     bool flag = false;
 
@@ -222,7 +222,8 @@ bool Globalplan::Isintersect(const map::centerway::CenterPoint3D &a_, const map:
     return flag;
 }
 
-int Globalplan::Inwhichcenterway(const map::centerway::CenterPoint3D &a, map::node::Node *nodes_, map::way::Way *ways_, map::relation::Relation *relations_)
+int Globalplan::Inwhichcenterway(const map::centerway::CenterPoint3D &a, const map::node::Node *nodes_, 
+                        const map::way::Way *ways_, const map::relation::Relation *relations_) const
 {
     //1st, 仅依靠该点到centerway两端点的距离和与两端点距离的偏差 < 5% 判断，不准
     /*for(auto it = plan_centerways->Begin(); it != plan_centerways->End(); ++it)
@@ -289,7 +290,7 @@ int Globalplan::Inwhichcenterway(const map::centerway::CenterPoint3D &a, map::no
     return -1;
 }
 
-double Globalplan::Point2edgedistance(const map::centerway::CenterPoint3D &a, map::node::Node *nodes_, map::way::Line *line_, int pathid_)
+double Globalplan::Point2edgedistance(const map::centerway::CenterPoint3D &a, const map::node::Node *nodes_, map::way::Line *line_, int pathid_) const
 {
     //int pathid = Inwhichcenterway(a);
     map::centerway::CenterWay3D *path_ = plan_centerways->Find(pathid_);
@@ -366,7 +367,7 @@ double Globalplan::Point2edgedistance(const map::centerway::CenterPoint3D &a, ma
 }
 
 //cost: 从x路段的target到y路段的target长度
-void Globalplan::Astar(int x, int y)
+void Globalplan::Astar(const int x, const int y)
 {
     if(x == y)
     {
@@ -374,7 +375,7 @@ void Globalplan::Astar(int x, int y)
         plan_path.push_back(x);
         isfindpath = true;
         std::cout << "---------------------------------------------------" << std::endl;
-        std::cout << "find!" << std::endl;
+        std::cout << "* find! *" << std::endl;
         return;
     }
 
@@ -421,7 +422,7 @@ void Globalplan::Astar(int x, int y)
             {
                 plan_ways_map[y]->parent = minidnode;
                 std::cout << "---------------------------------------------------" << std::endl;
-                std::cout << "find!" << std::endl;
+                std::cout << "* find! *" << std::endl;
                 int i = y;
                 while(i != -1)
                 {
@@ -435,12 +436,12 @@ void Globalplan::Astar(int x, int y)
         }
     }
     std::cout << "---------------------------------------------------" << std::endl;
-    std::cout << "not find" << std::endl;
+    std::cout << "* not find! *" << std::endl;
     return;
 }
 
 //H恒等于0的A*
-void Globalplan::Dijkstra(int x, int y)
+void Globalplan::Dijkstra(const int x, const int y)
 {
     openlist.clear();
     closelist.clear();
@@ -506,7 +507,7 @@ void Globalplan::Dstar(int x, int y)
 
 void Globalplan::Reset()
 {
-    std::cout << "replan ..." << std::endl;
+    std::cout << "* replan ... *" << std::endl;
     openlist.clear();
     closelist.clear();
     plan_path.clear();
@@ -520,17 +521,15 @@ void Globalplan::Reset()
     }
 }
 
-bool Globalplan::isReset(int x, int y)
+bool Globalplan::isReset(const int x, const int y)
 {
     if(plan_path.empty()) return true;
     
     bool flag = true;
     int i = y;
     std::vector<int> plan_path_new;
-    while(plan_ways_map[i]->parent != -1)
+    while(i != -1)
     {
-        plan_path_new.push_back(i);
-        i = plan_ways_map[i]->parent;
         if(i == x)
         {
             plan_path_new.push_back(i);
@@ -538,15 +537,17 @@ bool Globalplan::isReset(int x, int y)
             plan_path.clear();
             plan_path = plan_path_new;
             flag = false;
-            std::cout << "not necessary to replan!" << std::endl;
+            std::cout << "* not necessary to replan! *" << std::endl;
             std::cout << "---------------------------------------------------" << std::endl;
             break;
         }
+        plan_path_new.push_back(i);
+        i = plan_ways_map[i]->parent;
     }
     return flag;
 }
 
-std::vector<int> Globalplan::run(int x, int y)
+std::vector<int> Globalplan::run(const int x, const int y)
 {
     //test
     /*map::centerway::CenterPoint3D testa(6.4, 1.2);//6.4, 1.2->220

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:43
- * @LastEditTime: 2022-04-17 13:56:27
+ * @LastEditTime: 2022-04-23 10:05:08
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_node.h
@@ -30,7 +30,7 @@ struct Point3D
     double local_y;
     double elevation;
     Point3D() {}
-    Point3D(double lat_, double lon_, double ele_)
+    Point3D(const double lat_, const double lon_, const double ele_)
     {
         ID = -1;
         longitude = lon_;
@@ -39,7 +39,7 @@ struct Point3D
         local_x = 0;
         local_y = 0;
     }
-    Point3D(double x_, double y_)
+    Point3D(const double x_, const double y_)
     {
         ID = -1;
         local_x = x_;
@@ -48,7 +48,7 @@ struct Point3D
         longitude = 0;
         latitude = 0;
     }
-    bool operator==(const Point3D &a)
+    bool operator==(const Point3D &a) const
     {
         return (this->ID == a.ID);
     }

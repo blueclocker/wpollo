@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   message_generation
   fsd_common_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -54,8 +55,11 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
 #   Message1.msg
 #   Message2.msg
+    Lane.msg
+    Lanes.msg
     navigation.msg
     regulatoryelement.msg
+    carState.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -76,6 +80,7 @@ find_package(catkin REQUIRED COMPONENTS
  generate_messages(
    DEPENDENCIES
    std_msgs
+   geometry_msgs
  )
 
 ################################################
@@ -167,7 +172,7 @@ add_library(map_lib
     src/tinyxml.cpp
     src/tinyxmlerror.cpp
     src/tinyxmlparser.cpp
-#    src/map_io.cpp 
+    src/map_io.cpp 
     src/map_node.cpp 
     src/map_way.cpp 
     src/map_relation.cpp 
@@ -182,7 +187,7 @@ add_library(geographicLib
     GeographicLib/Math.cpp
 )
 
-add_executable(mapio src/map_io.cpp src/main.cpp)
+add_executable(mapio src/map_core.cpp src/main.cpp)
 target_link_libraries(mapio ${catkin_LIBRARIES} map_lib geographicLib)
 add_dependencies(mapio ${PROJECT_NAME}_gencpp fsd_common_msgs_gencpp)
 

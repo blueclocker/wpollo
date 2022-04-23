@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:30:09
- * @LastEditTime: 2022-04-18 20:28:20
+ * @LastEditTime: 2022-04-23 10:02:36
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_base.h
@@ -47,17 +47,19 @@ public:
     //插入哈系表元素时，numbers增加1
     void Addnumbers() {numbers++;}
     //返回哈系表元素数量
-    int Size() {return numbers;}
+    int Size() const {return numbers;}
     //哈系表插入元素
     void Insert(int id_, T* x) {Data[id_] = x;}
     //根据索引（某类元素的ID号）从哈系表查找对应的具体数据
-    T* Find(const int id_) {return Data[id_];}
+    T* Find(const int id_) const {return Data.at(id_);}
     //判断id是否存在
-    bool isExist(const int id_) {return !(Data.find(id_) == Data.end());}
+    bool isExist(const int id_) const {return !(Data.find(id_) == Data.end());}
+    //返回哈系表
+    //typename std::unordered_map<int, T*> getData() const {return Data;}
     //返回哈系表第一个元素的指针
-    typename std::unordered_map<int, T*>::iterator Begin() {return Data.begin();}
+    typename std::unordered_map<int, T*>::const_iterator Begin() const {return Data.cbegin();}
     //返回哈系表元素的最后一个元素指针
-    typename std::unordered_map<int, T*>::iterator End() {return Data.end();}
+    typename std::unordered_map<int, T*>::const_iterator End() const {return Data.cend();}
     //析构，销毁哈系表及指针，释放内存
     virtual ~map_base() 
     {
