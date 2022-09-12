@@ -10,8 +10,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Kd Hybrid.png
-map_Ka Hybrid.png
+map_Kd type.jpg
+map_Ka type.jpg
 
 newmtl Hybrid_Interior
 Ns 9.803922
@@ -27,10 +27,12 @@ map_Ka Hybrid_Interior.png
 
 newmtl Windows
 Ns 0.000000
-Ka 0.262700 0.262700 0.262700
-Kd 0.262700 0.262700 0.262700
+#Ka 0.262700 0.262700 0.262700
+#Kd 0.262700 0.262700 0.262700
+Ka 1.000000 0.920000 0.800000
+Kd 1.000000 0.920000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.100000
+d 0.300000
 illum 2

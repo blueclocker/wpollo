@@ -1,0 +1,11 @@
+Log file created at: 2022/09/04 22:16:45
+Running on machine: Legion-Y7000P
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I0904 22:16:45.443411 18086 main.cpp:335] map published.
+I0904 22:16:46.854271 18086 main.cpp:335] map published.
+I0904 22:16:48.239526 18086 main.cpp:335] map published.
+I0904 22:16:49.658401 18086 main.cpp:335] map published.
+I0904 22:16:51.067085 18086 main.cpp:335] map published.
+I0904 22:16:52.468678 18086 main.cpp:335] map published.
+I0904 22:16:53.869953 18086 main.cpp:335] map published.
+I0904 22:16:55.276340 18086 main.cpp:335] map published.

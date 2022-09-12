@@ -263,3 +263,8 @@ add_dependencies(serialPort ${PROJECT_NAME} fsd_common_msgs_gencpp)
 - map_io和map_core分离，在map_core中调用map_io，预置地图基础四类元素的常量指针
 - 优化地图输出信息，目前包括导航信息、车辆状态信息，还需完善车道信息
 - 下一版本预计解决停车位问题、地图数据传输问题
+
+##### 20220912
+* 新增jps2d和jps3d两种搜索方式
+* 更改path_optimer_2为path_boost，改输入地图格式为pcl点云
+* 下一版本大改osmmap，预计支持多模态路径规划

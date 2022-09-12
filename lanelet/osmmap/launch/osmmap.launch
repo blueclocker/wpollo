@@ -3,7 +3,7 @@
 <launch>
 <!--param name="use_sim_time" value="true"/-->
 <arg name="file_path" default="$(find osmmap)/maps/"/>
-<arg name="file_name" default="SurfMap_double.osm"/>
+<arg name="file_name" default="SurfMap_mullocate.osm"/>
 <arg name="origin_lat" default="39.9558622"/>
 <arg name="origin_lon" default="116.3105016"/>
 <arg name="origin_ele" default="58.45015716"/>
@@ -23,5 +23,7 @@
 <include file="$(find prius_description)/launch/demo.launch"/>
 
 <node pkg="tf" type="static_transform_publisher" name="baselink_to_rslidar" args="-1.5 0 -2 0 0 0 rslidar base_link 100" />
+
+<!--node pkg="rosbag" type="play" name="rosbag" args=" - -clock -r 2 /home/wangpeng/AI/2022-04-14-15-48-26.bag"/-->
 
 </launch>

@@ -7,7 +7,7 @@
 #include <sensor_msgs/NavSatFix.h>
 #include <nav_msgs/Odometry.h>
 // #include <kvaser/CANPacket.h>
-#include <fsd_common_msgs/comb.h>
+#include <fsd_common_msgs/Comb.h>
 #include <fsd_common_msgs/Gnss.h>
 #include <Eigen/Core>
 #include <Eigen/Dense>
@@ -78,7 +78,7 @@ class GPS{
                             point_lla->data()[0], point_lla->data()[1], point_lla->data()[2]);                            
     }
     
-    void gpsCallback(const fsd_common_msgs::comb::ConstPtr& comb){
+    void gpsCallback(const fsd_common_msgs::Comb::ConstPtr& comb){
       double latitude = comb->Lattitude;
       double longitude = comb->Longitude;
       double altitude = comb->Altitude;

@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2022-03-13 15:21:15
- * @LastEditTime: 2022-04-23 10:35:00
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-07-20 14:29:02
+ * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_plan.h
  */
@@ -83,9 +83,11 @@ public:
     ~Globalplan();
     std::vector<int> run(const int x, const int y);//返回plan_path
     int Inwhichcenterway(const map::centerway::CenterPoint3D &a, const map::node::Node *nodes_, const map::way::Way *ways_, const map::relation::Relation *relations_) const;
+    std::vector<int> LocateLanelets(const map::centerway::CenterPoint3D &a, const map::node::Node *nodes_, const map::way::Way *ways_, const map::relation::Relation *relations_) const;
     int Atwhichpoint(const map::centerway::CenterPoint3D &a, const map::centerway::CenterWay3D *centerline_) const;
     double Point2edgedistance(const map::centerway::CenterPoint3D &a, const map::node::Node *nodes_, map::way::Line *line_, int pathid_) const;
     void Reset();//重置邻接表，openlist，closelist等
+    std::vector<int> findNextLanes(const int id_) const;
 };
 
 class CBSpline

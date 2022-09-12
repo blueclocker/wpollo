@@ -3,11 +3,11 @@
 #include "std_msgs/String.h"
 #include <iostream>
 #include <string>
-#include "fsd_common_msgs/comb.h"
-#include "fsd_common_msgs/state_as.h"
+#include "fsd_common_msgs/Comb.h"
+#include "fsd_common_msgs/State_as.h"
 #include <stdio.h>
 
-fsd_common_msgs::state_as state_as; // state_as means attached_struct
+fsd_common_msgs::State_as state_as; // state_as means attached_struct
 serial::Serial ser;
 const int frequency = 100;
 const int Baud_rate = 115200;
@@ -30,8 +30,8 @@ int main(int argc, char **argv) {
   //声明节点句柄
   ros::NodeHandle nh;
 
-  ros::Publisher read_pub = nh.advertise<fsd_common_msgs::comb>("comb", 1000);
-  ros::Publisher as_pub = nh.advertise<fsd_common_msgs::state_as>("state_as", 1000);
+  ros::Publisher read_pub = nh.advertise<fsd_common_msgs::Comb>("comb", 1000);
+  ros::Publisher as_pub = nh.advertise<fsd_common_msgs::State_as>("state_as", 1000);
 
   try {
     ser.setPort("/dev/ttyUSB0");
@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
           ret_temp1 = ret;
         }
       }
-      fsd_common_msgs::comb pub;
+      fsd_common_msgs::Comb pub;
 
       type_float temp_float[13];
       type_int temp_int[2], TimeCnt;

@@ -52,9 +52,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
  add_message_files(
    FILES
-   comb.msg
+   Comb.msg
    Gnss.msg
-   state_as.msg
+   State_as.msg
    e_comb.msg
    brake.msg
    wheel_speed.msg

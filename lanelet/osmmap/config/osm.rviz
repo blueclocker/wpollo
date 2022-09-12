@@ -5,10 +5,9 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /MarkerArray1
-        - /MarkerArray1/Namespaces1
         - /MarkerArray2
         - /MarkerArray2/Namespaces1
+        - /Marker1/Namespaces1
       Splitter Ratio: 0.4941176474094391
     Tree Height: 611
   - Class: rviz/Selection
@@ -99,23 +98,23 @@ Visualization Manager:
         centerpoints: false
         centerpoints_number: true
         edge_ways: true
-        edgepoints: true
+        edgepoints: false
         edgepoints_number: false
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
-      Enabled: true
+      Enabled: false
       Marker Topic: /mapio/path
       Name: MarkerArray
       Namespaces:
         {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 17.67089080810547
-        Min Value: -0.6475119590759277
+        Max Value: 18.985675811767578
+        Min Value: -5.0915422439575195
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -132,7 +131,7 @@ Visualization Manager:
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.07999999821186066
+      Size (m): 0.10000000149011612
       Style: Flat Squares
       Topic: /rslidar_points
       Unreliable: false
@@ -280,6 +279,24 @@ Visualization Manager:
       Topic: /mapio/gpspath_info
       Unreliable: false
       Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /mapio/golbalpath_info
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic: /bit_map
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -308,16 +325,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 90.28607177734375
+      Distance: 231.42356872558594
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 24.74570655822754
-        Y: -9.1692476272583
-        Z: 8.923926361603662e-5
+        X: 60.44766616821289
+        Y: -10.552240371704102
+        Z: -1.3252021744847298e-5
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -326,7 +343,7 @@ Visualization Manager:
       Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: ThirdPersonFollower (rviz)
-      Yaw: 4.548515796661377
+      Yaw: 4.5135178565979
     Saved: ~
 Window Geometry:
   Displays:
@@ -344,5 +361,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1267
-  X: 383
-  Y: 27
+  X: 482
+  Y: 98

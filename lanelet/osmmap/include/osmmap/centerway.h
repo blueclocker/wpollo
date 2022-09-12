@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2022-03-06 15:43:53
- * @LastEditTime: 2022-04-23 11:01:22
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-05-30 16:05:54
+ * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/centerway.h
  */
@@ -14,6 +14,7 @@
 #include "map_relation.h"
 #include <numeric>  // std::partial_sum
 #include <utility>      // std::pair
+#include <cfloat>
 
 /*根据node, way, relation计算得到的道路中心线
 * 计算得到的道路中心点存储在CenterPoint3D中，并全部存储在类CenterWay的centerpointmap中
@@ -191,6 +192,8 @@ public:
     void findNeighbor(const int centerwayid_, std::vector<int> &neighbors_) const;
     //判断a、b车道是否相邻
     bool isNeighbor(const int a, const int b) const;
+    //遍历寻找最近点
+    int returnMap(const node::Point3D *atnowpoint_) const;
     //run()----非const
     void run(const node::Node *nodes_, const way::Way *ways_, const relation::Relation *relations_);
     virtual void CreateOneObject(TiXmlElement *head);

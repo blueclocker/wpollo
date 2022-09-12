@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="path_optimizer_2" type="osmplan" name="osmplan" args="--log_dir=." output="screen" />
+    
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find path_optimizer_2)/config/rvizsomplan.rviz" output="screen" />
+</launch>

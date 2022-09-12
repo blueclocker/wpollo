@@ -17,6 +17,8 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
 )
 
+find_package(Eigen3 REQUIRED)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -57,9 +59,9 @@ find_package(catkin REQUIRED COMPONENTS
 #   Message2.msg
     Lane.msg
     Lanes.msg
-    navigation.msg
-    regulatoryelement.msg
-    carState.msg
+    Navigation.msg
+    Regulatoryelement.msg
+    CarState.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -128,6 +130,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${Eigen_INCLUDE_DIR}
 )
 
 ## Declare a C++ library
@@ -160,26 +163,32 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-#add_library(xml_io
-#    src/tinystr.cpp
-#    src/tinyxml.cpp
-#    src/tinyxmlerror.cpp
-#    src/tinyxmlparser.cpp
-#)
+add_library(xmlio_lib
+    src/tinyxml/tinystr.cpp
+    src/tinyxml/tinyxml.cpp
+    src/tinyxml/tinyxmlerror.cpp
+    src/tinyxml/tinyxmlparser.cpp
+)
 
 add_library(map_lib
-    src/tinystr.cpp
-    src/tinyxml.cpp
-    src/tinyxmlerror.cpp
-    src/tinyxmlparser.cpp
-    src/map_io.cpp 
-    src/map_node.cpp 
-    src/map_way.cpp 
-    src/map_relation.cpp 
-    src/centerway.cpp
-    src/visualization.cpp
-    src/map_plan.cpp
+    #src/tinyxml/tinystr.cpp
+    #src/tinyxml/tinyxml.cpp
+    #src/tinyxml/tinyxmlerror.cpp
+    #src/tinyxml/tinyxmlparser.cpp
+    src/hdmap/map_io.cpp 
+    src/hdmap/map_node.cpp 
+    src/hdmap/map_way.cpp 
+    src/hdmap/map_relation.cpp 
+    src/hdmap/centerway.cpp
+    src/hdmap/visualization.cpp
+    src/hdmap/map_core.cpp 
+    src/plan/map_plan.cpp
+    src/plan/dubins.cpp
+    src/plan/reeds_shepp.cpp
+    src/plan/rs_path.cpp
+    src/plan/hybidacore.cpp
 )
+target_link_libraries(map_lib xmlio_lib grid_map_pcllib ${catkin_LIBRARIES})
 
 add_library(geographicLib
     GeographicLib/Geocentric.cpp
@@ -187,8 +196,8 @@ add_library(geographicLib
     GeographicLib/Math.cpp
 )
 
-add_executable(mapio src/map_core.cpp src/main.cpp)
-target_link_libraries(mapio ${catkin_LIBRARIES} map_lib geographicLib)
+add_executable(mapio src/main.cpp)
+target_link_libraries(mapio map_lib geographicLib)
 add_dependencies(mapio ${PROJECT_NAME}_gencpp fsd_common_msgs_gencpp)
 
 #############

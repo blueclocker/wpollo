@@ -54,11 +54,11 @@ int main(int argc, char** argv)
 
    ros::Rate loop_rate(1.0);
 
-   private_nh.param("file_directory", file_directory, std::string("/home/wp/"));
+   private_nh.param("file_directory", file_directory, std::string("/home/wangpeng/wpollo/src/lanelet/osmmap/maps/"));
    ROS_INFO("*** file_directory = %s ***\n", file_directory.c_str());
 
 
-   private_nh.param("file_name", file_name, std::string("bit"));
+   private_nh.param("file_name", file_name, std::string("SurfMap"));
    ROS_INFO("*** file_name = %s ***\n", file_name.c_str());
 
    pcd_file = file_directory + file_name + pcd_format;
@@ -84,12 +84,12 @@ int main(int argc, char** argv)
 
    std::cout << "初始点云数据点数：" << pcd_cloud->points.size() << std::endl;
 
-   //PassThroughFilter(thre_z_min, thre_z_max, bool(flag_pass_through));
+   PassThroughFilter(thre_z_min, thre_z_max, bool(flag_pass_through));
 
-//   RadiusOutlierFilter(cloud_after_PassThrough, 0.1, 10);
+   RadiusOutlierFilter(cloud_after_PassThrough, 0.1, 10);
 //   SetMapTopicMsg(cloud_after_Radius, map_topic_msg);
 
-   //SetMapTopicMsg(cloud_after_PassThrough, map_topic_msg);
+   SetMapTopicMsg(cloud_after_PassThrough, map_topic_msg);
    SetMapTopicMsg(pcd_cloud, map_topic_msg);
 
    while(ros::ok())
