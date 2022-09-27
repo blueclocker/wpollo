@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2022-03-06 15:44:08
- * @LastEditTime: 2022-05-30 16:11:43
+ * @LastEditTime: 2022-09-25 15:28:30
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: /wpollo/src/lanelet/osmmap/src/centerway.cpp
+ * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/centerway.cpp
  */
 #include "../include/osmmap/centerway.h"
 
@@ -25,6 +25,13 @@ CenterWay::CenterWay(TiXmlElement *root)
 void CenterWay::CreateOneObject(TiXmlElement *head)
 {
     return;
+}
+
+double CenterWay::NodeDistance2D(const CenterPoint3D *a, const CenterPoint3D *b) const
+{
+    double x = a->x - b->x;
+    double y = a->y - b->y;
+    return std::sqrt(x*x + y*y);
 }
 
 double CenterWay::NodeDistance(const node::Point3D *a, const node::Point3D *b) const
@@ -341,21 +348,73 @@ bool CenterWay::isNeighbor(const int a, const int b) const
     return false;
 }
 
-int CenterWay::returnMap(const node::Point3D *atnowpoint_) const
+int CenterWay::findNearestCenterwaypointid(const node::Point3D *atnowpoint_) const
 {
-    int nearestcenterpointid = -1;
+    int nearest_center_point_id = -1;
     double distemp = DBL_MAX;
     CenterPoint3D startpoint(*atnowpoint_);
     for(auto it = centerpointmap.begin(); it != centerpointmap.end(); ++it)
     {
+        // 判定车与路同向的下一点, 暂不判定
+        // double bx = it->second->x - atnowpoint_->local_x;
+        // double by = it->second->y - atnowpoint_->local_y;
+        // double a_b = bx * cos(heading) + by * sin(heading);
+
         double temp = NodeDistance(&startpoint, it->second);
         if(temp < distemp)
         {
-            nearestcenterpointid = it->first;
+            nearest_center_point_id = it->first;
             distemp = temp;
         }
     }
-    return nearestcenterpointid;
+    return nearest_center_point_id;
+}
+
+void CenterWay::nextCenterwayPointid(const int now_centerway_point_id, CenterPoint3D &targetpoint) const
+{
+    CenterWay3D* candicate_centerway = Find(now_centerway_point_id / 100);
+    CenterPoint3D *a, *b;
+    if(now_centerway_point_id % 100 < candicate_centerway->length - 1)
+    {
+        a = centerpointmap.at(now_centerway_point_id);
+        b = centerpointmap.at(now_centerway_point_id + 1);
+    }else{
+        a = centerpointmap.at(now_centerway_point_id - 1);
+        b = centerpointmap.at(now_centerway_point_id);
+    }
+    if((b->x - a->x < 1e-5))
+    {
+        targetpoint.x = b->x;
+        targetpoint.y = b->y > a->y ? b->y + 5 : b->y - 5;
+    }else{
+        targetpoint.x = b->x + 5;
+        targetpoint.y = b->y + 5 * (b->y - a->y) / (b->x - a->x);
+    }
+}
+
+int CenterWay::findNearestLanelet(const CenterPoint3D *atnowpoint_, const double &heading) const
+{
+    double distemp = DBL_MAX;
+    int lanelet_id = -1;
+    for(auto it = Begin(); it != End(); ++it)
+    {
+        CenterWay3D *acenterway = it->second;
+        for(int i = 0; i < acenterway->length-1; ++i)
+        {
+            double bx = centerpointmap.at(acenterway->centernodeline[i+1])->x - centerpointmap.at(acenterway->centernodeline[i])->x;
+            double by = centerpointmap.at(acenterway->centernodeline[i+1])->y - centerpointmap.at(acenterway->centernodeline[i])->y;
+            double a_b = bx * cos(heading) + by * sin(heading);
+            if(a_b < 0) continue;
+
+            double temp = NodeDistance(atnowpoint_, centerpointmap.at(acenterway->centernodeline[i+1]));
+            if(temp < distemp)
+            {
+                lanelet_id = acenterway->centernodeline[i+1];
+                distemp = temp;
+            }
+        }
+    }
+    return lanelet_id/100;
 }
 
 void CenterWay::run(const node::Node *nodes_, const way::Way *ways_, const relation::Relation *relations_)
@@ -461,7 +520,7 @@ void CenterWay::run(const node::Node *nodes_, const way::Way *ways_, const relat
 
 CenterWay::~CenterWay()
 {
-    //std::cout << "~centerway" << std::endl;
+    // std::cout << "~centerway" << std::endl;
     for(auto it = centerpointmap.begin(); it != centerpointmap.end(); ++it)
     {
         delete it->second;

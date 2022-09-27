@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+
+<node pkg="open_space" type="parking_run" name="parking_run" output="screen" />
+
+<!--node pkg="rviz" type="rviz" name="rviz" args="-d $(find open_space)/config/demo.rviz"/-->
+
+</launch>

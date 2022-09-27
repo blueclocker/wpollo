@@ -8,6 +8,7 @@ Panels:
         - /MarkerArray2
         - /MarkerArray2/Namespaces1
         - /Marker1/Namespaces1
+        - /MarkerArray5
       Splitter Ratio: 0.4941176474094391
     Tree Height: 611
   - Class: rviz/Selection
@@ -284,18 +285,50 @@ Visualization Manager:
       Marker Topic: /mapio/golbalpath_info
       Name: Marker
       Namespaces:
-        {}
+        smooth_plan_ways: true
       Queue Size: 100
       Value: true
     - Alpha: 0.699999988079071
       Class: rviz/Map
       Color Scheme: map
       Draw Behind: false
-      Enabled: true
+      Enabled: false
       Name: Map
-      Topic: /bit_map
+      Topic: /pcdtogm/grid_map
       Unreliable: false
       Use Timestamp: false
+      Value: false
+    - Class: rviz/Marker
+      Enabled: false
+      Marker Topic: /parking/path
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: false
+    - Class: rviz/MarkerArray
+      Enabled: false
+      Marker Topic: /adaptive_clustering/markers_tubao
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: false
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /path
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /obsmarkers
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
@@ -325,16 +358,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 231.42356872558594
+      Distance: 284.0746154785156
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 60.44766616821289
-        Y: -10.552240371704102
-        Z: -1.3252021744847298e-5
+        X: 177.93914794921875
+        Y: -8.93117904663086
+        Z: 3.958389788749628e-5
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -343,7 +376,7 @@ Visualization Manager:
       Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: ThirdPersonFollower (rviz)
-      Yaw: 4.5135178565979
+      Yaw: 4.518517971038818
     Saved: ~
 Window Geometry:
   Displays:
@@ -362,4 +395,4 @@ Window Geometry:
     collapsed: true
   Width: 1267
   X: 482
-  Y: 98
+  Y: 27

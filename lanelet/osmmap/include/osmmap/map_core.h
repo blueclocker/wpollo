@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:36
- * @LastEditTime: 2022-09-12 15:35:56
+ * @LastEditTime: 2022-09-25 15:16:50
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_core.h
@@ -14,11 +14,12 @@
 #include "map_plan.h"
 #include "dubins.h"
 #include "cubic_spline.h"
-#include "grid_map_pcl/grid_map_pcl.hpp"
 #include <ros/ros.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <sensor_msgs/NavSatFix.h>
 #include <tf/transform_broadcaster.h>
+#include <nav_msgs/OccupancyGrid.h>
+#include <grid_map_ros/grid_map_ros.hpp>
 #include <fsd_common_msgs/Comb.h>
 #include <nav_msgs/Path.h>
 #include <osmmap/Navigation.h>
@@ -53,9 +54,9 @@ private:
     const way::Way *waysptr;
     const relation::Relation *relationsptr;
     const centerway::CenterWay *centerwaysptr;
+    const grid_map::GridMap *gridmapsptr;
     map::Map *vectormap;
     MapVisualization *visualmap;
-    grid_map::GridMap *gridmaps;
     plan::Globalplan *globalplans;
 
     //params
@@ -98,6 +99,7 @@ private:
 
     ros::Publisher map_pub;
     ros::Publisher path_pub;
+    ros::Publisher gridmap_pub;
     ros::Publisher gpspath_pub;
     ros::Publisher carstate_pub;
     ros::Publisher navigation_pub;
@@ -106,6 +108,7 @@ private:
 
     visualization_msgs::MarkerArray map_markerarray;
     visualization_msgs::MarkerArray path_markerarray;
+    nav_msgs::OccupancyGrid gridmapmsg;
     nav_msgs::Path gpspath;
     osmmap::Navigation laneletinfo;
     osmmap::Lanes Lanesinfo;
@@ -117,11 +120,13 @@ private:
     template <typename Derived> Eigen::Matrix<typename Derived::Scalar, 3, 3> GetSkewMatrix(const Eigen::MatrixBase<Derived> &v);
     template <typename Derived> Eigen::Matrix<typename Derived::Scalar, 3, 3> Amatrix(const Eigen::MatrixBase<Derived> &v);
     void imuInit(const Eigen::Vector3d &imuMsg);
+    void pushCenterPoint(const std::vector<int> &pathid_);
+    void outMapPlan(const centerway::CenterPoint3D &atnow_centerpoint, const double heading);
 
 public:
     HDMap(ros::NodeHandle n_);
     ~HDMap();
-    void Smoothpath(const std::vector<int> &pathid_);
+    void Smoothpath();
     void startpoint_callback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg);
     void goalpoint_callback(const geometry_msgs::PoseStamped::ConstPtr &msg);
     void gps_callback(const fsd_common_msgs::Comb::ConstPtr &msg);

@@ -5,7 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /MarkerArray1
         - /MarkerArray1/Namespaces1
         - /MarkerArray2
       Splitter Ratio: 0.6958039999008179
@@ -74,8 +73,11 @@ Visualization Manager:
       Name: MarkerArray
       Namespaces:
         center_lane_line: true
+        crosswalk_lanelets: true
         lanelet direction: true
         left_lane_bound: true
+        parking_lots: true
+        parking_space: true
         right_lane_bound: true
         road_lanelets: true
         stop_lines: true
@@ -118,7 +120,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -1.4699996709823608
+      Angle: -2.665004253387451
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -128,11 +130,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 2.935425281524658
+      Scale: 3.0426833629608154
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
-      X: 10.848438262939453
-      Y: -85.20977783203125
+      X: 3758.233154296875
+      Y: 73747.4140625
     Saved: ~
 Window Geometry:
   Displays:
@@ -151,4 +153,4 @@ Window Geometry:
     collapsed: false
   Width: 1389
   X: 246
-  Y: 162
+  Y: 132

@@ -268,3 +268,7 @@ add_dependencies(serialPort ${PROJECT_NAME} fsd_common_msgs_gencpp)
 * 新增jps2d和jps3d两种搜索方式
 * 更改path_optimer_2为path_boost，改输入地图格式为pcl点云
 * 下一版本大改osmmap，预计支持多模态路径规划
+
+##### 20220927
+* 新增open_space泊车功能，使用apollo混合A*
+* osmmap导航方式优化，当超过地图范围和无法搜索出可行道路时，取和车头朝向相同的最近lanelet作为定位结果，尝试再次A*

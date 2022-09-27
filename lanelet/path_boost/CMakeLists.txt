@@ -1,6 +1,22 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(path_boost)
 
+#include(CheckCXXCompilerFlag)
+#CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
+#CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+
+#if (COMPILER_SUPPORTS_CXX14)
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+#elseif (COMPILER_SUPPORTS_CXX0X)
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+#else ()
+#    message(FATAL_ERROR "The compiler ${CMAKE_CXX_FLAGS} doesn't have C++14 support.
+#                         Please use a different C++ compiler")
+#endif ()
+
+#set(ADDITIONAL_CXX_FLAG "-Wall -O3 -march=native")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ADDITIONAL_CXX_FLAG}")
+
 ## Compile as C++11, supported in ROS Kinetic and newer
  add_compile_options(-std=c++14)
 
@@ -186,6 +202,8 @@ add_library(pathboostlib
   src/reference_path_smoother/reference_path_smoother.cpp
   src/reference_path_smoother/tension_smoother.cpp
   src/reference_path_smoother/tension_smoother_2.cpp
+  src/reference_path_smoother/hybidacore.cpp
+  src/reference_path_smoother/rs_path.cpp
   src/solver/base_solver.cpp
   src/tools/car_model.cpp
   src/tools/collosion_check.cpp
@@ -201,7 +219,7 @@ add_executable(${PROJECT_NAME}_demo src/test/main.cpp)
 target_link_libraries(${PROJECT_NAME}_demo pathboostlib grid_map_pcllib ros_rviz_toolslib ${OpenCV_LIBRARIES})
 
 add_executable(pcdtogm src/test/pcd2gridmap.cpp)
-target_link_libraries(pcdtogm grid_map_pcllib)
+target_link_libraries(pcdtogm pathboostlib grid_map_pcllib)
 
 #############
 ## Install ##

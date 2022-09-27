@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:06
- * @LastEditTime: 2022-04-23 19:43:51
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-09-12 17:56:01
+ * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: /wpollo/src/lanelet/osmmap/src/map_way.cpp
+ * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/map_way.cpp
  */
 
 #include "osmmap/map_way.h"
@@ -88,7 +88,7 @@ WaySubtype Way::MatchSubtype(const std::string s) const
 
 Way::~Way()
 {
-    //std::cout << "~way" << std::endl;
+    // std::cout << "~way" << std::endl;
 }
 
 

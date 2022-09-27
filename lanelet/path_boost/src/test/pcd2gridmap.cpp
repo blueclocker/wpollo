@@ -2,7 +2,7 @@
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-09-01 15:20:40
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
- * @LastEditTime: 2022-09-04 15:21:34
+ * @LastEditTime: 2022-09-12 21:33:53
  * @FilePath: /wpollo/src/lanelet/path_boost/src/test/pcd2gridmap.cpp
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * 
@@ -19,69 +19,110 @@
 #include "grid_map_pcl/grid_map_pcl.hpp"
 #include <nav_msgs/OccupancyGrid.h>
 #include "osmmap/CarState.h"
+#include "hastar/hybidacore.h"
+#include "path_boost/tools/eigen2cv.hpp"
+#include <tf/tf.h>
+#include <nav_msgs/Path.h>
 
+HybidA::Vec3d start_state, goal_state;
 ros::Publisher map_publisher;
-grid_map::GridMap gridMap;
+ros::Publisher path_pub;
+grid_map::GridMap gridmap(std::vector<std::string>{"obstacle", "distance"});
+nav_msgs::OccupancyGrid message;
+bool start_state_rcv = false, end_state_rcv = false, has_map = false;
+std::shared_ptr<HybidA::hybidacore> kinodynamic_astar_searcher_ptr_;
 
-void tooccupancymap(const grid_map::GridMap& gridMap,
-                    const std::string& layer, float dataMin, float dataMax,
-                    nav_msgs::OccupancyGrid& occupancyGrid)
+void tobinary(grid_map::GridMap::Matrix &data)
 {
-//   std::cout << "tooccupancymap" << std::endl;
-  occupancyGrid.header.frame_id = gridMap.getFrameId();
-  occupancyGrid.header.stamp.fromNSec(gridMap.getTimestamp());
-  occupancyGrid.info.map_load_time = occupancyGrid.header.stamp;  // Same as header stamp as we do not load the map.
-  occupancyGrid.info.resolution = gridMap.getResolution();
-  occupancyGrid.info.width = gridMap.getSize()(0);
-  occupancyGrid.info.height = gridMap.getSize()(1);
-  grid_map::Position position = gridMap.getPosition() - 0.5 * gridMap.getLength().matrix();
-  occupancyGrid.info.origin.position.x = position.x();
-  occupancyGrid.info.origin.position.y = position.y();
-  occupancyGrid.info.origin.position.z = 0.0;
-  occupancyGrid.info.origin.orientation.x = 0.0;
-  occupancyGrid.info.origin.orientation.y = 0.0;
-  occupancyGrid.info.origin.orientation.z = 0.0;
-  occupancyGrid.info.origin.orientation.w = 1.0;
-  size_t nCells = gridMap.getSize().prod();
-  occupancyGrid.data.resize(nCells);
-
-  // Occupancy probabilities are in the range [0,100]. Unknown is -1.
-  const float cellMin = 0;
-  const float cellMax = 100;
-  const float cellRange = cellMax - cellMin;
-
-  for (grid_map::GridMapIterator iterator(gridMap); !iterator.isPastEnd(); ++iterator) {
-    float value = (gridMap.at(layer, *iterator) - dataMin) / (dataMax - dataMin);
-    if (std::isnan(value))
-      value = 0;
-    else
-      value = 100 - cellMin - std::min(std::max(0.0f, value), 1.0f) * cellRange;
-    size_t index = grid_map::getLinearIndexFromIndex(iterator.getUnwrappedIndex(), gridMap.getSize(), false);
-    // Reverse cell order because of different conventions between occupancy grid and grid map.
-    occupancyGrid.data[nCells - index - 1] = value;
-  }
+    for(auto i = 0; i < data.rows(); ++i)
+    {
+        for(auto j = 0; j < data.cols(); ++j)
+        {
+            if(std::isnan(data(i, j)))
+            {
+                data(i, j) = 255;
+            }else{
+                data(i, j) = 0;
+            }
+        }
+    }
 }
 
+void PublishPath(const VectorVec3d &path) 
+{
+    nav_msgs::Path nav_path;
+
+    geometry_msgs::PoseStamped pose_stamped;
+    for (const auto &pose: path) {
+        pose_stamped.header.frame_id = "map";
+        pose_stamped.pose.position.x = pose.x();
+        pose_stamped.pose.position.y = pose.y();
+        pose_stamped.pose.position.z = 0.0;
+        pose_stamped.pose.orientation = tf::createQuaternionMsgFromYaw(pose.z());
+
+        nav_path.poses.emplace_back(pose_stamped);
+    }
+
+    nav_path.header.frame_id = "map";
+    nav_path.header.stamp = ros::Time::now();
+
+    path_pub.publish(nav_path);
+}
 
 void carstatecallback(const osmmap::CarState::ConstPtr &msgptr)
 {
-    bool subflag = false;
+    // bool subflag = false;
     int x = msgptr->carPose.position.x;
     int y = msgptr->carPose.position.y;
-    grid_map::GridMap submap = gridMap.getSubmap({x, y}, {50, 30}, subflag);
-    float a = gridMap.atPosition("elevation", {0, 0}, grid_map::InterpolationMethods::INTER_LINEAR);
-    std::cout << "now=" << a << std::endl;
+    start_state.x() = x;
+    start_state.y() = y;
+    start_state.z() = tf::getYaw(msgptr->carPose.orientation);
+    start_state_rcv = true;
+    goal_state.x() = msgptr->endPose.position.x;
+    goal_state.y() = msgptr->endPose.position.y;
+    goal_state.z() = tf::getYaw(msgptr->endPose.orientation);
+    if(goal_state.x() != 0 && goal_state.y() != 0)
+    {
+        end_state_rcv = true;
+    }
+    // grid_map::GridMap submap = gridMap.getSubmap({x, y}, {50, 30}, subflag);
+    // float a = gridMap.atPosition("elevation", {0, 0}, grid_map::InterpolationMethods::INTER_LINEAR);
+    // std::cout << "now=" << a << std::endl;
     // grid_map::Length len = submap.getLength();
     // grid_map::Position pos = submap.getPosition();
     // submap.setGeometry(len, 0.2, pos);
-    submap.setFrameId("/map");
-    grid_map::GridMap modifiedmap;
-    grid_map::GridMapCvProcessing::changeResolution(submap, modifiedmap, 0.2);
+    // submap.setFrameId("/map");
+
+    // 改分辨率
+    // grid_map::GridMap modifiedmap;
+    // grid_map::GridMapCvProcessing::changeResolution(submap, modifiedmap, 0.2);
     
-    nav_msgs::OccupancyGrid message;
-    grid_map::GridMapRosConverter::toOccupancyGrid(modifiedmap, "elevation", 0, 255, message);
-    // grid_map::GridMapRosConverter::toOccupancyGrid(submap, "elevation", 0, 255, message);
-    map_publisher.publish(message);
+    // nav_msgs::OccupancyGridPtr message;
+    // grid_map::GridMapRosConverter::toOccupancyGrid(modifiedmap, "elevation", 255, 0, message);
+    // grid_map::GridMapRosConverter::toOccupancyGrid(gridMap, "elevation", 255, 0, *message);
+    if(!has_map)
+    {
+      kinodynamic_astar_searcher_ptr_->init(message, 0.2);
+      has_map = true; 
+    }
+    if (start_state_rcv && end_state_rcv && has_map)
+    {
+      if(kinodynamic_astar_searcher_ptr_->search(start_state, goal_state))
+      {
+        std::cout << "find" << std::endl;
+        auto path = kinodynamic_astar_searcher_ptr_->getPath();
+        PublishPath(path);
+      }
+    }
+    // map_publisher.publish(*message);
+}
+
+void goalCb(const geometry_msgs::PoseStampedConstPtr &goal) {
+    goal_state.x() = goal->pose.position.x;
+    goal_state.y() = goal->pose.position.y;
+    goal_state.z() = tf::getYaw(goal->pose.orientation);
+    end_state_rcv = true;
+    std::cout << "get the goal." << std::endl;
 }
 
 
@@ -90,9 +131,24 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "pcd2gridmap");
     ros::NodeHandle nh("~");
 
-    ros::Publisher gridMapPub;
-    gridMapPub = nh.advertise<grid_map_msgs::GridMap>("grid_map_from_raw_pointcloud", 1, true);
+    double steering_angle = nh.param("steering_angle", 10);
+    int steering_angle_discrete_num = nh.param("steering_angle_discrete_num", 1);
+    double wheel_base = nh.param("wheel_base", 1.0);
+    double segment_length = nh.param("segment_length", 1.6);
+    int segment_length_discrete_num = nh.param("segment_length_discrete_num", 8);
+    double steering_penalty = nh.param("steering_penalty", 1.05);
+    double steering_change_penalty = nh.param("steering_change_penalty", 1.5);
+    double reversing_penalty = nh.param("reversing_penalty", 2.0);
+    double shot_distance = nh.param("shot_distance", 5.0);
+    kinodynamic_astar_searcher_ptr_ = std::make_shared<HybidA::hybidacore>(
+            steering_angle, steering_angle_discrete_num, segment_length, segment_length_discrete_num, wheel_base,
+            steering_penalty, reversing_penalty, steering_change_penalty, shot_distance
+    );
+
+    // ros::Publisher gridMapPub;
+    // gridMapPub = nh.advertise<grid_map_msgs::GridMap>("grid_map_from_raw_pointcloud", 1, true);
     map_publisher = nh.advertise<nav_msgs::OccupancyGrid>("grid_map", 1, true);
+    path_pub = nh.advertise<nav_msgs::Path>("path", 1);
 
     //点云加载参数
     grid_map::GridMapPclLoader gridMapPclLoader;
@@ -134,42 +190,41 @@ int main(int argc, char **argv)
     // gridMapPclLoader->addLayerFromInputCloud(getMapLayerName(nh));
     // printTimeElapsedToRosInfoStream(start, "Total time: ");
 
-    gridMap = gridMapPclLoader.getGridMap();
-    gridMap.setFrameId("/map");
-    // float a = gridMap.atPosition("elevation", {0, 0}, grid_map::InterpolationMethods::INTER_CUBIC);
-    // std::cout << "a=" << a << std::endl;
-    bool subflag = false;
-    grid_map::GridMap submap = gridMap.getSubmap({100, 10}, {50, 30}, subflag);
-    gridMap.setFrameId("/map");
-    submap.setFrameId("/map");
-    grid_map_msgs::GridMap msg;
-    if(subflag)
-    {
-        std::cout << "submap succeed" << std::endl;
-        grid_map::GridMapRosConverter::toMessage(submap, msg);
-        
-    }else{
-        std::cout << "submap failed" << std::endl;
-        grid_map::GridMapRosConverter::toMessage(gridMap, msg);
-    }
+    // grid_map::GridMap gridmap(std::vector<std::string>{"obstacle", "distance"});
+    gridmap.setGeometry(gridMapPclLoader.getGridMap().getLength(), 
+                        gridMapPclLoader.getGridMap().getResolution(), 
+                        gridMapPclLoader.getGridMap().getPosition());
+    // Add obstacle layer.
+    auto obsdata = gridMapPclLoader.getGridMap().get("elevation");
+    tobinary(obsdata);
+    gridmap.add("obstacle", obsdata);
+    // Update distance layer.
+    Eigen::Matrix<unsigned char, Eigen::Dynamic, Eigen::Dynamic> binary =
+        gridmap.get("obstacle").cast<unsigned char>();
+    cv::distanceTransform(eigen2cv(binary), eigen2cv(gridmap.get("distance")),
+                          CV_DIST_L2, CV_DIST_MASK_PRECISE);
+    gridmap.get("distance") *= 0.2;
+    gridmap.setFrameId("/map");
     
-    gridMap.setTimestamp(ros::Time::now().toNSec());
-    nav_msgs::OccupancyGrid message;
-    // grid_map::GridMapRosConverter::toOccupancyGrid(gridMap, "elevation", 0, 255, message);
-    tooccupancymap(gridMap, "elevation", 0, 255, message);
-    map_publisher.publish(message);
+    gridmap.setTimestamp(ros::Time::now().toNSec());
+    // nav_msgs::OccupancyGrid message;
+    grid_map::GridMapRosConverter::toOccupancyGrid(gridmap, "obstacle", 255, 0, message);
+    // grid_map::GridMapRosConverter::toOccupancyGrid(gridmap, "obstacle", 255, 0, message);
+
+    // ros::Subscriber end_sub = nh.subscribe("/move_base_simple/goal", 1, goalCb);
+    // ros::Subscriber followmap = nh.subscribe("/mapio/carstate_info", 1, &carstatecallback);
+
 
     ros::Rate r(10);
     while(nh.ok())
     {
-        msg.info.header.stamp = ros::Time::now();
-        gridMapPub.publish(msg);
+        message.header.stamp = ros::Time::now();
+        map_publisher.publish(message);
         r.sleep();
         ros::spinOnce();
     }
 
     // ros::Subscriber followmap = nh.subscribe("/mapio/carstate_info", 1, &carstatecallback);
-    ros::spin();
     return 0;
 }
 

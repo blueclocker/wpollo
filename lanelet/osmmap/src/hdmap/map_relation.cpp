@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:16
- * @LastEditTime: 2022-04-23 19:44:41
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-09-12 17:55:54
+ * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: /wpollo/src/lanelet/osmmap/src/map_relation.cpp
+ * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/map_relation.cpp
  */
 #include "osmmap/map_relation.h"
 
@@ -169,7 +169,7 @@ std::vector<regulatoryelement*> Relation::getRegulatoryelement(const int id_) co
 
 Relation::~Relation()
 {
-    //std::cout << "~relation" << std::endl;
+    // std::cout << "~relation" << std::endl;
     for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
     {
         delete it->second;

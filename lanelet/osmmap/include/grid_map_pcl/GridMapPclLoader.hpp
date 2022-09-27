@@ -14,8 +14,8 @@
 
 #include <grid_map_core/GridMap.hpp>
 
-#include "grid_map_pcl/PclLoaderParameters.hpp"
-#include "grid_map_pcl/PointcloudProcessor.hpp"
+#include "PclLoaderParameters.hpp"
+#include "PointcloudProcessor.hpp"
 
 namespace grid_map {
 

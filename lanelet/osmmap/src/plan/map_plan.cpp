@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2022-03-13 15:21:33
- * @LastEditTime: 2022-07-20 14:30:28
+ * @LastEditTime: 2022-09-23 22:09:00
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: /wpollo/src/lanelet/osmmap/src/map_plan.cpp
+ * @FilePath: /wpollo/src/lanelet/osmmap/src/plan/map_plan.cpp
  */
 #include "../include/osmmap/map_plan.h"
 
@@ -168,19 +168,31 @@ bool Globalplan::Isinlist(const int x, const std::list<int> &listx) const
 
 int Globalplan::Atwhichpoint(const map::centerway::CenterPoint3D &a, const map::centerway::CenterWay3D *centerline_) const
 {
+    // 1st
+    // for(int i = 0; i < centerline_->length - 1; ++i)
+    // {
+    //     //a点沿道路点集顺序y轴方向向量#1
+    //     double oyx = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->x - plan_centerways->Findcenterpoint(centerline_->centernodeline[i])->x;
+    //     double oyy = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->y - plan_centerways->Findcenterpoint(centerline_->centernodeline[i])->y;
+    //     //a->p0 #2
+    //     double ap0x = plan_centerways->Findcenterpoint(centerline_->centernodeline[i])->x - a.x;
+    //     double ap0y = plan_centerways->Findcenterpoint(centerline_->centernodeline[i])->y - a.y;
+    //     //a->p1 #3
+    //     double ap1x = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->x - a.x;
+    //     double ap1y = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->y - a.y;
+    //     //#1 * #2 与 #1 * #3异号
+    //     if((oyx*ap0x + oyy*ap0y) * (oyx*ap1x + oyy*ap1y) < 0) return centerline_->centernodeline[i+1];
+    // }
+
+    // 2nd
     for(int i = 0; i < centerline_->length - 1; ++i)
     {
-        //a点沿道路点集顺序y轴方向向量#1
-        double oyx = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->x - plan_centerways->Findcenterpoint(centerline_->centernodeline[i])->x;
-        double oyy = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->y - plan_centerways->Findcenterpoint(centerline_->centernodeline[i])->y;
-        //a->p0 #2
-        double ap0x = plan_centerways->Findcenterpoint(centerline_->centernodeline[i])->x - a.x;
-        double ap0y = plan_centerways->Findcenterpoint(centerline_->centernodeline[i])->y - a.y;
-        //a->p1 #3
-        double ap1x = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->x - a.x;
-        double ap1y = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->y - a.y;
-        //#1 * #2 与 #1 * #3异号
-        if((oyx*ap0x + oyy*ap0y) * (oyx*ap1x + oyy*ap1y) < 0) return centerline_->centernodeline[i+1];
+        double pathx = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->x - plan_centerways->Findcenterpoint(centerline_->centernodeline[i])->x;
+        double pathy = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->y - plan_centerways->Findcenterpoint(centerline_->centernodeline[i])->y;
+        double carx = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->x - a.x;
+        double cary = plan_centerways->Findcenterpoint(centerline_->centernodeline[i+1])->y - a.y;
+
+        if(carx * pathx + cary * pathy > 0) return centerline_->centernodeline[i+1];
     }
     return -1;
 }
@@ -238,7 +250,7 @@ int Globalplan::Inwhichcenterway(const map::centerway::CenterPoint3D &a, const m
     }
     return -1;*/
 
-    //2nd, 射线法，好使
+    //2nd, 射线法
     std::vector<map::node::Point3D*> polygon;
     for(auto it = relations_->Begin(); it != relations_->End(); ++it)
     {
@@ -655,16 +667,19 @@ std::vector<int> Globalplan::run(const int x, const int y)
     return plan_path;
 }
 
+void Globalplan::deleteChain(plan_ways_map_chain *root)
+{
+    if(root == nullptr) return;
+    deleteChain(root->next);
+    delete root;
+}
 
 Globalplan::~Globalplan()
 {
-    //std::cout << "~Globalplan" << std::endl;
+    // std::cout << "~Globalplan" << std::endl;
     for(auto it = plan_ways_map.begin(); it != plan_ways_map.end(); ++it)
     {
-        for(auto iter = it->second->next; iter != nullptr; iter = iter->next)
-        {
-            delete iter;
-        }
+        deleteChain(it->second->next);
         delete it->second;
     }
     plan_ways_map.clear();

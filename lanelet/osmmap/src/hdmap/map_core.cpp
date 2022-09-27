@@ -1,16 +1,16 @@
 /*
- * @Author: your name
- * @Date: 2022-03-03 21:24:25
- * @LastEditTime: 2022-09-12 14:27:58
+ * @Author: blueclocker 1456055290@hnu.edu.cn
+ * @Date: 2022-09-24 15:16:06
+ * @LastEditTime: 2022-09-25 16:19:55
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
- * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 
  * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/map_core.cpp
+ * Copyright (c) 2022 by bit, All Rights Reserved. 
  */
 #include "osmmap/map_core.h"
 
 namespace map
 {
-
 HDMap::HDMap(ros::NodeHandle n_):n(n_)
 {
     std::string file_path_, file_name_;
@@ -25,6 +25,7 @@ HDMap::HDMap(ros::NodeHandle n_):n(n_)
     map_pub = n.advertise<visualization_msgs::MarkerArray>("map", 1);
     path_pub = n.advertise<visualization_msgs::MarkerArray>("path", 1);
     gpspath_pub = n.advertise<nav_msgs::Path>("gpspath_info", 1);
+    // gridmap_pub = n.advertise<nav_msgs::OccupancyGrid>("gridmap_info", 1, true);
     //导航信息
     navigation_pub = n.advertise<osmmap::Navigation>("navigation_info", 1);
     carstate_pub = n.advertise<osmmap::CarState>("carstate_info", 1);
@@ -42,7 +43,12 @@ HDMap::HDMap(ros::NodeHandle n_):n(n_)
     waysptr = vectormap->getWaysConstPtr();
     relationsptr = vectormap->getRelationConstPtr();
     centerwaysptr = vectormap->getCenterwayConstPtr();
-    
+    //gridmapsptr = vectormap->getGridmapConstPtr();
+
+    //test gridmap
+    //grid_map::GridMapRosConverter::toMessage(*gridmapsptr, {"obstacle"}, gridmapmsg);//{"obstacle", "distance"}
+    //grid_map::GridMapRosConverter::toOccupancyGrid(*gridmapsptr, "obstacle", 255, 0, gridmapmsg);
+
     //基准点设置，默认初始时不存在起点、终点
     isstart_path_exist = false;
     isend_path_exist = false;
@@ -51,6 +57,9 @@ HDMap::HDMap(ros::NodeHandle n_):n(n_)
     atnowpoint = new node::Point3D(0, 0);
     imucount = 0;
     imuinit_flag = false;
+    endPose.position.x = 0;
+    endPose.position.y = 0;
+    endPose.orientation.w = 1;
 
     //globalplan
     //若const对象想调用非const成员函数，则需要进行强制类型转换const_cast <T&>(Obj)
@@ -72,6 +81,8 @@ HDMap::HDMap(ros::NodeHandle n_):n(n_)
         currenttime = ros::Time::now();
         map_pub.publish(map_markerarray);
         path_pub.publish(path_markerarray);
+        // gridmapmsg.header.stamp = currenttime;
+        // gridmap_pub.publish(gridmapmsg);
         // navigation_pub.publish(laneletinfo);
         //到达终点退出程序
         if(start_centerpoint_id == end_centerpoint_id)
@@ -88,217 +99,49 @@ HDMap::HDMap(ros::NodeHandle n_):n(n_)
     }
 }
 
-void HDMap::Smoothpath(const std::vector<int> &pathid_)
+void HDMap::pushCenterPoint(const std::vector<int> &pathid_)
 {
-    //std::vector<centerway::CenterPoint3D> smoothpathnode;
     smoothpathnode.clear();
     if(pathid_.empty()) return;
-    /*if(pathid_.size() == 1)
-    {
-        //只有一条路段, 肯定不换道
-        centerway::CenterWay3D *oneway = centerwaysptr->Find(pathid_[0]);
-        smoothpathnode.push_back(centerway::CenterPoint3D(*atnowpoint));
-        
-        bool flag_ = false;
-        for(int j = 0; j < oneway->length; ++j)
-        {
-            if(oneway->centernodeline[j] == start_centerpoint_id) flag_ = true;
-            if(!flag_) continue;
-            smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-            if(oneway->centernodeline[j] == end_centerpoint_id) break;
-        }
-        smoothpathnode[0].ele = smoothpathnode[1].ele;
-    }else if(pathid_.size() == 2){
-        //两条路段，可能换道，可能不换
-        centerway::CenterWay3D *oneway = centerwaysptr->Find(pathid_[0]);
-        smoothpathnode.push_back(centerway::CenterPoint3D(*atnowpoint));
-        if(centerwaysptr->isNeighbor(pathid_[0], pathid_[1]))
-        {
-            //换道
-            if(start_centerpoint_id%100 >= end_centerpoint_id%100)
-            {
-                std::cout << "* maybe miss goal point, next turn... *" << std::endl;
-                smoothpathnode.clear();
-                return;
-            }
-            smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(start_centerpoint_id));
-            oneway = centerwaysptr->Find(end_centerpoint_id/100);
-            //借用相邻车道的中心线id基本一致，不严谨
-            for(int j = start_centerpoint_id%100 + 1; j < oneway->length; ++j)
-            {
-                smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-                if(oneway->centernodeline[j] == end_centerpoint_id) break;
-            }
-        }else{
-            //不换道
-            bool flag_ = false;
-            for(int j = 0; j < oneway->length; ++j)
-            {
-                if(oneway->centernodeline[j] == start_centerpoint_id) flag_ = true;
-                if(!flag_) continue;
-                smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-            }
-            oneway = centerwaysptr->Find(pathid_[1]);
-            for(int j = 0; j < oneway->length; ++j)
-            {
-                smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-                if(oneway->centernodeline[j] == end_centerpoint_id) break;
-            }
-        }
-        smoothpathnode[0].ele = smoothpathnode[1].ele;
-    }else{
-        //三条及以上路段
-        smoothpathnode.push_back(centerway::CenterPoint3D(*atnowpoint));
-        for(int i = 0; i < pathid_.size() - 1; ++i)
-        {
-            centerway::CenterWay3D *oneway = centerwaysptr->Find(pathid_[i]);
 
-            //如果换道
-            if(centerwaysptr->isNeighbor(pathid_[i], pathid_[i+1]))
-            {
-                //i -> i+1 换道
-                //i走到倒数第二点，i+1只保留最后一点
-                bool flag_ = false;
-                if(i == pathid_.size()-2)
-                {
-                    //最后一段路
-                    smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[0]));
-                    oneway = centerwaysptr->Find(pathid_[pathid_.size()-1]);
-                    for(int j = 1; j < oneway->length; ++j)
-                    {
-                        smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-                        if(oneway->centernodeline[j] == end_centerpoint_id) break;
-                    }
-                }else if(i == 0){
-                    //第一段路
-                    for(int j = 1; j < oneway->length - 1; ++j)
-                    {
-                        if(oneway->centernodeline[j] == start_centerpoint_id) flag_ = true;
-                        if(!flag_) continue;
-                        smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-                    }
-                    oneway = centerwaysptr->Find(pathid_[++i]);
-                    smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[oneway->length-1]));
-                }else{
-                    //中间
-                    for(int j = 1; j < oneway->length - 1; ++j)
-                    {
-                        smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-                    }
-                    oneway = centerwaysptr->Find(pathid_[++i]);
-                    smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[oneway->length-1]));
-                }
-            }else{
-                bool flag_ = false;
-                for(int j = 1; j < oneway->length; ++j)
-                {
-                    if(i == 0)
-                    {
-                        //第一段路
-                        if(oneway->centernodeline[j] == start_centerpoint_id) flag_ = true;
-                        if(!flag_) continue;
-                        smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-                    }else{
-                        //中间
-                        smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-                    }
-                }
-            }
-        
-        }
-        
-        smoothpathnode[0].ele = smoothpathnode[1].ele;
-        //最后一条路段
-        if(!centerwaysptr->isNeighbor(pathid_[pathid_.size()-1], pathid_[pathid_.size()-2]))
-        {
-            centerway::CenterWay3D *oneway = centerwaysptr->Find(pathid_[pathid_.size()-1]);
-            for(int j = 0; j < oneway->length; ++j)
-            {
-                smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-                if(oneway->centernodeline[j] == end_centerpoint_id) break;
-            }
-        }
-    }*/
-    
     smoothpathnode.push_back(centerway::CenterPoint3D(*atnowpoint));
+    centerway::CenterPoint3D pre_centerway_point = smoothpathnode.back();
+    double accumulatelength_ = 0;
     for(int i = 0; i < pathid_.size(); ++i)
     {
         centerway::CenterWay3D *oneway = centerwaysptr->Find(pathid_[i]);
-        
-        bool flag_ = false;
-        for(int j = 0; j < oneway->length - 1; ++j)
+
+        int j = 0;
+        if(i == 0) while(j < oneway->length - 1 && oneway->centernodeline[j] != start_centerpoint_id) j++;
+        for(; j < oneway->length - 1; ++j)
         {
-            if(i == pathid_.size() - 1)
+            smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
+            if(smoothpathnode.size() == 2)
             {
-                //最后一段路
-                if(i == 0)
-                {
-                    //同时也是第一段路
-                    if(oneway->centernodeline[j] == start_centerpoint_id) flag_ = true;
-                    if(!flag_) continue;
-                    smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-                    if(oneway->centernodeline[j] == end_centerpoint_id) break;
-                }else{
-                    smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-                    if(oneway->centernodeline[j] == end_centerpoint_id) break;
-                }
-            }else if(i == 0){
-                //第一段路
-                if(oneway->centernodeline[j] == start_centerpoint_id) flag_ = true;
-                if(!flag_) continue;
-                smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
-            }else{
-                //中间
-                smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(oneway->centernodeline[j]));
+                smoothpathnode[0].ele = smoothpathnode[1].ele;
+                pre_centerway_point.ele = smoothpathnode[1].ele;
             }
+            //截取100米
+            accumulatelength_ += centerwaysptr->NodeDistance2D(&pre_centerway_point, &smoothpathnode.back());
+            pre_centerway_point = smoothpathnode.back();
+            if(accumulatelength_ > 100) break;
+            if(i == pathid_.size() - 1 && oneway->centernodeline[j] == end_centerpoint_id) break;
         }
+        if(accumulatelength_ > 100) break;
     }
-    smoothpathnode[0].ele = smoothpathnode[1].ele;
-    smoothpathnode.erase(smoothpathnode.begin()+1);
-    if(smoothpathnode.size() <= 3)
+
+    //对终点、起点后处理
+    if(accumulatelength_ < 100)
     {
-        smoothpathnode.erase(smoothpathnode.begin()+1, smoothpathnode.end());
-        smoothpathnode.push_back(centerway::CenterPoint3D(end_state[0], end_state[1]));
-        smoothpathnode.back().ele = smoothpathnode[0].ele;
-        // DubinsStateSpace db_planner(2.5);
-        // std::vector<std::vector<double> > db_path;
-        // double length_ = -1;
-        // db_planner.sample(start_state, end_state, 0.2, length_, db_path);
-        // std::vector<centerway::CenterPoint3D> smoothpathnodetemp;
-        // for(int j = 0; j < db_path.size(); ++j)
-        // {
-        //     centerway::CenterPoint3D aa(db_path[j][0], db_path[j][1]);
-        //     aa.ele = smoothpathnode[0].ele;
-        //     smoothpathnodetemp.push_back(aa);
-        // }
-        // smoothpathnode.clear();
-        // smoothpathnode = smoothpathnodetemp;
-        return;
-    }else{
-        // smoothpathnode.erase(smoothpathnode.end()-2, smoothpathnode.end());
         smoothpathnode.erase(smoothpathnode.end());
         smoothpathnode.push_back(centerway::CenterPoint3D(end_state[0], end_state[1]));
         smoothpathnode.back().ele = smoothpathnode[1].ele;
     }
+    if(smoothpathnode.size() >= 3) smoothpathnode.erase(smoothpathnode.begin()+1);
+}
 
-    //截取100米
-    std::vector<centerway::CenterPoint3D> cutsmoothpathnode;
-    double accumulatelength_ = 0;
-    for(int i = 0; i < smoothpathnode.size(); ++i)
-    {
-        if(i == smoothpathnode.size() - 1)
-        {
-            cutsmoothpathnode.push_back(smoothpathnode[i]);
-            break;
-        }
-        accumulatelength_ += centerwaysptr->NodeDistance(&smoothpathnode[i], &smoothpathnode[i+1]);
-        if(accumulatelength_ > 100) break;
-        cutsmoothpathnode.push_back(smoothpathnode[i]);
-    }
-    //std::cout << "publish golbal path length is " << accumulatelength_ << std::endl;
-    smoothpathnode.clear();
-    smoothpathnode = cutsmoothpathnode;
-    
+void HDMap::Smoothpath()
+{
     //B样条插值
     //std::cout << "smoothpathnode size: " << smoothpathnode.size() << std::endl;
     // int *intnum = new int[smoothpathnode.size() - 1];
@@ -313,77 +156,21 @@ void HDMap::Smoothpath(const std::vector<int> &pathid_)
     //std::cout << "smoothpathnode after size: " << smoothpathnode.size() << std::endl;
 
     //cubic_spline
-    // if(smoothpathnode.size() < 2) return;
-    // plan::Spline2D csp_obj(smoothpathnode);
-    // std::vector<centerway::CenterPoint3D> temppathnode;
-    // std::vector<double> rcurvature;
-    // for(double i = 0; i < csp_obj.s.back(); i += 0.2)
-    // {
-    //     std::array<double, 3> point_ = csp_obj.calc_postion(i);
-    //     centerway::CenterPoint3D pointtemp;
-    //     pointtemp.x = point_[0];
-    //     pointtemp.y = point_[1];
-    //     pointtemp.ele = point_[2];
-    //     temppathnode.push_back(pointtemp);
-    //     rcurvature.push_back(csp_obj.calc_curvature(i));
-    // }
-    // smoothpathnode = temppathnode;
-    //debug
-    // double t = 0;
-    // for(int i = 0; i < rcurvature.size(); ++i)
-    // {
-    //     if(std::fabs(rcurvature[i]) > t) t = std::fabs(rcurvature[i]);
-        //std::cout << rcurvature[i] << " ";
-    // }
-    //std::cout << std::endl;
-    // std::cout << "max rcurvature is " << t << std::endl;
-
-    //dubins
-    // double steer_radius = 2.5;//5.8
-    // double step_size = 0.2;
-    // std::vector<centerway::CenterPoint3D> smoothpathnodetemp;
-    // //std::cout << "smoothpathnode size is " << smoothpathnode.size() << std::endl;
-    // for(int i = 0; i < smoothpathnode.size(); ++i)
-    // {
-    //     DubinsStateSpace db_planner(steer_radius);
-    //     std::vector<std::vector<double> > db_path;
-    //     double length = -1;
-    //     // if(i == smoothpathnode.size() - 2)//smoothpathnode.size() - 2
-    //     // {
-    //     //     double deltax = smoothpathnode[i].x - smoothpathnode[i - 1].x;
-    //     //     double deltay = smoothpathnode[i].y - smoothpathnode[i - 1].y;
-    //     //     double temp[3] = {smoothpathnode[i].x, smoothpathnode[i].y, atan2(deltay, deltax)};
-    //     //     //std::cout << "angle1 is " << temp[2] << ", end angle2 is " << end_state[2] << std::endl;
-    //     //     db_planner.sample(temp, end_state, step_size, length, db_path);
-    //     // }else 
-    //     if(i == 0){
-    //         // double deltax = smoothpathnode[1].x - start_state[0];
-    //         // double deltay = smoothpathnode[1].y - start_state[1];
-    //         double deltax = smoothpathnode[i + 2].x - smoothpathnode[i + 1].x;
-    //         double deltay = smoothpathnode[i + 2].y - smoothpathnode[i + 1].y;
-    //         double temp[3] = {smoothpathnode[1].x, smoothpathnode[1].y, atan2(deltay, deltax)};
-    //         //std::cout << "start angle1 is " << start_state[2] << ", angle2 is " << temp[2] << std::endl;
-    //         db_planner.sample(start_state, temp, step_size, length, db_path);
-    //     }else{
-    //         double deltax = smoothpathnode[i].x - smoothpathnode[i - 1].x;
-    //         double deltay = smoothpathnode[i].y - smoothpathnode[i - 1].y;
-    //         double temp1[3] = {smoothpathnode[i].x, smoothpathnode[i].y, atan2(deltay, deltax)};
-    //         deltax = smoothpathnode[i + 1].x - smoothpathnode[i].x;
-    //         deltay = smoothpathnode[i + 1].y - smoothpathnode[i].y;
-    //         double temp2[3] = {smoothpathnode[i+1].x, smoothpathnode[i+1].y, atan2(deltay, deltax)};
-    //         //std::cout << "angle1 is " << temp1[2] << ", angle2 is " << temp2[2] << std::endl;
-    //         if(temp2[0] == end_state[0] && temp2[1] == end_state[1]) temp2[2] = end_state[2];
-    //         db_planner.sample(temp1, temp2, step_size, length, db_path);
-    //     }
-    //     for(int j = 0; j < db_path.size(); ++j)
-    //     {
-    //         centerway::CenterPoint3D aa(db_path[j][0], db_path[j][1]);
-    //         aa.ele = smoothpathnode[i].ele;
-    //         smoothpathnodetemp.push_back(aa);
-    //     }
-    // }
-    // smoothpathnode.clear();
-    // smoothpathnode = smoothpathnodetemp;
+    if(smoothpathnode.size() < 2) return;
+    plan::Spline2D csp_obj(smoothpathnode);
+    std::vector<centerway::CenterPoint3D> temppathnode;
+    std::vector<double> rcurvature;
+    for(double i = 0; i < csp_obj.s.back(); i += 0.2)
+    {
+        std::array<double, 3> point_ = csp_obj.calc_postion(i);
+        centerway::CenterPoint3D pointtemp;
+        pointtemp.x = point_[0];
+        pointtemp.y = point_[1];
+        pointtemp.ele = point_[2];
+        temppathnode.push_back(pointtemp);
+        rcurvature.push_back(csp_obj.calc_curvature(i));
+    }
+    smoothpathnode = temppathnode;
 }
 
 void HDMap::fullNavigationInfo()
@@ -517,6 +304,42 @@ void HDMap::imuInit(const Eigen::Vector3d &imuMsg)
     }
 }
 
+void HDMap::outMapPlan(const centerway::CenterPoint3D &atnow_centerpoint, const double heading)
+{
+    int laneletid = centerwaysptr->findNearestLanelet(&atnow_centerpoint, heading);
+    if(laneletid == -1)
+    {
+        ROS_WARN("can not plan!");
+        return;
+    }
+    start_path = laneletid;
+    start_centerpoint_id = globalplans->Atwhichpoint(atnow_centerpoint, centerwaysptr->Find(laneletid));
+    if(isend_path_exist)
+    {
+        //visualmap->pathmarkerclear();
+        paths.clear();
+        paths = globalplans->run(start_path, end_path);
+        if(!paths.empty())
+        {
+            visualmap->path2marker(centerwaysptr, paths, path_markerarray, currenttime);
+            pushCenterPoint(paths);
+            visualmap->smoothpath2marker(smoothpathnode, path_markerarray, currenttime);
+            //发布导航信息
+            fullNavigationInfo();
+            navigation_pub.publish(laneletinfo);
+            //发路径
+            visualization_msgs::Marker golbalpath_ = path_markerarray.markers.back();
+            golbalpath_pub.publish(golbalpath_);
+            //std::cout << "path_markerarray size is " << path_markerarray.markers.size() << std::endl;
+            //发下一个车道
+            fullLanesInfo(start_path);
+            lanes_pub.publish(Lanesinfo);
+        }
+    }else{
+        ROS_WARN("goal point has not set!");
+    } 
+}
+
 void HDMap::startpoint_callback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& msg)
 {
     double xx = msg->pose.pose.position.x;
@@ -549,7 +372,7 @@ void HDMap::startpoint_callback(const geometry_msgs::PoseWithCovarianceStamped::
             if(!paths.empty())
             {
                 visualmap->path2marker(centerwaysptr, paths, path_markerarray, currenttime);
-                Smoothpath(paths);
+                pushCenterPoint(paths);
                 //可视化
                 visualmap->smoothpath2marker(smoothpathnode, path_markerarray, currenttime);
                 //发布导航信息
@@ -608,7 +431,7 @@ void HDMap::goalpoint_callback(const geometry_msgs::PoseStamped::ConstPtr &msg)
             if(!paths.empty())
             {
                 visualmap->path2marker(centerwaysptr, paths, path_markerarray, currenttime);
-                Smoothpath(paths);
+                pushCenterPoint(paths);
                 visualmap->smoothpath2marker(smoothpathnode, path_markerarray, currenttime);
 
                 //发布导航信息
@@ -669,7 +492,6 @@ void HDMap::gps_callback(const fsd_common_msgs::Comb::ConstPtr &msg)
     //plan
     //visualmap->pathmarkerclear();
     path_markerarray.markers.clear();
-    //if(atnowcenterway != -1)
     if(!lanelets_res.empty())
     {
         hdmapstate.inMap = true;
@@ -710,7 +532,7 @@ void HDMap::gps_callback(const fsd_common_msgs::Comb::ConstPtr &msg)
             {
                 hdmapstate.isFindPath = true;
                 visualmap->path2marker(centerwaysptr, paths, path_markerarray, currenttime);
-                Smoothpath(paths);
+                pushCenterPoint(paths);
                 visualmap->smoothpath2marker(smoothpathnode, path_markerarray, currenttime);
                 //发布导航信息
                 fullNavigationInfo();
@@ -722,6 +544,12 @@ void HDMap::gps_callback(const fsd_common_msgs::Comb::ConstPtr &msg)
                 //发下一个车道
                 fullLanesInfo(start_path);
                 lanes_pub.publish(Lanesinfo);
+            }else{
+                smoothpathnode.clear();
+                smoothpathnode.push_back(centerway::CenterPoint3D(*atnowpoint));
+                double atnowpoint_heading = constrainAngle(msg->Heading)/180*M_PI;
+                outMapPlan(atnowcenterpoint, atnowpoint_heading);
+                ROS_WARN("gps point is in reverse direction path!");
             }
 
             //该点到下一个路口(下一次转向)距离测试
@@ -736,40 +564,19 @@ void HDMap::gps_callback(const fsd_common_msgs::Comb::ConstPtr &msg)
         //越界：直接连接当前点与最近的道路中心点！！
         smoothpathnode.clear();
         smoothpathnode.push_back(centerway::CenterPoint3D(*atnowpoint));
-        smoothpathnode.push_back(*centerwaysptr->Findcenterpoint(centerwaysptr->returnMap(atnowpoint)));
+        double atnowpoint_heading = constrainAngle(msg->Heading)/180*M_PI;
+        
+        // int nearestcenterwayid = centerwaysptr->findNearestCenterwaypointid(atnowpoint);
+        // centerway::CenterPoint3D tartgetpoint;
+        // centerwaysptr->nextCenterwayPointid(nearestcenterwayid, tartgetpoint);
+        // smoothpathnode.push_back(tartgetpoint);
 
-        if(smoothpathnode.size() >= 2)
-        {
-            plan::Spline2D csp_obj(smoothpathnode);
-            std::vector<centerway::CenterPoint3D> temppathnode;
-            std::vector<double> rcurvature;
-            for(double i = 0; i < csp_obj.s.back(); i += 0.2)
-            {
-                std::array<double, 3> point_ = csp_obj.calc_postion(i);
-                centerway::CenterPoint3D pointtemp;
-                pointtemp.x = point_[0];
-                pointtemp.y = point_[1];
-                pointtemp.ele = point_[2];
-                temppathnode.push_back(pointtemp);
-                rcurvature.push_back(csp_obj.calc_curvature(i));
-            }
-            //debug
-            // double t = 0;
-            // for(int i = 0; i < rcurvature.size(); ++i)
-            // {
-            //     if(std::fabs(rcurvature[i]) > t) t = std::fabs(rcurvature[i]);
-            //     //std::cout << rcurvature[i] << " ";
-            // }
-            // //std::cout << std::endl;
-            // std::cout << "max rcurvature is " << t << std::endl;
-
-            smoothpathnode = temppathnode;
-
-            visualmap->smoothpath2marker(smoothpathnode, path_markerarray, currenttime);
-            //发路径
-            visualization_msgs::Marker golbalpath_ = path_markerarray.markers.back();
-            golbalpath_pub.publish(golbalpath_);
-        }
+        // visualmap->smoothpath2marker(smoothpathnode, path_markerarray, currenttime);
+        // //发路径
+        // visualization_msgs::Marker golbalpath_ = path_markerarray.markers.back();
+        // golbalpath_pub.publish(golbalpath_);
+        outMapPlan(atnowcenterpoint, atnowpoint_heading);
+        
         ROS_WARN("gps point out of HD-map!");
     }
 
@@ -778,7 +585,7 @@ void HDMap::gps_callback(const fsd_common_msgs::Comb::ConstPtr &msg)
     headtemp = constrainAngle(headtemp);
     // std::cout << "headtemp: " << headtemp << std::endl;
     tf::Quaternion qenu2base;
-    qenu2base.setRPY((msg->Roll)/180*3.14159, (msg->Pitch)/180*3.14159, (headtemp)/180*3.14159);
+    qenu2base.setRPY((msg->Roll)/180*M_PI, (msg->Pitch)/180*M_PI, (headtemp)/180*M_PI);
     baselink2map.setRotation(qenu2base);
     baselink2map.setOrigin(tf::Vector3(atnowpoint->local_x, atnowpoint->local_y, atnowpoint->elevation));
     //map->rslidar->base_link
@@ -803,6 +610,24 @@ void HDMap::gps_callback(const fsd_common_msgs::Comb::ConstPtr &msg)
     // double yaw = atan2(siny_cosp, cosy_cosp);
     // std::cout << "head: " << (headtemp)/180*3.14159 << ", yaw: " << yaw << std::endl;
     
+    //smoothpath
+    // if(smoothpathnode.size() >= 2)
+    // {
+        // plan::Spline2D csp_obj(smoothpathnode);
+        // std::vector<centerway::CenterPoint3D> temppathnode;
+        // std::vector<double> rcurvature;
+        // for(double i = 0; i < csp_obj.s.back(); i += 0.2)
+        // {
+        //     std::array<double, 3> point_ = csp_obj.calc_postion(i);
+        //     centerway::CenterPoint3D pointtemp;
+        //     pointtemp.x = point_[0];
+        //     pointtemp.y = point_[1];
+        //     pointtemp.ele = point_[2];
+        //     temppathnode.push_back(pointtemp);
+        //     rcurvature.push_back(csp_obj.calc_curvature(i));
+        // }
+    // }
+
     //gps path
     gpspath.header.frame_id = "map";
     gpspath.header.stamp = ros::Time::now();
@@ -827,6 +652,45 @@ void HDMap::gps_callback(const fsd_common_msgs::Comb::ConstPtr &msg)
     hdmapstate.carPose.orientation.z = qenu2base.z();
     hdmapstate.carPose.orientation.w = qenu2base.w();
     hdmapstate.endPose = endPose;
+    hdmapstate.nextpoint.x = 0;
+    hdmapstate.nextpoint.y = 0;
+    hdmapstate.nextpoint.z = 0;
+    if(smoothpathnode.size() >= 2) 
+    {
+        plan::Spline2D csp_obj(smoothpathnode);
+        if(csp_obj.s.back() >= 6)
+        {
+            std::array<double, 3> point_ = csp_obj.calc_postion(6);
+            hdmapstate.nextpoint.x = point_[0];
+            hdmapstate.nextpoint.y = point_[1];
+            hdmapstate.nextpoint.z = csp_obj.calc_yaw(6);
+        }
+    }
+    // if(!path_markerarray.markers.empty() && path_markerarray.markers.back().points.size() >= 2)
+    // {
+    //     hdmapstate.nextpoint.x = path_markerarray.markers.back().points[1].x;
+    //     hdmapstate.nextpoint.y = path_markerarray.markers.back().points[1].y;
+    // }
+    // if(!path_markerarray.markers.empty() && path_markerarray.markers.back().points.size() == 2)
+    // {
+    //     double dx = path_markerarray.markers.back().points[1].x - atnowpoint->local_x;
+    //     double dy = path_markerarray.markers.back().points[1].y - atnowpoint->local_y;
+    //     if(dx < 1e-5)
+    //     {
+    //         hdmapstate.nextpoint.z = dy > 0 ? M_PI : -M_PI;
+    //     }else{
+    //         hdmapstate.nextpoint.z = atan2(dy, dx);
+    //     }
+    // }else if(!path_markerarray.markers.empty() && path_markerarray.markers.back().points.size() > 2){
+    //     double dx = path_markerarray.markers.back().points[2].x - path_markerarray.markers.back().points[1].x;
+    //     double dy = path_markerarray.markers.back().points[2].y - path_markerarray.markers.back().points[1].y;
+    //     if(dx < 1e-5)
+    //     {
+    //         hdmapstate.nextpoint.z = dy > 0 ? M_PI : -M_PI;
+    //     }else{
+    //         hdmapstate.nextpoint.z = atan2(dy, dx);
+    //     }
+    // }
     hdmapstate.velocity.x = Vxyz(0);
     hdmapstate.velocity.y = Vxyz(1);
     hdmapstate.velocity.z = Vxyz(2);
@@ -851,4 +715,4 @@ HDMap::~HDMap()
 }
 
 
-};//namespace map
+} // namespace map

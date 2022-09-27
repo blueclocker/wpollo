@@ -1,4 +1,13 @@
 /*
+ * @Author: blueclocker 1456055290@hnu.edu.cn
+ * @Date: 2022-09-12 15:01:29
+ * @LastEditTime: 2022-09-12 16:22:32
+ * @LastEditors: blueclocker 1456055290@hnu.edu.cn
+ * @Description: 
+ * @FilePath: /wpollo/src/lanelet/osmmap/include/grid_map_pcl/PclLoaderParameters.hpp
+ * Copyright (c) 2022 by bit, All Rights Reserved. 
+ */
+/*
  * PclLoaderParameters.hpp
  *
  *  Created on: Nov 7, 2019

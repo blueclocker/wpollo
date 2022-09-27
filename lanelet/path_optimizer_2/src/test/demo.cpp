@@ -155,26 +155,26 @@ int main(int argc, char **argv) {
     FLAGS_stop_logging_if_full_disk = true;
 
     // Initialize grid map from image.
-    // std::string image_dir = ros::package::getPath("path_optimizer_2");
-    // std::string image_file = "gridmap.png";
-    // image_dir.append("/" + image_file);
-    // cv::Mat img_src = cv::imread(image_dir, CV_8UC1);
-    // double resolution = 0.2;  // in meter
-    // grid_map::GridMap grid_map(std::vector<std::string>{"obstacle", "distance"});
-    // grid_map::GridMapCvConverter::initializeFromImage(
-    //     img_src, resolution, grid_map, grid_map::Position::Zero());
+    std::string image_dir = ros::package::getPath("path_optimizer_2");
+    std::string image_file = "gridmap.png";
+    image_dir.append("/" + image_file);
+    cv::Mat img_src = cv::imread(image_dir, CV_8UC1);
+    double resolution = 0.2;  // in meter
+    grid_map::GridMap grid_map(std::vector<std::string>{"obstacle", "distance"});
+    grid_map::GridMapCvConverter::initializeFromImage(
+        img_src, resolution, grid_map, grid_map::Position::Zero());
     // Add obstacle layer.
     unsigned char OCCUPY = 0;
     unsigned char FREE = 255;
-    // grid_map::GridMapCvConverter::addLayerFromImage<unsigned char, 1>(
-    //     img_src, "obstacle", grid_map, OCCUPY, FREE, 0.5);
-    // // Update distance layer.
-    // Eigen::Matrix<unsigned char, Eigen::Dynamic, Eigen::Dynamic> binary =
-    //     grid_map.get("obstacle").cast<unsigned char>();
-    // cv::distanceTransform(eigen2cv(binary), eigen2cv(grid_map.get("distance")),
-    //                       CV_DIST_L2, CV_DIST_MASK_PRECISE);
-    // grid_map.get("distance") *= resolution;
-    // grid_map.setFrameId("/map");
+    grid_map::GridMapCvConverter::addLayerFromImage<unsigned char, 1>(
+        img_src, "obstacle", grid_map, OCCUPY, FREE, 0.5);
+    // Update distance layer.
+    Eigen::Matrix<unsigned char, Eigen::Dynamic, Eigen::Dynamic> binary =
+        grid_map.get("obstacle").cast<unsigned char>();
+    cv::distanceTransform(eigen2cv(binary), eigen2cv(grid_map.get("distance")),
+                          CV_DIST_L2, CV_DIST_MASK_PRECISE);
+    grid_map.get("distance") *= resolution;
+    grid_map.setFrameId("/map");
 
     //test obsdata
     // auto obsdata = grid_map.get("obstacle");
@@ -189,44 +189,44 @@ int main(int argc, char **argv) {
 //    cv::imwrite("/home/ljn/桌面/map1.png", eigen2cv(grid_map.get("obstacle")));
 
     //pcl->gridmap
-    grid_map::GridMapPclLoader gridMapPclLoader;
-    const std::string pathtocloud = "/home/wangpeng/wpollo/src/lanelet/osmmap/maps/SurfMap.pcd";
-    const std::string pathtoparameters = "/home/wangpeng/wpollo/src/lanelet/path_boost/config/parameters.yaml";
+    // grid_map::GridMapPclLoader gridMapPclLoader;
+    // const std::string pathtocloud = "/home/wangpeng/wpollo/src/lanelet/osmmap/maps/SurfMap.pcd";
+    // const std::string pathtoparameters = "/home/wangpeng/wpollo/src/lanelet/path_boost/config/parameters.yaml";
     
     //读取点云
     // gridMapPclLoader.loadCloudFromPcdFile(pathtocloud);
-    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
-    if(pcl::io::loadPCDFile(pathtocloud, *cloud) < 0)
-    {
-        ROS_ERROR("pcd file don't exist!");
-        return -1;
-    }
+    // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+    // if(pcl::io::loadPCDFile(pathtocloud, *cloud) < 0)
+    // {
+    //     ROS_ERROR("pcd file don't exist!");
+    //     return -1;
+    // }
     //滤波
-    pcl::PointCloud<pcl::PointXYZ>::Ptr passcloud(new pcl::PointCloud<pcl::PointXYZ>);
-    pcl::PassThrough<pcl::PointXYZ> pass;
-    pass.setInputCloud(cloud);
-    pass.setFilterFieldName("z");
-    pass.setFilterLimits(-4.0, 2.0);
-    pass.filter(*passcloud);
+    // pcl::PointCloud<pcl::PointXYZ>::Ptr passcloud(new pcl::PointCloud<pcl::PointXYZ>);
+    // pcl::PassThrough<pcl::PointXYZ> pass;
+    // pass.setInputCloud(cloud);
+    // pass.setFilterFieldName("z");
+    // pass.setFilterLimits(-4.0, 2.0);
+    // pass.filter(*passcloud);
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr removecloud(new pcl::PointCloud<pcl::PointXYZ>);
-    pcl::RadiusOutlierRemoval<pcl::PointXYZ> outrem;
-    outrem.setInputCloud(passcloud);
-    outrem.setRadiusSearch(1.2);
-    outrem.setMinNeighborsInRadius (130);
-    outrem.filter(*removecloud);
+    // pcl::PointCloud<pcl::PointXYZ>::Ptr removecloud(new pcl::PointCloud<pcl::PointXYZ>);
+    // pcl::RadiusOutlierRemoval<pcl::PointXYZ> outrem;
+    // outrem.setInputCloud(passcloud);
+    // outrem.setRadiusSearch(1.2);
+    // outrem.setMinNeighborsInRadius (130);
+    // outrem.filter(*removecloud);
 
-    gridMapPclLoader.setInputCloud(removecloud);
-    gridMapPclLoader.loadParameters(pathtoparameters);
+    // gridMapPclLoader.setInputCloud(removecloud);
+    // gridMapPclLoader.loadParameters(pathtoparameters);
 
-    grid_map::grid_map_pcl::processPointcloud(&gridMapPclLoader, nh);
-    grid_map::GridMap grid_map(std::vector<std::string>{"obstacle", "distance"});
-    grid_map.setGeometry(gridMapPclLoader.getGridMap().getLength(), 
-                        gridMapPclLoader.getGridMap().getResolution(), 
-                        gridMapPclLoader.getGridMap().getPosition());
-    // Add obstacle layer.
-    auto obsdata = gridMapPclLoader.getGridMap().get("elevation");
-    tobinary(obsdata);
+    // grid_map::grid_map_pcl::processPointcloud(&gridMapPclLoader, nh);
+    // grid_map::GridMap grid_map(std::vector<std::string>{"obstacle", "distance"});
+    // grid_map.setGeometry(gridMapPclLoader.getGridMap().getLength(), 
+    //                     gridMapPclLoader.getGridMap().getResolution(), 
+    //                     gridMapPclLoader.getGridMap().getPosition());
+    // // Add obstacle layer.
+    // auto obsdata = gridMapPclLoader.getGridMap().get("elevation");
+    // tobinary(obsdata);
     //test obsdata
     // for(int i = 0; i < obsdata.rows(); ++i)
     // {
@@ -236,7 +236,7 @@ int main(int argc, char **argv) {
     //     }
     //     std::cout << std::endl;
     // }
-    grid_map.add("obstacle", obsdata);
+    // grid_map.add("obstacle", obsdata);
     // nav_msgs::OccupancyGrid message;
     // tooccupancymap(grid_map, "obstacle", 0, 255, message);
     // grid_map::GridMapRosConverter::toOccupancyGrid(grid_map, "obstacle", 0, 255, message);
@@ -244,12 +244,12 @@ int main(int argc, char **argv) {
     // ros::Publisher bit_publisher = nh.advertise<nav_msgs::OccupancyGrid>("bit_map", 1, true);
     // bit_publisher.publish(message);
     // Update distance layer.
-    Eigen::Matrix<unsigned char, Eigen::Dynamic, Eigen::Dynamic> binary =
-        grid_map.get("obstacle").cast<unsigned char>();
-    cv::distanceTransform(eigen2cv(binary), eigen2cv(grid_map.get("distance")),
-                          CV_DIST_L2, CV_DIST_MASK_PRECISE);
-    grid_map.get("distance") *= 0.2;
-    grid_map.setFrameId("/map");
+    // Eigen::Matrix<unsigned char, Eigen::Dynamic, Eigen::Dynamic> binary =
+    //     grid_map.get("obstacle").cast<unsigned char>();
+    // cv::distanceTransform(eigen2cv(binary), eigen2cv(grid_map.get("distance")),
+    //                       CV_DIST_L2, CV_DIST_MASK_PRECISE);
+    // grid_map.get("distance") *= 0.2;
+    // grid_map.setFrameId("/map");
 
     // Set publishers.
     ros::Publisher map_publisher =

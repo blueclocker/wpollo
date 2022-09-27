@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(osmmap)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+ add_compile_options(-std=c++14)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -18,6 +18,12 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(Eigen3 REQUIRED)
+#find_package(PCL REQUIRED)
+#find_package(OpenMP QUIET)
+#if (OpenMP_FOUND)
+#  add_compile_options("${OpenMP_CXX_FLAGS}")
+#  add_definitions(-DGRID_MAP_PCL_OPENMP_FOUND=${OpenMP_FOUND})
+#endif()
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -130,7 +136,9 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${Eigen_INCLUDE_DIR}
+  ${EIGEN3_INCLUDE_DIR}
+  #${PCL_INCLUDE_DIRS}
+  #${OpenMP_CXX_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -188,7 +196,7 @@ add_library(map_lib
     src/plan/rs_path.cpp
     src/plan/hybidacore.cpp
 )
-target_link_libraries(map_lib xmlio_lib grid_map_pcllib ${catkin_LIBRARIES})
+target_link_libraries(map_lib xmlio_lib ${catkin_LIBRARIES})
 
 add_library(geographicLib
     GeographicLib/Geocentric.cpp
@@ -199,6 +207,9 @@ add_library(geographicLib
 add_executable(mapio src/main.cpp)
 target_link_libraries(mapio map_lib geographicLib)
 add_dependencies(mapio ${PROJECT_NAME}_gencpp fsd_common_msgs_gencpp)
+
+add_executable(math_test src/plan/math_test.cpp src/plan/math.cpp)
+target_link_libraries(math_test ${catkin_LIBRARIES})
 
 #############
 ## Install ##

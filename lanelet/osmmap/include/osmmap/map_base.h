@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:30:09
- * @LastEditTime: 2022-04-23 10:02:36
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-09-12 17:55:28
+ * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_base.h
  */
@@ -63,7 +63,7 @@ public:
     //析构，销毁哈系表及指针，释放内存
     virtual ~map_base() 
     {
-        //std::cout << "~map_base" << std::endl;
+        // std::cout << "~map_base" << std::endl;
         for(auto it = Data.begin(); it != Data.end(); ++it)
         {
             delete it->second;

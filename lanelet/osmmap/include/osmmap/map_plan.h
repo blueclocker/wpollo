@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-13 15:21:15
- * @LastEditTime: 2022-07-20 14:29:02
+ * @LastEditTime: 2022-09-23 22:09:11
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_plan.h
@@ -81,6 +81,7 @@ private:
 public:
     Globalplan(map::centerway::CenterWay *plan_centerways_);
     ~Globalplan();
+    void deleteChain(plan_ways_map_chain *root);
     std::vector<int> run(const int x, const int y);//返回plan_path
     int Inwhichcenterway(const map::centerway::CenterPoint3D &a, const map::node::Node *nodes_, const map::way::Way *ways_, const map::relation::Relation *relations_) const;
     std::vector<int> LocateLanelets(const map::centerway::CenterPoint3D &a, const map::node::Node *nodes_, const map::way::Way *ways_, const map::relation::Relation *relations_) const;

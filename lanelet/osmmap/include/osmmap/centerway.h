@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-06 15:43:53
- * @LastEditTime: 2022-05-30 16:05:54
+ * @LastEditTime: 2022-09-25 15:18:39
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/centerway.h
@@ -168,6 +168,8 @@ public:
     std::unordered_map<int, CenterPoint3D*> getCenterpointmapHashMap() const {return centerpointmap;}
     //根据索引ID查找centerpoint, 使用前需验证是否存在
     CenterPoint3D* Findcenterpoint(const int id_) const {return centerpointmap.at(id_);}
+    //计算两点的二维距离
+    double NodeDistance2D(const CenterPoint3D *a, const CenterPoint3D *b) const;
     //计算两点的三维距离
     double NodeDistance(const node::Point3D *a, const node::Point3D *b) const;
     double NodeDistance(const CenterPoint3D *a, const CenterPoint3D *b) const;
@@ -192,8 +194,12 @@ public:
     void findNeighbor(const int centerwayid_, std::vector<int> &neighbors_) const;
     //判断a、b车道是否相邻
     bool isNeighbor(const int a, const int b) const;
-    //遍历寻找最近点
-    int returnMap(const node::Point3D *atnowpoint_) const;
+    //遍历寻找最近点的lanelet
+    int findNearestCenterwaypointid(const node::Point3D *atnowpoint_) const;
+    //寻找某centerwaypoint的下一点id
+    void nextCenterwayPointid(const int now_centerway_point_id, CenterPoint3D &targetpoint) const;
+    //超过地图时找到最近的同向lanelet
+    int findNearestLanelet(const CenterPoint3D *atnowpoint_, const double &heading) const;
     //run()----非const
     void run(const node::Node *nodes_, const way::Way *ways_, const relation::Relation *relations_);
     virtual void CreateOneObject(TiXmlElement *head);
