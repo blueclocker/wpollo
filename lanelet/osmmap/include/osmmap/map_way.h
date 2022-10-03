@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:50
- * @LastEditTime: 2022-04-23 19:43:37
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-10-03 15:35:19
+ * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_way.h
  */
@@ -39,41 +39,41 @@ enum class WaySubtype
 
 struct Line
 {
-    int ID;
-    int size;//最大容量
-    int length;//实际元素个数
-    int *nodeline;//node的id
-    WayType type;
-    WaySubtype subtype;
-    bool isVisual;
+    int ID_;
+    int size_;//最大容量
+    int length_;//实际元素个数
+    int *nodeline_;//node的id
+    WayType type_;
+    WaySubtype subtype_;
+    bool isVisual_;
     bool operator==(const Line &a) const
     {
-        return (this->ID == a.ID);
+        return (this->ID_ == a.ID_);
     }
     Line()
     {
-        size = 5;
-        length = 0;
-        nodeline = new int[size];
-        type = WayType::unknown;
-        subtype = WaySubtype::unknown;
-        isVisual = false;
+        size_ = 5;
+        length_ = 0;
+        nodeline_ = new int[size_];
+        type_ = WayType::unknown;
+        subtype_ = WaySubtype::unknown;
+        isVisual_ = false;
     }
     void Changesize()
     {
-        int *nodelinenew = new int[size*2];
-        for(int i = 0; i < size; ++i)
+        int *nodelinenew = new int[size_*2];
+        for(int i = 0; i < size_; ++i)
         {
-            nodelinenew[i] = nodeline[i];
+            nodelinenew[i] = nodeline_[i];
         }
-        size *= 2;
-        delete [] nodeline;
-        nodeline = nodelinenew;
+        size_ *= 2;
+        delete [] nodeline_;
+        nodeline_ = nodelinenew;
         
     }
     int Length() const
     {
-        return length;
+        return length_;
     }
 };
 

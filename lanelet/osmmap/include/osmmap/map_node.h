@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:43
- * @LastEditTime: 2022-04-23 10:05:08
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-10-03 15:34:00
+ * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_node.h
  */
@@ -23,78 +23,78 @@ namespace node
 {
 struct Point3D
 {
-    int ID;
-    double longitude;
-    double latitude;
-    double local_x;
-    double local_y;
-    double elevation;
+    int ID_;
+    double longitude_;
+    double latitude_;
+    double local_x_;
+    double local_y_;
+    double elevation_;
     Point3D() {}
-    Point3D(const double lat_, const double lon_, const double ele_)
+    Point3D(const double lat, const double lon, const double ele)
     {
-        ID = -1;
-        longitude = lon_;
-        latitude = lat_;
-        elevation = ele_;
-        local_x = 0;
-        local_y = 0;
+        ID_ = -1;
+        longitude_ = lon;
+        latitude_ = lat;
+        elevation_ = ele;
+        local_x_ = 0;
+        local_y_ = 0;
     }
-    Point3D(const double x_, const double y_)
+    Point3D(const double x, const double y)
     {
-        ID = -1;
-        local_x = x_;
-        local_y = y_;
-        elevation = 0;
-        longitude = 0;
-        latitude = 0;
+        ID_ = -1;
+        local_x_ = x;
+        local_y_ = y;
+        elevation_ = 0;
+        longitude_ = 0;
+        latitude_ = 0;
     }
     bool operator==(const Point3D &a) const
     {
-        return (this->ID == a.ID);
+        return (this->ID_ == a.ID_);
     }
     Point3D& operator=(const Point3D &a)
     {
         //std::cout << "operator point3d =" << std::endl;
-        this->ID = a.ID;
-        this->local_x = a.local_x;
-        this->local_y = a.local_y;
-        this->elevation = a.elevation;
+        this->ID_ = a.ID_;
+        this->local_x_ = a.local_x_;
+        this->local_y_ = a.local_y_;
+        this->elevation_ = a.elevation_;
         return *this;
     }
     Point3D& operator*(const double &a)
     {
         //std::cout << "operator point3d *" << std::endl;
-        this->local_x *= a;
-        this->local_y *= a;
-        this->elevation *= a;
-        this->ID = -1;
+        this->local_x_ *= a;
+        this->local_y_ *= a;
+        this->elevation_ *= a;
+        this->ID_ = -1;
         return *this;
     }
     Point3D& operator/(const double &a)
     {
         //std::cout << "operator point3d /" << std::endl;
-        this->local_x /= a;
-        this->local_y /= a;
-        this->elevation /= a;
-        this->ID = -1;
+        this->local_x_ /= a;
+        this->local_y_ /= a;
+        this->elevation_ /= a;
+        this->ID_ = -1;
         return *this;
     }
     Point3D& operator+(const Point3D &a)
     {
         //std::cout << "operator point3d +" << std::endl;
-        this->local_x += a.local_x;
-        this->local_y += a.local_y;
-        this->elevation += a.elevation;
-        this->ID = -1;
+        this->local_x_ += a.local_x_;
+        this->local_y_ += a.local_y_;
+        this->elevation_ += a.elevation_;
+        this->ID_ = -1;
         return *this;
     }
     Point3D& operator-(const Point3D &a)
     {
         //std::cout << "operator point3d -" << std::endl;
-        this->local_x -= a.local_x;
-        this->local_y -= a.local_y;
-        this->elevation -= a.elevation;
-        this->ID = -1;
+        this->local_x_ -= a.local_x_;
+        this->local_y_ -= a.local_y_;
+        this->elevation_ -= a.elevation_;
+        this->ID_ = -1;
         return *this;
     }
 };
@@ -106,9 +106,9 @@ private:
     //std::unordered_map<int, Point3D*> Data;
     //int numbers;
     //TiXmlElement *node_root;
-    static constexpr double RMajor = 6378137.0;
-    static constexpr double RMinor = 6356752.3142;
-    static constexpr double Eccent = 0.081819190928906924;  //=std::sqrt(1.0 - RMinor*RMinor/RMajor/RMajor)
+    static constexpr double RMajor_ = 6378137.0;
+    static constexpr double RMinor_ = 6356752.3142;
+    static constexpr double Eccent_ = 0.081819190928906924;  //=std::sqrt(1.0 - RMinor*RMinor/RMajor/RMajor)
 public:
     Node();
     Node(TiXmlElement *root);

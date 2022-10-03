@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:36
- * @LastEditTime: 2022-09-12 18:25:23
+ * @LastEditTime: 2022-10-03 15:51:47
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_io.h
@@ -41,34 +41,34 @@ class Map
 {
 private:
     //params
-    std::string file_path;
-    std::string file_name;
-    double origin_lat;
-    double origin_lon;
-    double origin_ele;
+    std::string file_path_;
+    std::string file_name_;
+    double origin_lat_;
+    double origin_lon_;
+    double origin_ele_;
 
-    TiXmlElement *node_pin;
-    TiXmlElement *way_pin;
-    TiXmlElement *relation_pin;
+    TiXmlElement *node_pin_;
+    TiXmlElement *way_pin_;
+    TiXmlElement *relation_pin_;
     
-    node::Node *nodes;
-    way::Way *ways;
-    relation::Relation *relations;
-    centerway::CenterWay *centerways;
-    GeographicLib::LocalCartesian *geo_converter;
+    node::Node *nodes_;
+    way::Way *ways_;
+    relation::Relation *relations_;
+    centerway::CenterWay *centerways_;
+    GeographicLib::LocalCartesian *geo_converter_;
     // grid_map::GridMap *gridmaps;
     // void tobinary(grid_map::GridMap::Matrix &data) const;
 
 public:
-    Map(const std::string file_path_, const std::string file_name_);
+    Map(const std::string file_path, const std::string file_name);
     ~Map();
-    void setOrigin(const double lat_, const double lon_, const double ele_);
-    node::Node const* getNodesConstPtr() const;
-    way::Way const* getWaysConstPtr() const;
-    relation::Relation const* getRelationConstPtr() const;
-    centerway::CenterWay const* getCenterwayConstPtr() const;
+    void SetOrigin(const double lat, const double lon, const double ele);
+    node::Node const* GetNodesConstPtr() const;
+    way::Way const* GetWaysConstPtr() const;
+    relation::Relation const* GetRelationConstPtr() const;
+    centerway::CenterWay const* GetCenterwayConstPtr() const;
     // grid_map::GridMap const* getGridmapConstPtr() const;
-    void GPS2Localxy(node::Point3D *node_) const;
+    void GPS2Localxy(node::Point3D *node) const;
 };
 
 

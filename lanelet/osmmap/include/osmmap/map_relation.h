@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:30:01
- * @LastEditTime: 2022-04-23 19:44:22
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-10-03 16:00:36
+ * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_relation.h
  */
@@ -40,7 +40,8 @@ enum class RelationSubType
     road = 1,
     traffic_sign = 2,
     traffic_light = 3,
-    park = 4
+    park = 4,
+    crosswalk = 5
 };
 
 enum class WayDirection
@@ -53,69 +54,88 @@ enum class WayDirection
 
 struct WayEdge
 {
-    int ID;
-    Edge edge;
+    int ID_;
+    Edge edge_;
 };
 
 struct regulatoryelement
 {
-    int ID;
-    RelationSubType subtype;//交通标志类型
-    int stoplineid;//stop_line的id
-    int laneletid;//关联lanelet序号
-    int centerpoint3did;//关联到该lanelet的精确的中心点id
+    int ID_;
+    RelationSubType subtype_;//交通标志类型
+    int stoplineid_;//stop_line的id
+    int laneletid_;//关联lanelet序号
+    int centerpoint3did_;//关联到该lanelet的精确的中心点id
     regulatoryelement() {}
-    regulatoryelement(const int id_)
+    regulatoryelement(const int id)
     {
-        ID = id_;
-        subtype = RelationSubType::unknown;
-        stoplineid = -1;
-        laneletid = -1;
-        centerpoint3did = -1;
+        ID_ = id;
+        subtype_ = RelationSubType::unknown;
+        stoplineid_ = -1;
+        laneletid_ = -1;
+        centerpoint3did_ = -1;
     }
     bool operator==(regulatoryelement &a) const
     {
-        return (a.ID == this->ID);
+        return (a.ID_ == this->ID_);
     }
 };
 
 
 struct relationship
 {
-    int ID;
-    WayEdge leftedge;
-    WayEdge rightedge;
-    RelationType type;
-    RelationSubType subtype;
-    double speed_limit = 0;
-    WayDirection turn_direction;
+    int ID_;
+    WayEdge leftedge_;
+    WayEdge rightedge_;
+    RelationType type_;
+    RelationSubType subtype_;
+    double speed_limit_ = 0;
+    WayDirection turn_direction_;
     //type = regulatory_element, 以下3个有意义，且表示对应way元素索引
-    int refers;
-    int ref_line;
-    int light_bulbs;
+    int refers_;
+    int ref_line_;
+    int light_bulbs_;
     bool operator==(relationship &a) const
     {
-        return (this->ID == a.ID);
+        return (this->ID_ == a.ID_);
     }
 };
 
 struct parkspace
 {
-    int ID;
-    int leftID;
-    int rightID;
+    int ID_;
+    int leftID_;
+    int rightID_;
     parkspace() {}
-    parkspace(const int id_)
+    parkspace(const int id)
     {
-        ID = id_;
-        leftID = -1;
-        rightID = -1;
+        ID_ = id;
+        leftID_ = -1;
+        rightID_ = -1;
     }
     bool operator==(const parkspace &a) const
     {
-        return (this->ID == a.ID);
+        return (this->ID_ == a.ID_);
     }
 };
+
+struct crosswalk
+{
+    int ID_;
+    int leftID_;
+    int rightID_;
+    crosswalk() = default;
+    crosswalk(const int id)
+    {
+        ID_ = id;
+        leftID_ = -1;
+        rightID_ = -1;
+    }
+    bool operator==(const crosswalk &a) const
+    {
+        return (this->ID_ == a.ID_);
+    }
+};
+
 
 
 
@@ -125,8 +145,9 @@ private:
     //std::unordered_map<int, relationship*> Data;
     //int numbers;
     //TiXmlElement *node_root;
-    std::unordered_map<int, regulatoryelement*> TrafficSign;
-    std::unordered_map<int, parkspace*> ParkLots;
+    std::unordered_map<int, regulatoryelement*> trafficSign_;
+    std::unordered_map<int, parkspace*> parkLots_;
+    std::unordered_map<int, crosswalk*> crosswalks_;
     RelationType Matchtype(const std::string s) const;
     RelationSubType MatchSubtype(const std::string s) const;
     WayDirection MatchDirection(const std::string s) const;
@@ -137,21 +158,27 @@ public:
     //virtual void CreateObjects(TiXmlElement *tail);
     //virtual int Size() const;
     //virtual relationship* Find(int id_);
-    std::unordered_map<int, regulatoryelement*> getTrafficSignHashMap() const {return TrafficSign;}
-    std::unordered_map<int, regulatoryelement*>::const_iterator regulatoryelementBegin() const {return TrafficSign.cbegin();}
-    std::unordered_map<int, regulatoryelement*>::const_iterator regulatoryelementEnd() const {return TrafficSign.cend();}
-    regulatoryelement* findRegulatoryelement(const int id_) const {return TrafficSign.at(id_);}
-    std::unordered_map<int, parkspace*> getParkLotsHashMap() const {return ParkLots;}
-    std::unordered_map<int, parkspace*>::const_iterator parklotsBegin() const {return ParkLots.cbegin();}
-    std::unordered_map<int, parkspace*>::const_iterator parklotsEnd() const {return ParkLots.cend();}
-    parkspace* findParkLot(const int id_) const {return ParkLots.at(id_);}
+    std::unordered_map<int, regulatoryelement*> GetTrafficSignHashMap() const {return trafficSign_;}
+    std::unordered_map<int, regulatoryelement*>::const_iterator RegulatoryelementBegin() const {return trafficSign_.cbegin();}
+    std::unordered_map<int, regulatoryelement*>::const_iterator RegulatoryelementEnd() const {return trafficSign_.cend();}
+    regulatoryelement* FindRegulatoryelement(const int id) const {return trafficSign_.at(id);}
+
+    std::unordered_map<int, parkspace*> GetParkLotsHashMap() const {return parkLots_;}
+    std::unordered_map<int, parkspace*>::const_iterator ParklotsBegin() const {return parkLots_.cbegin();}
+    std::unordered_map<int, parkspace*>::const_iterator ParklotsEnd() const {return parkLots_.cend();}
+    parkspace* FindParkLot(const int id) const {return parkLots_.at(id);}
+
+    std::unordered_map<int, crosswalk*> GetCrosswalksHashMap() const {return crosswalks_;}
+    std::unordered_map<int, crosswalk*>::const_iterator CrosswalksBegin() const {return crosswalks_.cbegin();}
+    std::unordered_map<int, crosswalk*>::const_iterator CrosswalksEnd() const {return crosswalks_.cend();}
+    crosswalk* FindCrosswalk(const int id) const {return crosswalks_.at(id);}
     //判断该lanelet是否有交通标志，如果有则返回True，否则False
-    bool isRegulatoryelement(const int id_) const;
+    bool IsRegulatoryElement(const int id) const;
     //判断该lanelet是否有停止线，如果有则返回True，否则False
     //当前只要有交通信号标志即有停止线, 等价于isRegulatoryelement()
-    bool isStopLine(const int id_) const;
+    bool IsStopLine(const int id) const;
     //根据lanelet的id寻找与其对应的交通信号标志，返回全部的交通标志信息
-    std::vector<regulatoryelement*> getRegulatoryelement(const int id_) const;
+    std::vector<regulatoryelement*> GetRegulatoryElement(const int id) const;
     virtual ~Relation();
 };
 

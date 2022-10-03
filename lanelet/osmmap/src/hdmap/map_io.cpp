@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:24:25
- * @LastEditTime: 2022-09-12 18:24:23
+ * @LastEditTime: 2022-10-03 16:48:20
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/map_io.cpp
@@ -11,10 +11,10 @@
 namespace map
 {
 
-Map::Map(const std::string file_path_, const std::string file_name_):file_path(file_path_), file_name(file_name_)
+Map::Map(const std::string file_path, const std::string file_name):file_path_(file_path), file_name_(file_name)
 {
     const auto start = std::chrono::steady_clock::now();
-    std::string file = file_path + file_name;
+    std::string file = file_path_ + file_name_;
     TiXmlDocument doc;
     if(!doc.LoadFile(file.c_str()))
     {
@@ -28,30 +28,30 @@ Map::Map(const std::string file_path_, const std::string file_name_):file_path(f
         doc.Clear();
         return;
     }
-    node_pin = ROOT->FirstChildElement("node");
-    way_pin = ROOT->FirstChildElement("way");
-    relation_pin = ROOT->FirstChildElement("relation");
+    node_pin_ = ROOT->FirstChildElement("node");
+    way_pin_ = ROOT->FirstChildElement("way");
+    relation_pin_ = ROOT->FirstChildElement("relation");
 
     //std::cout << "---------------------------------------------------" << std::endl;
     //node
-    nodes = new node::Node(node_pin);
-    nodes->CreateObjects(way_pin);
-    std::cout << "nodes total number: " << nodes->Size() << std::endl;
+    nodes_ = new node::Node(node_pin_);
+    nodes_->CreateObjects(way_pin_);
+    std::cout << "nodes total number: " << nodes_->Size() << std::endl;
 
     //way
-    ways = new way::Way(way_pin);
-    ways->CreateObjects(relation_pin);
-    std::cout << "ways total number: " << ways->Size() << std::endl;
+    ways_ = new way::Way(way_pin_);
+    ways_->CreateObjects(relation_pin_);
+    std::cout << "ways total number: " << ways_->Size() << std::endl;
     
     //relation
-    relations = new relation::Relation(relation_pin);
-    relations->CreateObjects(nullptr);
-    std::cout << "relations total number: " << relations->Size() << std::endl;
+    relations_ = new relation::Relation(relation_pin_);
+    relations_->CreateObjects(nullptr);
+    std::cout << "relations total number: " << relations_->Size() << std::endl;
     
     //centerway
-    centerways = new centerway::CenterWay(nullptr);
-    centerways->run(nodes, ways, relations);
-    std::cout << "centerways total number: " << centerways->Size() << std::endl;
+    centerways_ = new centerway::CenterWay(nullptr);
+    centerways_->Run(nodes_, ways_, relations_);
+    std::cout << "centerways total number: " << centerways_->Size() << std::endl;
     
     //output
     //std::cout << "************** map init successful!! **************" << std::endl;
@@ -129,33 +129,33 @@ Map::Map(const std::string file_path_, const std::string file_name_):file_path(f
 //     }
 // }
 
-void Map::setOrigin(const double lat_, const double lon_, const double ele_)
+void Map::SetOrigin(const double lat, const double lon, const double ele)
 {
-    geo_converter = new GeographicLib::LocalCartesian(lat_, lon_, ele_);
-    origin_lat = lat_;
-    origin_lon = lon_;
-    origin_ele = ele_;
+    geo_converter_ = new GeographicLib::LocalCartesian(lat, lon, ele);
+    origin_lat_ = lat;
+    origin_lon_ = lon;
+    origin_ele_ = ele;
     std::cout << "origin has set already!" << std::endl;
 }
 
-node::Node const* Map::getNodesConstPtr() const
+node::Node const* Map::GetNodesConstPtr() const
 {
-    return nodes;
+    return nodes_;
 }
 
-way::Way const* Map::getWaysConstPtr() const 
+way::Way const* Map::GetWaysConstPtr() const 
 {
-    return ways;
+    return ways_;
 }
 
-relation::Relation const* Map::getRelationConstPtr() const
+relation::Relation const* Map::GetRelationConstPtr() const
 {
-    return relations;
+    return relations_;
 }
 
-centerway::CenterWay const* Map::getCenterwayConstPtr() const
+centerway::CenterWay const* Map::GetCenterwayConstPtr() const
 {
-    return centerways;
+    return centerways_;
 }
 
 // grid_map::GridMap const* Map::getGridmapConstPtr() const
@@ -163,21 +163,21 @@ centerway::CenterWay const* Map::getCenterwayConstPtr() const
 //     return gridmaps;
 // }
 
-void Map::GPS2Localxy(node::Point3D *node_) const
+void Map::GPS2Localxy(node::Point3D *node) const
 {
-    geo_converter->Forward(node_->latitude, node_->longitude, node_->elevation,
-                           node_->local_x, node_->local_y, node_->elevation);
+    geo_converter_->Forward(node->latitude_, node->longitude_, node->elevation_,
+                           node->local_x_, node->local_y_, node->elevation_);
 }
 
 Map::~Map()
 {
     // std::cout << "~Map" << std::endl;
-    delete nodes;
-    delete ways;
-    delete relations;
-    delete centerways;
-    delete geo_converter;
-    // delete gridmaps;
+    delete nodes_;
+    delete ways_;
+    delete relations_;
+    delete centerways_;
+    delete geo_converter_;
+    // delete gridmaps_;
 }
 
 

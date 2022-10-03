@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:16
- * @LastEditTime: 2022-09-12 17:55:54
+ * @LastEditTime: 2022-10-03 16:55:38
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/map_relation.cpp
@@ -26,7 +26,7 @@ Relation::Relation(TiXmlElement* root)
 void Relation::CreateOneObject(TiXmlElement *head)
 {
     relationship *oneobject = new relationship;
-    oneobject->ID = std::atoi(head->Attribute("id"));
+    oneobject->ID_ = std::atoi(head->Attribute("id"));
     TiXmlElement *member_pin = head->FirstChildElement("member");
     TiXmlElement *tag_pin = head->FirstChildElement("tag");
     for(auto it = member_pin; it != tag_pin; it = it->NextSiblingElement())
@@ -34,17 +34,17 @@ void Relation::CreateOneObject(TiXmlElement *head)
         std::string s(it->Attribute("role"));
         if(s == "left")
         {
-            oneobject->leftedge.edge = Edge::left;
-            oneobject->leftedge.ID = std::atoi(it->Attribute("ref"));
+            oneobject->leftedge_.edge_ = Edge::left;
+            oneobject->leftedge_.ID_ = std::atoi(it->Attribute("ref"));
         }else if(s == "right"){
-            oneobject->rightedge.edge = Edge::right;
-            oneobject->rightedge.ID = std::atoi(it->Attribute("ref"));
+            oneobject->rightedge_.edge_ = Edge::right;
+            oneobject->rightedge_.ID_ = std::atoi(it->Attribute("ref"));
         }else if(s == "refers"){
-            oneobject->refers = std::atoi(it->Attribute("ref"));
+            oneobject->refers_ = std::atoi(it->Attribute("ref"));
         }else if(s == "ref_line"){
-            oneobject->ref_line = std::atoi(it->Attribute("ref"));
+            oneobject->ref_line_ = std::atoi(it->Attribute("ref"));
         }else if(s == "light_bulbs"){
-            oneobject->light_bulbs = std::atoi(it->Attribute("ref"));
+            oneobject->light_bulbs_ = std::atoi(it->Attribute("ref"));
         }else{
             continue;
         }
@@ -55,32 +55,40 @@ void Relation::CreateOneObject(TiXmlElement *head)
         std::string p(it->Attribute("v"));
         if(s == "type")
         {
-            oneobject->type = Matchtype(p);
+            oneobject->type_ = Matchtype(p);
         }else if(s == "subtype"){
-            oneobject->subtype = MatchSubtype(p);
+            oneobject->subtype_ = MatchSubtype(p);
         }else if(s == "speed_limit"){
-            oneobject->speed_limit = std::atof(it->Attribute("v"));
+            oneobject->speed_limit_ = std::atof(it->Attribute("v"));
         }else if(s == "turn_direction"){
-            oneobject->turn_direction = MatchDirection(p);
+            oneobject->turn_direction_ = MatchDirection(p);
         }else{
             continue;
         }
     }
-    Insert(oneobject->ID, oneobject);
+    Insert(oneobject->ID_, oneobject);
 
     //存储regulatoryelement,在此定义regulatoryelement，在centerway中Matchregulatoryelement(...)函数赋值
-    if(oneobject->type == RelationType::regulatory_element)
+    if(oneobject->type_ == RelationType::regulatory_element)
     {
-        regulatoryelement *onetrafficsign = new regulatoryelement(oneobject->ID);
-        TrafficSign[onetrafficsign->ID] = onetrafficsign;
+        regulatoryelement *onetrafficsign = new regulatoryelement(oneobject->ID_);
+        trafficSign_[onetrafficsign->ID_] = onetrafficsign;
     }
 
-    if(oneobject->subtype == RelationSubType::park)
+    if(oneobject->subtype_ == RelationSubType::park)
     {
-        parkspace *onepark = new parkspace(oneobject->ID);
-        onepark->leftID = oneobject->leftedge.ID;
-        onepark->rightID = oneobject->rightedge.ID;
-        ParkLots[onepark->ID] = onepark; 
+        parkspace *onepark = new parkspace(oneobject->ID_);
+        onepark->leftID_ = oneobject->leftedge_.ID_;
+        onepark->rightID_ = oneobject->rightedge_.ID_;
+        parkLots_[onepark->ID_] = onepark; 
+    }
+
+    if(oneobject->subtype_ == RelationSubType::crosswalk)
+    {
+        crosswalk *onecrosswalk = new crosswalk(oneobject->ID_);
+        onecrosswalk->leftID_ = oneobject->leftedge_.ID_;
+        onecrosswalk->rightID_ = oneobject->rightedge_.ID_;
+        crosswalks_[onecrosswalk->ID_] = onecrosswalk;
     }
 }
 
@@ -107,6 +115,8 @@ RelationSubType Relation::MatchSubtype(const std::string s) const
         return RelationSubType::traffic_light;
     }else if(s == "park"){
         return RelationSubType::park;
+    }else if(s == "crosswalk"){
+        return RelationSubType::crosswalk;
     }else{
         return RelationSubType::unknown;
     }
@@ -126,12 +136,12 @@ WayDirection Relation::MatchDirection(const std::string s) const
     }
 }
 
-bool Relation::isRegulatoryelement(const int id_) const
+bool Relation::IsRegulatoryElement(const int id) const
 {
     bool flag = false;
-    for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
+    for(auto it = trafficSign_.begin(); it != trafficSign_.end(); ++it)
     {
-        if(id_ == it->second->laneletid)
+        if(id == it->second->laneletid_)
         {
             flag = true;
             break;
@@ -140,12 +150,12 @@ bool Relation::isRegulatoryelement(const int id_) const
     return flag;
 }
 
-bool Relation::isStopLine(const int id_) const
+bool Relation::IsStopLine(const int id) const
 {
     bool flag = false;
-    for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
+    for(auto it = trafficSign_.begin(); it != trafficSign_.end(); ++it)
     {
-        if(id_ == it->second->laneletid)
+        if(id == it->second->laneletid_)
         {
             flag = true;
             break;
@@ -154,12 +164,12 @@ bool Relation::isStopLine(const int id_) const
     return flag;
 }
 
-std::vector<regulatoryelement*> Relation::getRegulatoryelement(const int id_) const
+std::vector<regulatoryelement*> Relation::GetRegulatoryElement(const int id) const
 {
     std::vector<regulatoryelement*> res;
-    for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
+    for(auto it = trafficSign_.begin(); it != trafficSign_.end(); ++it)
     {
-        if(id_ == it->second->laneletid)
+        if(id == it->second->laneletid_)
         {
             res.push_back(it->second);
         }
@@ -170,16 +180,21 @@ std::vector<regulatoryelement*> Relation::getRegulatoryelement(const int id_) co
 Relation::~Relation()
 {
     // std::cout << "~relation" << std::endl;
-    for(auto it = TrafficSign.begin(); it != TrafficSign.end(); ++it)
+    for(auto it = trafficSign_.begin(); it != trafficSign_.end(); ++it)
     {
         delete it->second;
     }
-    TrafficSign.clear();
-    for(auto it = ParkLots.begin(); it != ParkLots.end(); ++it)
+    trafficSign_.clear();
+    for(auto it = parkLots_.begin(); it != parkLots_.end(); ++it)
     {
         delete it->second;
     }
-    ParkLots.clear();
+    parkLots_.clear();
+    for(auto it = crosswalks_.begin(); it != crosswalks_.end(); ++it)
+    {
+        delete it->second;
+    }
+    crosswalks_.clear();
 }
 
 

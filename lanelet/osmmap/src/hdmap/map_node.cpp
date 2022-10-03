@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:28:59
- * @LastEditTime: 2022-09-12 17:55:48
+ * @LastEditTime: 2022-10-03 16:45:14
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/map_node.cpp
@@ -28,9 +28,9 @@ void Node::CreateOneObject(TiXmlElement *head)
 {
     //node
     Point3D *oneobject = new Point3D;
-    oneobject->ID = std::atoi(head->Attribute("id"));
-    oneobject->latitude = std::atof(head->Attribute("lat"));
-    oneobject->longitude = std::atof(head->Attribute("lon"));
+    oneobject->ID_ = std::atoi(head->Attribute("id"));
+    oneobject->latitude_ = std::atof(head->Attribute("lat"));
+    oneobject->longitude_ = std::atof(head->Attribute("lon"));
     TiXmlElement *tag_pin = head->FirstChildElement("tag");
     //bool islocalx = false;
     //bool islocaly = false;
@@ -39,13 +39,13 @@ void Node::CreateOneObject(TiXmlElement *head)
         std::string s(it->Attribute("k"));
         if(s == "local_x")
         {
-            oneobject->local_x = std::atof(it->Attribute("v"));
+            oneobject->local_x_ = std::atof(it->Attribute("v"));
             //islocalx = true;
         }else if(s == "local_y"){
-            oneobject->local_y = std::atof(it->Attribute("v"));
+            oneobject->local_y_ = std::atof(it->Attribute("v"));
             //islocaly = true;
         }else if(s == "ele"){
-            oneobject->elevation = std::atof(it->Attribute("v"));
+            oneobject->elevation_ = std::atof(it->Attribute("v"));
         }else{
             continue;
         }
@@ -54,7 +54,7 @@ void Node::CreateOneObject(TiXmlElement *head)
     {
         MercatorGPS2xy(oneobject);
     }*/
-    Insert(oneobject->ID, oneobject);
+    Insert(oneobject->ID_, oneobject);
 }
 
 /*void Node::MercatorGPS2xy(Point3D *pin)

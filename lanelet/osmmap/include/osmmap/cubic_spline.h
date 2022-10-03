@@ -133,9 +133,9 @@ public:
     std::vector<double> z;
     for(int i = 0; i < points_.size(); ++i)
     {
-      x.push_back(points_[i].x);
-      y.push_back(points_[i].y);
-      z.push_back(points_[i].ele);
+      x.push_back(points_[i].x_);
+      y.push_back(points_[i].y_);
+      z.push_back(points_[i].ele_);
     }
     s = calc_s(x, y, z);
     sx = Spline(s, x);

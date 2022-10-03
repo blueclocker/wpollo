@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:06
- * @LastEditTime: 2022-09-12 17:56:01
+ * @LastEditTime: 2022-10-03 16:49:48
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/map_way.cpp
@@ -26,13 +26,13 @@ Way::Way(TiXmlElement *root)
 void Way::CreateOneObject(TiXmlElement *head)
 {
     Line *oneobject = new Line;
-    oneobject->ID = std::atoi(head->Attribute("id"));
+    oneobject->ID_ = std::atoi(head->Attribute("id"));
     TiXmlElement *nd_pin = head->FirstChildElement("nd");
     TiXmlElement *tag_pin = head->FirstChildElement("tag");
     for(auto it = nd_pin; it != tag_pin; it = it->NextSiblingElement())
     {
-        oneobject->nodeline[oneobject->length++] = std::atoi(it->Attribute("ref"));
-        if(oneobject->length == oneobject->size)
+        oneobject->nodeline_[oneobject->length_++] = std::atoi(it->Attribute("ref"));
+        if(oneobject->length_ == oneobject->size_)
         {
             oneobject->Changesize();
         }
@@ -43,15 +43,15 @@ void Way::CreateOneObject(TiXmlElement *head)
         std::string p(it->Attribute("v"));
         if(s == "type")
         {
-            oneobject->type = Matchtype(p);
+            oneobject->type_ = Matchtype(p);
         }else if(s == "subtype"){
             //oneobject->subtype = static_cast<int>(WaySubtype::solid);
-            oneobject->subtype = MatchSubtype(p);
+            oneobject->subtype_ = MatchSubtype(p);
         }else{
             continue;
         }
     }
-    Insert(oneobject->ID, oneobject);
+    Insert(oneobject->ID_, oneobject);
 }
 
 WayType Way::Matchtype(const std::string s) const

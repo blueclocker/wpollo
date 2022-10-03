@@ -272,3 +272,7 @@ add_dependencies(serialPort ${PROJECT_NAME} fsd_common_msgs_gencpp)
 ##### 20220927
 * 新增open_space泊车功能，使用apollo混合A*
 * osmmap导航方式优化，当超过地图范围和无法搜索出可行道路时，取和车头朝向相同的最近lanelet作为定位结果，尝试再次A*
+
+##### 20221003
+* 高精地图新增人行横道
+* 优化类内变量和函数命名

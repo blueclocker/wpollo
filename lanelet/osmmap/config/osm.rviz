@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /MarkerArray1/Namespaces1
         - /MarkerArray2
         - /MarkerArray2/Namespaces1
         - /Marker1/Namespaces1
@@ -98,9 +99,11 @@ Visualization Manager:
         center_ways: true
         centerpoints: false
         centerpoints_number: true
+        crosswalk: true
         edge_ways: true
         edgepoints: false
         edgepoints_number: false
+        redgreenlight: true
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
@@ -285,7 +288,7 @@ Visualization Manager:
       Marker Topic: /mapio/golbalpath_info
       Name: Marker
       Namespaces:
-        smooth_plan_ways: true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 0.699999988079071
@@ -358,25 +361,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 284.0746154785156
+      Distance: 93.14189147949219
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 177.93914794921875
-        Y: -8.93117904663086
-        Z: 3.958389788749628e-5
+        X: 172.33018493652344
+        Y: 96.6471939086914
+        Z: -9.4787237685523e-6
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 1.5597963333129883
       Target Frame: <Fixed Frame>
       Value: ThirdPersonFollower (rviz)
-      Yaw: 4.518517971038818
+      Yaw: 4.663520812988281
     Saved: ~
 Window Geometry:
   Displays:
