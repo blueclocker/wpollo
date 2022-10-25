@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:36
- * @LastEditTime: 2022-10-03 19:20:15
+ * @LastEditTime: 2022-10-10 12:34:50
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_core.h
@@ -14,6 +14,7 @@
 #include "map_plan.h"
 #include "dubins.h"
 #include "cubic_spline.h"
+#include "smoother/reference_path_smoother.h"
 #include <ros/ros.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <sensor_msgs/NavSatFix.h>
@@ -21,6 +22,7 @@
 #include <nav_msgs/OccupancyGrid.h>
 #include <grid_map_ros/grid_map_ros.hpp>
 #include <fsd_common_msgs/Comb.h>
+#include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>
 #include <osmmap/Navigation.h>
 #include <osmmap/Regulatoryelement.h>
@@ -129,7 +131,8 @@ public:
     void SmoothPath();
     void StartpointCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg);
     void GoalpointCallback(const geometry_msgs::PoseStamped::ConstPtr &msg);
-    void GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg);
+    // void GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg);
+    void GpsCallback(const nav_msgs::Odometry::ConstPtr &msg);
 };
 
 };//namespace map

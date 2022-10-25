@@ -208,7 +208,7 @@ void HybridAStar::CalculateNodeCost(std::shared_ptr<Node3d> current_node,
                          TrajCost(current_node, next_node));
   // evaluate heuristic cost
   double optimal_path_cost = 0.0;
-  optimal_path_cost += HoloObstacleHeuristic(next_node);
+  optimal_path_cost += 1.01*HoloObstacleHeuristic(next_node);
   next_node->SetHeuCost(optimal_path_cost);
 }
 
@@ -236,7 +236,8 @@ double HybridAStar::HoloObstacleHeuristic(std::shared_ptr<Node3d> next_node) {
   // return grid_a_star_heuristic_generator_->CheckDpMap(next_node->GetX(),
   //                                                     next_node->GetY());
   double h;
-  h = std::fabs(next_node->GetX() - end_node_->GetX()) + std::fabs(next_node->GetY() - end_node_->GetY());
+  // h = std::fabs(next_node->GetX() - end_node_->GetX()) + std::fabs(next_node->GetY() - end_node_->GetY());
+  h = std::sqrt(std::pow(next_node->GetX() - end_node_->GetX(), 2) + std::pow(next_node->GetY() - end_node_->GetY(), 2));
   return h;
 }
 
@@ -708,7 +709,9 @@ bool HybridAStar::Plan(
     // configuration to the end configuration without collision. if so, search
     // ends.
     // const double rs_start_time = Clock::NowInSeconds();
-    if (AnalyticExpansion(current_node)) {
+    if (std::sqrt(std::pow((current_node->GetX() - end_node_->GetX()), 2) + 
+                  std::pow((current_node->GetY() - end_node_->GetY()), 2)) < 5 && 
+        AnalyticExpansion(current_node)) {
       break;
     }
     // const double rs_end_time = Clock::NowInSeconds();
@@ -739,14 +742,14 @@ bool HybridAStar::Plan(
       }
     }
 
-    //Hybrid A star > 50 ms搜索失败
-    const auto now_timestamp = std::chrono::system_clock::now();
-    std::chrono::duration<double> diff = now_timestamp - start_timestamp;
-    if(diff.count() * 1000.0 > 50.0) 
-    {
-      std::cout << "Hybrid A has run out of 50 ms" << std::endl;
-      return false;
-    }
+    //Hybrid A star > 500 ms搜索失败
+    // const auto now_timestamp = std::chrono::system_clock::now();
+    // std::chrono::duration<double> diff = now_timestamp - start_timestamp;
+    // if(diff.count() * 1000.0 > 500.0) 
+    // {
+    //   std::cout << "Hybrid A has run out of 50 ms" << std::endl;
+    //   return false;
+    // }
   }
   if (final_node_ == nullptr) {
     std::cout << "Hybrid A searching return null ptr(open_set ran out)" << std::endl;

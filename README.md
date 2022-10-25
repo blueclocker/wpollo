@@ -276,3 +276,7 @@ add_dependencies(serialPort ${PROJECT_NAME} fsd_common_msgs_gencpp)
 ##### 20221003
 * 高精地图新增人行横道
 * 优化类内变量和函数命名
+
+##### 20221025
+* 新增点云配准定位
+> (功能包较乱)

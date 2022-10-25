@@ -5,7 +5,7 @@
 <node pkg="static_frenet" type="static_frenet_node" name="frenet_trajectory" output="screen" >
 
 </node>
-<node pkg="rosbag" type="play" name="rosbag" args=" - -clock -r 2 /home/sml/database/forward1_2022-04-19-22-10-05.bag"/>
+<!--node pkg="rosbag" type="play" name="rosbag" args=" - -clock -r 2 /home/sml/database/forward1_2022-04-19-22-10-05.bag"/-->
 <!-- <include file="$(find osmmap)/launch/osmmap.launch"/> -->
 
 

@@ -7,5 +7,6 @@ float64 heading			#航向角，E=0度(-180-180)
 geometry_msgs/Pose carPose	#车辆位姿
 geometry_msgs/Pose endPose	#终点位姿
 geometry_msgs/Point nextpoint	#下一点
-geometry_msgs/Vector3 velocity	#速度
+geometry_msgs/Vector3 linear	#线速度
+geometry_msgs/Vector3 angular	#角速度
 geometry_msgs/Vector3 Accell	#加速度

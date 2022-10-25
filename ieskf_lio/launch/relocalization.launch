@@ -1,0 +1,12 @@
+<!-- -->
+<launch>
+    <!--- Sim Time -->
+    <param name="/use_sim_time" value="true" />
+    <!--node pkg="rviz" type="rviz" name="relocalization_rviz" args="-d  $(find ieskf_lio)/launch/relocalization.rviz" required="true"/-->
+    <node pkg="ieskf_lio" type="cari_lidar_repub" name="cari_lidar_repub" output="screen" />
+    <node pkg="ieskf_lio" type="cari_imu_repub" name="cari_imu_repub" output="screen" />
+    <node pkg="ieskf_lio" type="lidar_repub" name="lidar_repub" output="screen" />
+    <node pkg="ieskf_lio" type="Preprocess"  name="Preprocess"  output="screen" />
+    <node pkg="ieskf_lio" type="relocalization"  name="relocalization"  output="screen"/>
+  
+</launch>

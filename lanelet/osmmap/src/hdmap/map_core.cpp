@@ -1,7 +1,7 @@
 /*
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-09-24 15:16:06
- * @LastEditTime: 2022-10-03 19:21:18
+ * @LastEditTime: 2022-10-13 10:31:04
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 
  * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/map_core.cpp
@@ -70,9 +70,10 @@ HDMap::HDMap(ros::NodeHandle n):n_(n)
     visualmap_ = new MapVisualization();
     visualmap_->Map2Marker(nodesptr_, waysptr_, centerwaysptr_, relationsptr_, map_markerarray_, ros::Time::now());
     
-    startpoint_sub_ = n_.subscribe("/initialpose", 10, &HDMap::StartpointCallback, this);
-    goalpoint_sub_ = n_.subscribe("/move_base_simple/goal", 10, &HDMap::GoalpointCallback, this);
-    gps_sub_ = n_.subscribe("/comb", 10, &HDMap::GpsCallback, this);
+    startpoint_sub_ = n_.subscribe("/initialpose", 1, &HDMap::StartpointCallback, this);
+    goalpoint_sub_ = n_.subscribe("/move_base_simple/goal", 1, &HDMap::GoalpointCallback, this);
+    // gps_sub_ = n_.subscribe("/comb", 10, &HDMap::GpsCallback, this);
+    gps_sub_ = n_.subscribe("/mapping_odometry", 1, &HDMap::GpsCallback, this);
     //main loop
     ros::Rate r(10);
     while(n_.ok())
@@ -171,6 +172,25 @@ void HDMap::SmoothPath()
         rcurvature.push_back(csp_obj.calc_curvature(i));
     }
     smoothpathnode_ = std::move(temppathnode);
+
+    //osqp
+    // if(smoothpathnode_.size() < 2) return;
+    // plan::ReferencePathSmoother smooth(smoothpathnode_);
+    // smooth.Smooth();
+    // std::vector<double> tempx, tempy, tempz;
+    // tempx = smooth.GetXList();
+    // tempy = smooth.GetYList();
+    // tempz = smooth.GetZList();
+    // std::vector<centerway::CenterPoint3D> temppathnode;
+    // for(int i = 0; i < tempx.size(); ++i)
+    // {
+    //     centerway::CenterPoint3D pointtemp;
+    //     pointtemp.x_ = tempx[i];
+    //     pointtemp.y_ = tempy[i];
+    //     pointtemp.ele_ = tempz[i];
+    //     temppathnode.emplace_back(pointtemp);
+    // }
+    // smoothpathnode_ = std::move(temppathnode);
 }
 
 void HDMap::FullNavigationInfo()
@@ -323,6 +343,8 @@ void HDMap::OutMapPlan(const centerway::CenterPoint3D &atnow_centerpoint, const 
         {
             visualmap_->Path2Marker(centerwaysptr_, paths_, path_markerarray_, currenttime_);
             PushCenterPoint(paths_);
+            //smooth
+            // SmoothPath();
             visualmap_->Smoothpath2Marker(smoothpathnode_, path_markerarray_, currenttime_);
             //发布导航信息
             FullNavigationInfo();
@@ -461,20 +483,29 @@ void HDMap::GoalpointCallback(const geometry_msgs::PoseStamped::ConstPtr &msg)
     
 }
 
-void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
+// void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
+void HDMap::GpsCallback(const nav_msgs::Odometry::ConstPtr &msg)
 {
-    atnowpoint_->elevation_ = msg->Altitude;
-    atnowpoint_->latitude_ = msg->Lattitude;
-    atnowpoint_->longitude_ = msg->Longitude;
+    // GNSS
+    // atnowpoint_->elevation_ = msg->Altitude;
+    // atnowpoint_->latitude_ = msg->Lattitude;
+    // atnowpoint_->longitude_ = msg->Longitude;
 
-    vectormap_->GPS2Localxy(atnowpoint_);
+    // vectormap_->GPS2Localxy(atnowpoint_);
+
+    //点云配准
+    atnowpoint_->local_x_ = msg->pose.pose.position.x;
+    atnowpoint_->local_y_ = msg->pose.pose.position.y;
+    atnowpoint_->elevation_ = msg->pose.pose.position.z;
+
     start_state_[0] = atnowpoint_->local_x_;
     start_state_[1] = atnowpoint_->local_y_;
-    start_state_[2] = (msg->Heading + 90)/180*M_PI;
+    // start_state_[2] = (msg->Heading + 90)/180*M_PI;
+    start_state_[2] = tf::getYaw(msg->pose.pose.orientation);
     //imu矫正
-    Eigen::Vector3d imuinmsg;
-    imuinmsg << msg->Ax, -msg->Az, msg->Ay;
-    ImuInit(imuinmsg);
+    // Eigen::Vector3d imuinmsg;
+    // imuinmsg << msg->Ax, -msg->Az, msg->Ay;
+    // ImuInit(imuinmsg);
     //当前点定位到路段
     centerway::CenterPoint3D atnowcenterpoint = centerway::CenterPoint3D(*atnowpoint_);
     //当前路段精确定位到某点
@@ -501,6 +532,14 @@ void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
         {
             //第一帧，优先选取第一个定位结果
             start_path_ = lanelets_res[0];
+            // for(int i = 0; i < lanelets_res.size(); i++)
+            // {
+            //     start_path_ = lanelets_res[i];
+            //     if(!globalplans_->Run(start_path_, end_path_).empty())
+            //     {
+            //         break;
+            //     }
+            // }
             std::cout << "first plan!" << std::endl;
         }else{
             //其他帧，优先选取上一帧路径lanelet范围内的结果
@@ -516,7 +555,18 @@ void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
                 }
             }
             //如果均不在上一帧lanelet范围内, 优先选取第一个
-            if(!isInLastPaths) start_path_ = lanelets_res[0];
+            if(!isInLastPaths)
+            {
+                // for(int i = 0; i < lanelets_res.size(); i++)
+                // {
+                //     start_path_ = lanelets_res[i];
+                //     if(!globalplans_->Run(start_path_, end_path_).empty())
+                //     {
+                //         break;
+                //     }
+                // }
+                start_path_ = lanelets_res[0];
+            }
         }
         // start_path_ = atnowcenterway;
         
@@ -533,6 +583,8 @@ void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
                 hdmapstate.isFindPath = true;
                 visualmap_->Path2Marker(centerwaysptr_, paths_, path_markerarray_, currenttime_);
                 PushCenterPoint(paths_);
+                //smooth
+                // SmoothPath();
                 visualmap_->Smoothpath2Marker(smoothpathnode_, path_markerarray_, currenttime_);
                 //发布导航信息
                 FullNavigationInfo();
@@ -547,7 +599,8 @@ void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
             }else{
                 smoothpathnode_.clear();
                 smoothpathnode_.push_back(centerway::CenterPoint3D(*atnowpoint_));
-                double atnowpoint_heading = ConstrainAngle(msg->Heading)/180*M_PI;
+                // double atnowpoint_heading = ConstrainAngle(msg->Heading)/180*M_PI;
+                double atnowpoint_heading = start_state_[2];
                 OutMapPlan(atnowcenterpoint, atnowpoint_heading);
                 ROS_WARN("gps point is in reverse direction path!");
             }
@@ -564,7 +617,8 @@ void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
         //越界：直接连接当前点与最近的道路中心点！！
         smoothpathnode_.clear();
         smoothpathnode_.push_back(centerway::CenterPoint3D(*atnowpoint_));
-        double atnowpoint_heading = ConstrainAngle(msg->Heading)/180*M_PI;
+        // double atnowpoint_heading = ConstrainAngle(msg->Heading)/180*M_PI;
+        double atnowpoint_heading = start_state_[2];
         
         // int nearestcenterwayid = centerwaysptr->findNearestCenterwaypointid(atnowpoint);
         // centerway::CenterPoint3D tartgetpoint;
@@ -581,11 +635,16 @@ void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
     }
 
     //tf
-    double headtemp = msg->Heading;
-    headtemp = ConstrainAngle(headtemp);
+    // double headtemp = msg->Heading;
+    // headtemp = ConstrainAngle(headtemp);
+    double headtemp = start_state_[2];
     // std::cout << "headtemp: " << headtemp << std::endl;
     tf::Quaternion qenu2base;
-    qenu2base.setRPY((msg->Roll)/180*M_PI, (msg->Pitch)/180*M_PI, (headtemp)/180*M_PI);
+    // qenu2base.setRPY((msg->Roll)/180*M_PI, (msg->Pitch)/180*M_PI, (headtemp)/180*M_PI);
+    qenu2base.setW(msg->pose.pose.orientation.w);
+    qenu2base.setX(msg->pose.pose.orientation.x);
+    qenu2base.setY(msg->pose.pose.orientation.y);
+    qenu2base.setZ(msg->pose.pose.orientation.z);
     baselink2map_.setRotation(qenu2base);
     baselink2map_.setOrigin(tf::Vector3(atnowpoint_->local_x_, atnowpoint_->local_y_, atnowpoint_->elevation_));
     //map->rslidar->base_link
@@ -598,8 +657,8 @@ void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
     m3d << 1, 0, 0, 0, 0, -1, 0, -1, 0;
     Eigen::Quaterniond qbase2imu(m3d);
     Eigen::Quaterniond q1 = Eigen::Quaterniond(qenu2base.w(), qenu2base.x(), qenu2base.y(), qenu2base.z()).normalized();
-    Eigen::Vector3d Venu = Eigen::Vector3d(msg->Ve, msg->Vn, msg->Vu);
-    Eigen::Vector3d Vxyz = (q1*qbase2imu).normalized().inverse() * Venu;
+    // Eigen::Vector3d Venu = Eigen::Vector3d(msg->Ve, msg->Vn, msg->Vu);
+    // Eigen::Vector3d Vxyz = (q1*qbase2imu).normalized().inverse() * Venu;
     // std::cout << "vx=" << Vxyz(0) << ", vy=" << Vxyz(1) << ", vz=" << Vxyz(2) << std::endl;
     // std::cout << "ax=" << msg->Ax << ", ay=" << msg->Ay << ", az=" << msg->Az << std::endl;
     // double asum = std::sqrt(msg->Ax * msg->Ax + msg->Ay * msg->Ay + msg->Az * msg->Az);
@@ -691,12 +750,21 @@ void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
     //         hdmapstate.nextpoint.z = atan2(dy, dx);
     //     }
     // }
-    hdmapstate.velocity.x = Vxyz(0);
-    hdmapstate.velocity.y = Vxyz(1);
-    hdmapstate.velocity.z = Vxyz(2);
-    hdmapstate.Accell.x = msg->Ax;
-    hdmapstate.Accell.y = msg->Ay;
-    hdmapstate.Accell.z = msg->Az;
+    // hdmapstate.linear.x = Vxyz(0);
+    // hdmapstate.linear.y = Vxyz(1);
+    // hdmapstate.linear.z = Vxyz(2);
+    // hdmapstate.Accell.x = msg->Ax;
+    // hdmapstate.Accell.y = msg->Ay;
+    // hdmapstate.Accell.z = msg->Az;
+    hdmapstate.linear.x = msg->twist.twist.linear.x;
+    hdmapstate.linear.y = msg->twist.twist.linear.y;
+    hdmapstate.linear.z = msg->twist.twist.linear.z;
+    hdmapstate.angular.x = msg->twist.twist.angular.x;
+    hdmapstate.angular.y = msg->twist.twist.angular.y;
+    hdmapstate.angular.z = msg->twist.twist.angular.z;
+    hdmapstate.Accell.x = 0;
+    hdmapstate.Accell.y = 0;
+    hdmapstate.Accell.z = 0;
     if(imuinit_flag_)
     {
         hdmapstate.Accell.x = adjusted_acc_[0];

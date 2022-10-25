@@ -59,27 +59,27 @@ public:
   };
 
   float calc(float t){
-    if(t<x.front() || t>x.back()){
-      throw std::invalid_argument( "received value out of the pre-defined range" );
-    }
+    // if(t<x.front() || t>x.back()){
+    //   throw std::invalid_argument( "received value out of the pre-defined range" );
+    // }
     int seg_id = bisect(t, 0, nx);
     float dx = t - x[seg_id];
     return a[seg_id] + b[seg_id] * dx + c[seg_id] * dx * dx + d[seg_id] * dx * dx * dx;
   };
 
   float calc_d(float t){
-    if(t<x.front() || t>x.back()){
-      throw std::invalid_argument( "received value out of the pre-defined range" );
-    }
+    // if(t<x.front() || t>x.back()){
+    //   throw std::invalid_argument( "received value out of the pre-defined range" );
+    // }
     int seg_id = bisect(t, 0, nx-1);
     float dx = t - x[seg_id];
     return b[seg_id]  + 2 * c[seg_id] * dx + 3 * d[seg_id] * dx * dx;
   }
 
   float calc_dd(float t){
-    if(t<x.front() || t>x.back()){
-      throw std::invalid_argument( "received value out of the pre-defined range" );
-    }
+    // if(t<x.front() || t>x.back()){
+    //   throw std::invalid_argument( "received value out of the pre-defined range" );
+    // }
     int seg_id = bisect(t, 0, nx);
     float dx = t - x[seg_id];
     return 2 * c[seg_id] + 6 * d[seg_id] * dx;

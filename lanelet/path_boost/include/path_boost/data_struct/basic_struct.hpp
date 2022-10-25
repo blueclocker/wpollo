@@ -58,6 +58,7 @@ struct VehicleStateBound {
         SingleBound &operator=(const std::vector<double> &bounds) {
             ub = bounds[0];
             lb = bounds[1];
+            return *this;
         }
         void set(const std::vector<double> &bounds, const BState &center) {
             ub = bounds[0];

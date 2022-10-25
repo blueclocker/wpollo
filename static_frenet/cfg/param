@@ -1,0 +1,25 @@
+# PACKAGE = "static_frenet"
+ 
+# # 导入dynamic_reconfigure功能包提供的参数生成器（parameter generator）
+# from dynamic_reconfigure.parameter_generator_catkin import *
+ 
+# # 创建一个参数生成器
+# gen = ParameterGenerator()
+ 
+# # 定义动态配置的参数
+ 
+# gen.add("MAX_SPEED", double_t, 0, "MAX_SPEED_param", 5.5555,  0, 70)
+# # gen.add("D_ROAD_W", double_t, 0, "D_ROAD_W_param", 0.2,  0, 1)
+# # gen.add("DT", double_t, 0, "DT_param", 0.2,  0, 1)
+# # gen.add("MAXT", double_t, 0, "MAXT_param", 5.0,  0, 10)
+# # gen.add("MINT", double_t, 0, "MINT_param", 4.0,  0, 50)
+# gen.add("TARGET_SPEED", double_t, 0, "TARGET_SPEED_param", 4.1666,  0, 60)
+# gen.add("KJ", double_t, 0, "KJ_param", 0.1,  0, 2)
+# gen.add("KT", double_t, 0, "KT_param", 0.1,  0, 2)
+# gen.add("KD", double_t, 0, "KD_param", 1,  0, 2)
+# gen.add("KLAT", double_t, 0, "KLAT_param", 1,  0, 2)
+# gen.add("KLON", double_t, 0, "KI_param", 1,  0, 2)
+ 
+# # 退出
+# exit(gen.generate(PACKAGE, "dynamic_param", "param"))
+

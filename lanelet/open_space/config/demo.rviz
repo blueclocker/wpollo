@@ -5,7 +5,9 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Status1
         - /MarkerArray2/Namespaces1
+        - /Axes1
       Splitter Ratio: 0.4941176474094391
     Tree Height: 611
   - Class: rviz/Selection
@@ -45,11 +47,11 @@ Visualization Manager:
       Name: Grid
       Normal Cell Count: 0
       Offset:
-        X: 0
-        Y: 0
+        X: 40
+        Y: 25
         Z: 0
       Plane: XY
-      Plane Cell Count: 20
+      Plane Cell Count: 80
       Reference Frame: <Fixed Frame>
       Value: true
     - Class: rviz/MarkerArray
@@ -57,7 +59,7 @@ Visualization Manager:
       Marker Topic: /obsmarkers
       Name: MarkerArray
       Namespaces:
-        {}
+        obstacle: true
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
@@ -66,8 +68,81 @@ Visualization Manager:
       Name: MarkerArray
       Namespaces:
         {}
-      Queue Size: 100
+      Queue Size: 1
       Value: true
+    - Class: rviz/Axes
+      Enabled: true
+      Length: 5
+      Name: Axes
+      Radius: 0.20000000298023224
+      Reference Frame: map
+      Value: true
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.10000000149011612
+      Class: rviz/Pose
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 1
+      Head Radius: 0.5
+      Name: Pose
+      Shaft Length: 1
+      Shaft Radius: 0.20000000298023224
+      Shape: Arrow
+      Topic: /move_base_simple/goal
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.10000000149011612
+      Class: rviz/PoseWithCovariance
+      Color: 138; 226; 52
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: false
+      Enabled: true
+      Head Length: 1
+      Head Radius: 0.5
+      Name: PoseWithCovariance
+      Shaft Length: 1
+      Shaft Radius: 0.20000000298023224
+      Shape: Arrow
+      Topic: /initialpose
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Class: rviz/RobotModel
+      Collision Enabled: false
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        ground_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Name: RobotModel
+      Robot Description: robot_description
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -96,16 +171,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 32.163848876953125
+      Distance: 90.19577026367188
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.45092010498046875
-        Y: -5.751101016998291
-        Z: 4.77831345051527e-5
+        X: 41.86881637573242
+        Y: 12.855956077575684
+        Z: 4.873680882155895e-5
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -114,7 +189,7 @@ Visualization Manager:
       Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: ThirdPersonFollower (rviz)
-      Yaw: 4.703520774841309
+      Yaw: 4.726689338684082
     Saved: ~
 Window Geometry:
   Displays:

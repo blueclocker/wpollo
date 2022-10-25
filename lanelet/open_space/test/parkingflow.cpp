@@ -1,7 +1,7 @@
 /*
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-09-20 21:38:33
- * @LastEditTime: 2022-09-25 16:51:16
+ * @LastEditTime: 2022-10-07 15:32:30
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 
  * @FilePath: /wpollo/src/lanelet/open_space/test/parkingflow.cpp
@@ -87,8 +87,8 @@ void ParkingFlow::carstateCallback(const osmmap::CarState::ConstPtr &msg)
     //XYbounds_
     XYbounds_[0] = sx - 10;
     XYbounds_[1] = sx + 10;
-    XYbounds_[2] = sy - 5;
-    XYbounds_[3] = sy + 5;
+    XYbounds_[2] = sy - 10;
+    XYbounds_[3] = sy + 10;
     if(msg->endPose.position.x > XYbounds_[0] && msg->endPose.position.x < XYbounds_[1] && 
        msg->endPose.position.y > XYbounds_[2] && msg->endPose.position.y < XYbounds_[3])
     {

@@ -153,6 +153,7 @@ include_directories(
 
 add_executable(${PROJECT_NAME}_node src/fakegnsspub.cpp)
 target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES})
+add_dependencies(${PROJECT_NAME}_node fsd_common_msgs_gencpp)
 
 #############
 ## Install ##

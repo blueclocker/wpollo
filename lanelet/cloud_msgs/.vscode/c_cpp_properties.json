@@ -1,0 +1,39 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/cxy/mapping_ws/devel/include/**",
+        "/home/cxy/test_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/cxy/mapping_ws/src/A-LOAM-NOTED/include/**",
+        "/home/cxy/mapping_ws/src/cloud_msgs/include/**",
+        "/home/cxy/test_ws/src/dynamic-object-tracking-pointcloud-master/include/**",
+        "/home/cxy/mapping_ws/src/ERASOR/include/**",
+        "/home/cxy/test_ws/src/ESKF_LIO/include/**",
+        "/home/cxy/mapping_ws/src/faster-lio_noted/include/**",
+        "/home/cxy/mapping_ws/src/faster_lio_sam/include/**",
+        "/home/cxy/mapping_ws/src/floam/include/**",
+        "/home/cxy/mapping_ws/src/fsd_common_msgs/include/**",
+        "/home/cxy/mapping_ws/src/lins_livox/include/**",
+        "/home/cxy/mapping_ws/src/LIO-SAM_noted/include/**",
+        "/home/cxy/mapping_ws/src/LIO_SAM_6AXIS/LIO-SAM-6AXIS/include/**",
+        "/home/cxy/mapping_ws/src/mapping_gps/include/**",
+        "/home/cxy/mapping_ws/src/odometry_publisher/include/**",
+        "/home/cxy/test_ws/src/rangenet_lib/include/**",
+        "/home/cxy/test_ws/src/remove_dynamic_obj/include/**",
+        "/home/cxy/test_ws/src/removert/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

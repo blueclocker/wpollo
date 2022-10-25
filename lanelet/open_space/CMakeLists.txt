@@ -186,6 +186,9 @@ target_link_libraries(openspacelib glog gflags osqp absl::strings)
 add_executable(parking_run test/parkingflow.cpp test/parking_run.cpp)
 target_link_libraries(parking_run openspacelib ${catkin_LIBRARIES})
 
+add_executable(parkingonce test/parkingonce.cpp test/parkingonce_run.cpp)
+target_link_libraries(parkingonce openspacelib ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############

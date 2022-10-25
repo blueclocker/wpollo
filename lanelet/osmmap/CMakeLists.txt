@@ -18,6 +18,8 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(Eigen3 REQUIRED)
+find_package(gflags REQUIRED)
+find_package(OsqpEigen REQUIRED)
 #find_package(PCL REQUIRED)
 #find_package(OpenMP QUIET)
 #if (OpenMP_FOUND)
@@ -195,8 +197,9 @@ add_library(map_lib
     src/plan/reeds_shepp.cpp
     src/plan/rs_path.cpp
     src/plan/hybidacore.cpp
+    src/smoother/reference_path_smoother.cpp
 )
-target_link_libraries(map_lib xmlio_lib ${catkin_LIBRARIES})
+target_link_libraries(map_lib glog gflags xmlio_lib ${catkin_LIBRARIES} OsqpEigen::OsqpEigen)
 
 add_library(geographicLib
     GeographicLib/Geocentric.cpp

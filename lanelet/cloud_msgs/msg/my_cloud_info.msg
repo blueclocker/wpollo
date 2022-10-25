@@ -1,0 +1,8 @@
+Header header
+
+sensor_msgs/PointCloud2 fullCloud
+sensor_msgs/PointCloud2 groundCloud
+sensor_msgs/PointCloud2 cornerCloud
+sensor_msgs/PointCloud2 surfCloud
+std_msgs/Float64MultiArray planeParams
+nav_msgs/Odometry odomGuess
