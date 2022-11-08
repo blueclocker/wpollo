@@ -280,3 +280,7 @@ add_dependencies(serialPort ${PROJECT_NAME} fsd_common_msgs_gencpp)
 ##### 20221025
 * 新增点云配准定位
 > (功能包较乱)
+
+##### 20221108
+* osmmap导航功能支持GPS、PCD配准、lgsvl仿真三种
+* 路径平滑方式使用apollo的二次规划piecewise_jerk_path_problem

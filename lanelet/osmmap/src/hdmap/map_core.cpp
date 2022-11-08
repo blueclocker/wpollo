@@ -1,7 +1,7 @@
 /*
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-09-24 15:16:06
- * @LastEditTime: 2022-10-13 10:31:04
+ * @LastEditTime: 2022-11-03 15:13:39
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 
  * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/map_core.cpp
@@ -15,11 +15,13 @@ HDMap::HDMap(ros::NodeHandle n):n_(n)
 {
     std::string file_path_, file_name_;
     double origin_lat_, origin_lon_, origin_ele_;
+    use_gnss_ = true;
     n_.getParam("file_path", file_path_);
     n_.getParam("file_name", file_name_);
     n_.getParam("origin_lat", origin_lat_);
     n_.getParam("origin_lon", origin_lon_);
     n_.getParam("origin_ele", origin_ele_);
+    n_.getParam("use_gnss", use_gnss_);
 
     //可视化
     map_pub_ = n_.advertise<visualization_msgs::MarkerArray>("map", 1);
@@ -32,6 +34,8 @@ HDMap::HDMap(ros::NodeHandle n):n_(n)
     lanes_pub_ = n_.advertise<osmmap::Lanes>("lanes_info", 1);
     //全局路径(平滑后)，只在gps_callback调用
     golbalpath_pub_ = n_.advertise<visualization_msgs::Marker>("golbalpath_info", 1);
+    //车辆当前状态
+    speed_pub_ = n_.advertise<std_msgs::Float32>("car_speed", 1);
 
     std::cout << "---------------------------------------------------" << std::endl;
     vectormap_ = new Map(file_path_, file_name_);
@@ -72,8 +76,8 @@ HDMap::HDMap(ros::NodeHandle n):n_(n)
     
     startpoint_sub_ = n_.subscribe("/initialpose", 1, &HDMap::StartpointCallback, this);
     goalpoint_sub_ = n_.subscribe("/move_base_simple/goal", 1, &HDMap::GoalpointCallback, this);
-    // gps_sub_ = n_.subscribe("/comb", 10, &HDMap::GpsCallback, this);
-    gps_sub_ = n_.subscribe("/mapping_odometry", 1, &HDMap::GpsCallback, this);
+    gps_sub_ = n_.subscribe("/comb", 10, &HDMap::GpsCallback, this);
+    // gps_sub_ = n_.subscribe("/mapping_odometry", 1, &HDMap::GpsCallback, this);
     //main loop
     ros::Rate r(10);
     while(n_.ok())
@@ -483,35 +487,47 @@ void HDMap::GoalpointCallback(const geometry_msgs::PoseStamped::ConstPtr &msg)
     
 }
 
-// void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
-void HDMap::GpsCallback(const nav_msgs::Odometry::ConstPtr &msg)
+void HDMap::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
+// void HDMap::GpsCallback(const nav_msgs::Odometry::ConstPtr &msg)
 {
-    // GNSS
-    // atnowpoint_->elevation_ = msg->Altitude;
-    // atnowpoint_->latitude_ = msg->Lattitude;
-    // atnowpoint_->longitude_ = msg->Longitude;
-
-    // vectormap_->GPS2Localxy(atnowpoint_);
-
-    //点云配准
-    atnowpoint_->local_x_ = msg->pose.pose.position.x;
-    atnowpoint_->local_y_ = msg->pose.pose.position.y;
-    atnowpoint_->elevation_ = msg->pose.pose.position.z;
+    if(use_gnss_)
+    {
+        // GNSS
+        atnowpoint_->elevation_ = msg->Altitude;
+        atnowpoint_->latitude_ = msg->Lattitude;
+        atnowpoint_->longitude_ = msg->Longitude;
+        vectormap_->GPS2Localxy(atnowpoint_);
+    }else{
+        //点云配准
+        // atnowpoint_->local_x_ = msg->pose.pose.position.x;
+        // atnowpoint_->local_y_ = msg->pose.pose.position.y;
+        // atnowpoint_->elevation_ = msg->pose.pose.position.z;
+    }
 
     start_state_[0] = atnowpoint_->local_x_;
     start_state_[1] = atnowpoint_->local_y_;
-    // start_state_[2] = (msg->Heading + 90)/180*M_PI;
-    start_state_[2] = tf::getYaw(msg->pose.pose.orientation);
-    //imu矫正
-    // Eigen::Vector3d imuinmsg;
-    // imuinmsg << msg->Ax, -msg->Az, msg->Ay;
-    // ImuInit(imuinmsg);
+    if(use_gnss_)
+    {
+        start_state_[2] = (msg->Heading + 90)/180*M_PI;
+        
+        //imu矫正
+        Eigen::Vector3d imuinmsg;
+        imuinmsg << msg->Ax, -msg->Az, msg->Ay;
+        ImuInit(imuinmsg);
+    }else{
+        // start_state_[2] = tf::getYaw(msg->pose.pose.orientation);
+
+        //点云配准不矫正imu
+    }
+    
+
     //当前点定位到路段
     centerway::CenterPoint3D atnowcenterpoint = centerway::CenterPoint3D(*atnowpoint_);
     //当前路段精确定位到某点
     //int atnowcenterway = globalplans_->InWhichCenterway(atnowcenterpoint, nodesptr, waysptr, relationsptr);
     std::vector<int> lanelets_res = globalplans_->LocateLanelets(atnowcenterpoint, nodesptr_, waysptr_, relationsptr_);
     //ROS_INFO("lanelets number is %d!", (int)lanelets_res.size());
+
     //HDmap state
     osmmap::CarState hdmapstate;
     hdmapstate.header.frame_id = "map";
@@ -640,11 +656,15 @@ void HDMap::GpsCallback(const nav_msgs::Odometry::ConstPtr &msg)
     double headtemp = start_state_[2];
     // std::cout << "headtemp: " << headtemp << std::endl;
     tf::Quaternion qenu2base;
-    // qenu2base.setRPY((msg->Roll)/180*M_PI, (msg->Pitch)/180*M_PI, (headtemp)/180*M_PI);
-    qenu2base.setW(msg->pose.pose.orientation.w);
-    qenu2base.setX(msg->pose.pose.orientation.x);
-    qenu2base.setY(msg->pose.pose.orientation.y);
-    qenu2base.setZ(msg->pose.pose.orientation.z);
+
+    //GNSS
+    qenu2base.setRPY((msg->Roll)/180*M_PI, (msg->Pitch)/180*M_PI, (msg->Heading+90)/180*M_PI);
+
+    //点云配准
+    // qenu2base.setW(msg->pose.pose.orientation.w);
+    // qenu2base.setX(msg->pose.pose.orientation.x);
+    // qenu2base.setY(msg->pose.pose.orientation.y);
+    // qenu2base.setZ(msg->pose.pose.orientation.z);
     baselink2map_.setRotation(qenu2base);
     baselink2map_.setOrigin(tf::Vector3(atnowpoint_->local_x_, atnowpoint_->local_y_, atnowpoint_->elevation_));
     //map->rslidar->base_link
@@ -657,12 +677,15 @@ void HDMap::GpsCallback(const nav_msgs::Odometry::ConstPtr &msg)
     m3d << 1, 0, 0, 0, 0, -1, 0, -1, 0;
     Eigen::Quaterniond qbase2imu(m3d);
     Eigen::Quaterniond q1 = Eigen::Quaterniond(qenu2base.w(), qenu2base.x(), qenu2base.y(), qenu2base.z()).normalized();
-    // Eigen::Vector3d Venu = Eigen::Vector3d(msg->Ve, msg->Vn, msg->Vu);
-    // Eigen::Vector3d Vxyz = (q1*qbase2imu).normalized().inverse() * Venu;
+    Eigen::Vector3d Venu = Eigen::Vector3d(msg->Ve, msg->Vn, msg->Vu);
+    Eigen::Vector3d Vxyz = (q1*qbase2imu).normalized().inverse() * Venu;
+
+    //debug
     // std::cout << "vx=" << Vxyz(0) << ", vy=" << Vxyz(1) << ", vz=" << Vxyz(2) << std::endl;
     // std::cout << "ax=" << msg->Ax << ", ay=" << msg->Ay << ", az=" << msg->Az << std::endl;
     // double asum = std::sqrt(msg->Ax * msg->Ax + msg->Ay * msg->Ay + msg->Az * msg->Az);
     // std::cout << "asum=" << asum << std::endl;
+
     //欧拉角转四元数
     // double siny_cosp = +2.0 * (q1.w() * q1.z() + q1.x() * q1.y());
     // double cosy_cosp = +1.0 - 2.0 * (q1.y() * q1.y() + q1.z() * q1.z());
@@ -714,6 +737,8 @@ void HDMap::GpsCallback(const nav_msgs::Odometry::ConstPtr &msg)
     hdmapstate.nextpoint.x = 0;
     hdmapstate.nextpoint.y = 0;
     hdmapstate.nextpoint.z = 0;
+
+    //给hybid A*终点
     if(smoothpathnode_.size() >= 2) 
     {
         plan::Spline2D csp_obj(smoothpathnode_);
@@ -750,18 +775,26 @@ void HDMap::GpsCallback(const nav_msgs::Odometry::ConstPtr &msg)
     //         hdmapstate.nextpoint.z = atan2(dy, dx);
     //     }
     // }
-    // hdmapstate.linear.x = Vxyz(0);
-    // hdmapstate.linear.y = Vxyz(1);
-    // hdmapstate.linear.z = Vxyz(2);
-    // hdmapstate.Accell.x = msg->Ax;
-    // hdmapstate.Accell.y = msg->Ay;
-    // hdmapstate.Accell.z = msg->Az;
-    hdmapstate.linear.x = msg->twist.twist.linear.x;
-    hdmapstate.linear.y = msg->twist.twist.linear.y;
-    hdmapstate.linear.z = msg->twist.twist.linear.z;
-    hdmapstate.angular.x = msg->twist.twist.angular.x;
-    hdmapstate.angular.y = msg->twist.twist.angular.y;
-    hdmapstate.angular.z = msg->twist.twist.angular.z;
+
+    if(use_gnss_)
+    {
+        //GNSS
+        hdmapstate.linear.x = Vxyz(0);
+        hdmapstate.linear.y = Vxyz(1);
+        hdmapstate.linear.z = Vxyz(2);
+        hdmapstate.Accell.x = msg->Ax;
+        hdmapstate.Accell.y = msg->Ay;
+        hdmapstate.Accell.z = msg->Az;
+    }else{
+        //点云配准
+        // hdmapstate.linear.x = msg->twist.twist.linear.x;
+        // hdmapstate.linear.y = msg->twist.twist.linear.y;
+        // hdmapstate.linear.z = msg->twist.twist.linear.z;
+        // hdmapstate.angular.x = msg->twist.twist.angular.x;
+        // hdmapstate.angular.y = msg->twist.twist.angular.y;
+        // hdmapstate.angular.z = msg->twist.twist.angular.z;
+    }
+
     hdmapstate.Accell.x = 0;
     hdmapstate.Accell.y = 0;
     hdmapstate.Accell.z = 0;
@@ -772,6 +805,11 @@ void HDMap::GpsCallback(const nav_msgs::Odometry::ConstPtr &msg)
         hdmapstate.Accell.z = adjusted_acc_[2];
     }
     carstate_pub_.publish(hdmapstate);
+
+    //
+    std_msgs::Float32 sp;
+    sp.data = hdmapstate.linear.x;
+    speed_pub_.publish(std::move(sp));
 }
 
 HDMap::~HDMap()

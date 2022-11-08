@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:29:36
- * @LastEditTime: 2022-10-10 12:34:50
+ * @LastEditTime: 2022-11-02 15:30:24
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_core.h
@@ -18,6 +18,7 @@
 #include <ros/ros.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <sensor_msgs/NavSatFix.h>
+#include <std_msgs/Float32.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <grid_map_ros/grid_map_ros.hpp>
@@ -79,6 +80,8 @@ private:
     //终点状态
     double end_state_[3];
     geometry_msgs::Pose endPose_;
+    //是否使用gnss
+    bool use_gnss_;
     //初始imu矫正
     int imucount_;
     Eigen::Vector3d sum_acc_ = Eigen::Vector3d::Zero();
@@ -107,6 +110,7 @@ private:
     ros::Publisher navigation_pub_;
     ros::Publisher lanes_pub_;
     ros::Publisher golbalpath_pub_;
+    ros::Publisher speed_pub_;
 
     visualization_msgs::MarkerArray map_markerarray_;
     visualization_msgs::MarkerArray path_markerarray_;
@@ -131,8 +135,8 @@ public:
     void SmoothPath();
     void StartpointCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg);
     void GoalpointCallback(const geometry_msgs::PoseStamped::ConstPtr &msg);
-    // void GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg);
-    void GpsCallback(const nav_msgs::Odometry::ConstPtr &msg);
+    void GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg);
+    // void GpsCallback(const nav_msgs::Odometry::ConstPtr &msg);
 };
 
 };//namespace map

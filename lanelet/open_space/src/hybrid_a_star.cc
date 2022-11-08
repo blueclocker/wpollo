@@ -415,7 +415,7 @@ bool HybridAStar::GenerateSCurveSpeedAcceleration(HybridAStartResult* result) {
 
   const size_t num_of_knots = static_cast<size_t>(total_t / delta_t) + 1;
 
-  // 速度规划起点状态有问题！！！！！这里默认速度和加速度为0
+  // 速度规划起点状态有问题！！！！！这里默认速度和加速度为0，只能用于泊车
   PiecewiseJerkSpeedProblem piecewise_jerk_problem(
       num_of_knots, delta_t, {0.0, std::abs(init_v), std::abs(init_a)});
 

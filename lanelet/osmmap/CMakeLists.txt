@@ -15,11 +15,13 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   fsd_common_msgs
   geometry_msgs
+  #cv_bridge
 )
 
 find_package(Eigen3 REQUIRED)
 find_package(gflags REQUIRED)
 find_package(OsqpEigen REQUIRED)
+#find_package(OpenCV REQUIRED)
 #find_package(PCL REQUIRED)
 #find_package(OpenMP QUIET)
 #if (OpenMP_FOUND)
@@ -139,6 +141,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
+  #${OpenCV_INCLUDE_DIRS}
   #${PCL_INCLUDE_DIRS}
   #${OpenMP_CXX_INCLUDE_DIRS}
 )
@@ -198,8 +201,18 @@ add_library(map_lib
     src/plan/rs_path.cpp
     src/plan/hybidacore.cpp
     src/smoother/reference_path_smoother.cpp
+    src/smoother/planning_gflags.cc
+    src/smoother/piecewise_jerk_problem.cc
+    src/smoother/piecewise_jerk_path_problem.cc
+    #src/smoother/piecewise_jerk_speed_problem.cc
+    src/smoother/smoother.cpp
+    src/navagation/navagation.cpp
+    src/navagation/navagation_gnss.cpp
+    src/navagation/navagation_pcd.cpp
+    src/navagation/navagation_sim.cpp
+    src/navagation/navagation_optimizer.cpp
 )
-target_link_libraries(map_lib glog gflags xmlio_lib ${catkin_LIBRARIES} OsqpEigen::OsqpEigen)
+target_link_libraries(map_lib glog gflags xmlio_lib ${catkin_LIBRARIES} OsqpEigen::OsqpEigen )#${OpenCV_LIBS})
 
 add_library(geographicLib
     GeographicLib/Geocentric.cpp
@@ -207,9 +220,9 @@ add_library(geographicLib
     GeographicLib/Math.cpp
 )
 
-add_executable(mapio src/main.cpp)
-target_link_libraries(mapio map_lib geographicLib)
-add_dependencies(mapio ${PROJECT_NAME}_gencpp fsd_common_msgs_gencpp)
+add_executable(navagation_node src/main.cpp)
+target_link_libraries(navagation_node map_lib geographicLib)
+add_dependencies(navagation_node ${PROJECT_NAME}_gencpp fsd_common_msgs_gencpp)
 
 add_executable(math_test src/plan/math_test.cpp src/plan/math.cpp)
 target_link_libraries(math_test ${catkin_LIBRARIES})

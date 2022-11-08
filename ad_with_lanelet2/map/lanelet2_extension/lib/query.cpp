@@ -470,6 +470,40 @@ std::vector<lanelet::ConstLineString3d> query::stopLinesLanelet(const lanelet::C
   return stoplines;
 }
 
+std::vector<lanelet::ConstLineString3d> query::trafficLightStopLines(const lanelet::ConstLanelets lanelets)
+{
+  lanelet::ConstLanelets temp;
+  std::vector<lanelet::TrafficLightConstPtr> tl_reg_elems;
+  for (auto i = lanelets.begin(); i != lanelets.end(); i++) {
+    lanelet::ConstLanelet ll = *i;
+    std::vector<lanelet::TrafficLightConstPtr> ll_tl_re =
+      ll.regulatoryElementsAs<lanelet::TrafficLight>();
+
+    // insert unique tl into array
+    for (auto tli = ll_tl_re.begin(); tli != ll_tl_re.end(); tli++) {
+      lanelet::TrafficLightConstPtr tl_ptr = *tli;
+      lanelet::Id id = tl_ptr->id();
+      bool unique_id = true;
+      for (auto ii = tl_reg_elems.begin(); ii != tl_reg_elems.end(); ii++) {
+        if (id == (*ii)->id()) {
+          unique_id = false;
+          break;
+        }
+      }
+      if (unique_id) {
+        temp.push_back(ll);
+      }
+    }
+  }
+
+  return query::stopLinesLanelets(temp);
+}
+
+std::vector<lanelet::ConstLineString3d> query::trafficLightStopLines(const lanelet::ConstLanelet ll)
+{
+  return query::stopLinesLanelet(ll);
+}
+
 std::vector<lanelet::ConstLineString3d> query::stopSignStopLines(
   const lanelet::ConstLanelets lanelets, const std::string & stop_sign_id)
 {

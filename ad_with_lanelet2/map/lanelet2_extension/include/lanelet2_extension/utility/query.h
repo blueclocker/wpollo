@@ -166,8 +166,27 @@ std::vector<lanelet::ConstLineString3d> stopLinesLanelet(const lanelet::ConstLan
  * @param stop_sign_id [sign id of stop sign]
  * @return             [array of stoplines]
  */
+
 std::vector<lanelet::ConstLineString3d> stopSignStopLines(
   const lanelet::ConstLanelets lanelets, const std::string & stop_sign_id = "stop_sign");
+
+std::vector<lanelet::ConstLineString3d> trafficLightStopLines(const lanelet::ConstLanelets lanelets);
+
+/**
+ * [getTrafficLightStopLines extracts stoplines that are associated with
+ * traffic lights]
+ * @param lanelets [input lanelets]
+ * @return         [stop lines that are associated with input lanelets]
+ */
+
+std::vector<lanelet::ConstLineString3d> trafficLightStopLines(const lanelet::ConstLanelet ll);
+
+/**
+ * [getTrafficLightStopLines extracts stoplines that are associated with
+ * traffic lights]
+ * @param ll [input lanelet]
+ * @return   [stop lines that are associated with input lanelet]
+ */
 
 ConstLanelets getLaneletsWithinRange(
   const lanelet::ConstLanelets & lanelets, const lanelet::BasicPoint2d & search_point,
