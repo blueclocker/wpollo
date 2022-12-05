@@ -14,7 +14,7 @@
  * limitations under the License.
  *****************************************************************************/
 
-#include "osmmap/math.h"
+#include "tools/math.h"
 #include <iostream>
 
 namespace plan {

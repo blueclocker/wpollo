@@ -1,7 +1,7 @@
 /*
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-11-06 19:32:51
- * @LastEditTime: 2022-11-08 22:04:18
+ * @LastEditTime: 2022-11-23 18:53:04
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 
  * @FilePath: /wpollo/src/lanelet/osmmap/src/navagation/navagation.cpp
@@ -160,8 +160,9 @@ void NavagationBase::PushCenterPoint(const std::vector<int> &pathid)
     smoothpathnode_.clear();
     if(pathid.empty()) return;
 
-    smoothpathnode_.push_back(map::centerway::CenterPoint3D(*atnowpoint_));
-    map::centerway::CenterPoint3D pre_centerway_point = smoothpathnode_.back();
+    // smoothpathnode_.push_back(map::centerway::CenterPoint3D(*atnowpoint_));
+    // map::centerway::CenterPoint3D pre_centerway_point = smoothpathnode_.back();
+    map::centerway::CenterPoint3D pre_centerway_point;
     double accumulatelength = 0;
     for(int i = 0; i < pathid.size(); ++i)
     {
@@ -172,14 +173,21 @@ void NavagationBase::PushCenterPoint(const std::vector<int> &pathid)
         for(; j < oneway->length_ - 1; ++j)
         {
             smoothpathnode_.push_back(*centerwaysptr_->FindCenterPoint(oneway->centernodeline_[j]));
-            if(smoothpathnode_.size() == 2)
+            // if(smoothpathnode_.size() == 2)
+            // {
+                // smoothpathnode_[0].ele_ = smoothpathnode_[1].ele_;
+                // pre_centerway_point.ele_ = smoothpathnode_[1].ele_;
+            // }
+            //截取100米，包括车辆自身
+            // accumulatelength += centerwaysptr_->NodeDistance2D(&pre_centerway_point, &smoothpathnode_.back());
+            // pre_centerway_point = smoothpathnode_.back();
+            //纯参考线
+            if(smoothpathnode_.size() > 1)
             {
-                smoothpathnode_[0].ele_ = smoothpathnode_[1].ele_;
-                pre_centerway_point.ele_ = smoothpathnode_[1].ele_;
+                accumulatelength += centerwaysptr_->NodeDistance2D(&pre_centerway_point, &smoothpathnode_.back());
             }
-            //截取100米
-            accumulatelength += centerwaysptr_->NodeDistance2D(&pre_centerway_point, &smoothpathnode_.back());
             pre_centerway_point = smoothpathnode_.back();
+
             if(accumulatelength > 100) break;
             if(i == pathid.size() - 1 && oneway->centernodeline_[j] == end_centerpoint_id_) break;
         }
@@ -187,13 +195,13 @@ void NavagationBase::PushCenterPoint(const std::vector<int> &pathid)
     }
 
     //对终点、起点后处理
-    if(accumulatelength < 100)
-    {
-        smoothpathnode_.erase(smoothpathnode_.end());
-        smoothpathnode_.push_back(map::centerway::CenterPoint3D(end_state_[0], end_state_[1]));
-        smoothpathnode_.back().ele_ = smoothpathnode_[1].ele_;
-    }
-    if(smoothpathnode_.size() >= 3) smoothpathnode_.erase(smoothpathnode_.begin()+1);
+    // if(accumulatelength < 100)
+    // {
+    //     smoothpathnode_.erase(smoothpathnode_.end());
+    //     smoothpathnode_.push_back(map::centerway::CenterPoint3D(end_state_[0], end_state_[1]));
+    //     smoothpathnode_.back().ele_ = smoothpathnode_[1].ele_;
+    // }
+    // if(smoothpathnode_.size() >= 3) smoothpathnode_.erase(smoothpathnode_.begin()+1);
 }
 
 void NavagationBase::OutMapPlan(const map::centerway::CenterPoint3D &atnow_centerpoint, const double heading)
@@ -286,17 +294,18 @@ void NavagationBase::SmoothPath()
     // smoothpathnode_ = std::move(temppathnode);
 
     //apollo
-    if(smoothpathnode_.size() < 2) return;
-    apollo::planning::PathSmoother smooth(smoothpathnode_);
-    std::array<double, 3> initnode = {0, 0, 0};//s-l坐标系, (l, dl/ds, d(dl/ds)/ds)
-    std::vector<map::centerway::CenterPoint3D> temppathnode;
-    if(smooth.Process(initnode, temppathnode))
-    {
-        smoothpathnode_ = std::move(temppathnode);
-        ROS_INFO("apollo smooth successed!");
-    }else{
-        ROS_WARN("apollo smooth failed!");
-    }
+    // if(smoothpathnode_.size() < 2) return;
+    // apollo::planning::PathSmoother smooth(smoothpathnode_);
+    // /// @brief 在process对传入的initnode修正，initnode前两位本身应为0
+    // std::array<double, 3> initnode = {0, 0, 0};//s-l坐标系, (l, dl/ds, d(dl/ds)/ds)
+    // std::vector<map::centerway::CenterPoint3D> temppathnode;
+    // if(smooth.Process(initnode, temppathnode))
+    // {
+    //     smoothpathnode_ = std::move(temppathnode);
+    //     ROS_INFO("apollo smooth successed!");
+    // }else{
+    //     ROS_WARN("apollo smooth failed!");
+    // }
 }
     
 void NavagationBase::StartpointCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg)

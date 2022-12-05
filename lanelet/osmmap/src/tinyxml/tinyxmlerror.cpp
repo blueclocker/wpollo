@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2021-11-30 14:35:54
- * @LastEditTime: 2022-03-03 21:38:50
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-11-11 15:28:37
+ * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: /fusion/src/plan/src/tinyxmlerror.cpp
+ * @FilePath: /wpollo/src/lanelet/osmmap/src/tinyxml/tinyxmlerror.cpp
  */
 /*
 www.sourceforge.net/projects/tinyxml
@@ -30,7 +30,7 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
-#include "osmmap/tinyxml.h"
+#include "tools/tinyxml.h"
 
 // The goal of the seperate error file is to make the first
 // step towards localization. tinyxml (currently) only supports

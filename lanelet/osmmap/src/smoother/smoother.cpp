@@ -1,7 +1,7 @@
 /*
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-11-08 14:20:14
- * @LastEditTime: 2022-11-08 20:22:34
+ * @LastEditTime: 2022-11-10 21:20:39
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 
  * @FilePath: /wpollo/src/lanelet/osmmap/src/smoother/smoother.cpp
@@ -18,6 +18,7 @@ namespace planning
 PathSmoother::PathSmoother(const std::vector<map::centerway::CenterPoint3D> &path, const double delta_s) : 
 path_raw_(path), delta_s_(delta_s)
 {
+    pcl::PointCloud<pcl::PointXY> pcloud;
     plan::Spline2D csp_obj(path_raw_);
     for(double i = 0; i < csp_obj.s.back(); i += delta_s_)
     {
@@ -28,15 +29,27 @@ path_raw_(path), delta_s_(delta_s)
         s_list_.emplace_back(i);
         angle_list_.emplace_back(csp_obj.calc_yaw(i));
         k_list_.emplace_back(csp_obj.calc_curvature(i));
-        if(i >= 15) break;
+        pcl::PointXY pclpoint;
+        pclpoint.x = point[0];
+        pclpoint.y = point[1];
+        pcloud.push_back(pclpoint);
+        if(i >= 50) break;
     }
+    kdtree_flann_.setInputCloud(pcloud.makeShared());
+    // 通过kdtree找到最近的一个点
+    // std::vector<int> search_indices;
+    // std::vector<float> search_distance;
+    // pcl::PointXY point;
+    // point.x = p.x_;
+    // point.y = p.y_;
+    // kdtree_flann_.nearestKSearch(point, 1, search_indices, search_distance);
 }
 
 PathSmoother::~PathSmoother()
 {
 }
 
-bool PathSmoother::Process(const std::array<double, 3>& init_state, std::vector<map::centerway::CenterPoint3D> &result_path)
+bool PathSmoother::Process(std::array<double, 3>& init_state, std::vector<map::centerway::CenterPoint3D> &result_path)
 {
     std::array<double, 5> w = { 1.0,
                                 100.0 * std::fmax(2.0, 5.0), 
@@ -92,6 +105,9 @@ bool PathSmoother::Process(const std::array<double, 3>& init_state, std::vector<
         ddl_bounds.emplace_back(-lat_acc_bound - kappa, lat_acc_bound - kappa);
     }
 
+    // !!!!!!!!! error
+    //车为frenet坐标系原点，则车的横向l的状态（导数相对于s）为[0, 0, k[0]/(1-k[0])]
+    init_state[2] = k_list_[0] / (1 - k_list_[0]);
     // 为什么第一个参数特意输入了当前沿着参考线的速度？
     bool res_opt = OptimizePath(init_state, end_state, path_boundary,
                                 ddl_bounds, w, &opt_l, &opt_dl, &opt_ddl, max_iter);

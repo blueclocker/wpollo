@@ -1,7 +1,7 @@
 /*
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-10-04 15:14:11
- * @LastEditTime: 2022-10-04 16:59:45
+ * @LastEditTime: 2022-11-11 15:23:41
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 
  * @FilePath: /wpollo/src/lanelet/osmmap/include/smoother/reference_path_smoother.h
@@ -10,10 +10,10 @@
 #ifndef REFERENCE_PATH_SMOOTHER_H_
 #define REFERENCE_PATH_SMOOTHER_H_
 
-#include "osmmap/centerway.h"
+#include "hdmap/centerway.h"
 #include "Eigen/Dense"
 #include "Eigen/Sparse"
-#include "osmmap/cubic_spline.h"
+#include "tools/cubic_spline.h"
 #include "glog/logging.h"
 #include "gflags/gflags.h"
 

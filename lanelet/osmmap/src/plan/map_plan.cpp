@@ -1,12 +1,12 @@
 /*
  * @Author: your name
  * @Date: 2022-03-13 15:21:33
- * @LastEditTime: 2022-10-03 19:07:16
+ * @LastEditTime: 2022-11-11 15:27:06
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/plan/map_plan.cpp
  */
-#include "../include/osmmap/map_plan.h"
+#include "plan/map_plan.h"
 
 namespace plan
 {
@@ -192,7 +192,8 @@ int Globalplan::AtWhichPoint(const map::centerway::CenterPoint3D &a, const map::
         double carx = plan_centerways_->FindCenterPoint(centerline->centernodeline_[i+1])->x_ - a.x_;
         double cary = plan_centerways_->FindCenterPoint(centerline->centernodeline_[i+1])->y_ - a.y_;
 
-        if(carx * pathx + cary * pathy > 0) return centerline->centernodeline_[i+1];
+        // if(carx * pathx + cary * pathy > 0) return centerline->centernodeline_[i+1];//给出导航路线包括车辆本身
+        if(carx * pathx + cary * pathy > 0) return centerline->centernodeline_[i];//给出纯参考线
     }
     return -1;
 }

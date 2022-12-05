@@ -29,7 +29,7 @@ distribution.
 #include <iostream>
 #endif
 
-#include "osmmap/tinyxml.h"
+#include "tools/tinyxml.h"
 
 FILE* TiXmlFOpen( const char* filename, const char* mode );
 

@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   fsd_common_msgs
   geometry_msgs
+  pcl_ros
   #cv_bridge
 )
 
@@ -184,22 +185,17 @@ add_library(xmlio_lib
 )
 
 add_library(map_lib
-    #src/tinyxml/tinystr.cpp
-    #src/tinyxml/tinyxml.cpp
-    #src/tinyxml/tinyxmlerror.cpp
-    #src/tinyxml/tinyxmlparser.cpp
     src/hdmap/map_io.cpp 
     src/hdmap/map_node.cpp 
     src/hdmap/map_way.cpp 
     src/hdmap/map_relation.cpp 
     src/hdmap/centerway.cpp
     src/hdmap/visualization.cpp
-    src/hdmap/map_core.cpp 
     src/plan/map_plan.cpp
-    src/plan/dubins.cpp
-    src/plan/reeds_shepp.cpp
-    src/plan/rs_path.cpp
-    src/plan/hybidacore.cpp
+    src/tools/dubins.cpp
+    src/tools/reeds_shepp.cpp
+    src/hastar/rs_path.cpp
+    src/hastar/hybidacore.cpp
     src/smoother/reference_path_smoother.cpp
     src/smoother/planning_gflags.cc
     src/smoother/piecewise_jerk_problem.cc
@@ -215,17 +211,23 @@ add_library(map_lib
 target_link_libraries(map_lib glog gflags xmlio_lib ${catkin_LIBRARIES} OsqpEigen::OsqpEigen )#${OpenCV_LIBS})
 
 add_library(geographicLib
-    GeographicLib/Geocentric.cpp
-    GeographicLib/LocalCartesian.cpp
-    GeographicLib/Math.cpp
+    src/GeographicLib/Geocentric.cpp
+    src/GeographicLib/LocalCartesian.cpp
+    src/GeographicLib/Math.cpp
 )
 
 add_executable(navagation_node src/main.cpp)
 target_link_libraries(navagation_node map_lib geographicLib)
 add_dependencies(navagation_node ${PROJECT_NAME}_gencpp fsd_common_msgs_gencpp)
 
-add_executable(math_test src/plan/math_test.cpp src/plan/math.cpp)
-target_link_libraries(math_test ${catkin_LIBRARIES})
+#add_executable(math_test src/tools/math_test.cpp src/tools/math.cpp)
+#target_link_libraries(math_test ${catkin_LIBRARIES})
+
+add_executable(cubic_path_test src/tools/cubic_path_test.cpp src/tools/cubic_path.cpp)
+target_link_libraries(cubic_path_test ${catkin_LIBRARIES} glog gflags)
+
+add_executable(fem_pos_test src/smoother/fem_pos_deviation_osqp_test.cpp src/smoother/fem_pos_deviation_osqp.cpp src/tools/cubic_path.cpp)
+target_link_libraries(fem_pos_test ${catkin_LIBRARIES} glog gflags OsqpEigen::OsqpEigen)
 
 #############
 ## Install ##

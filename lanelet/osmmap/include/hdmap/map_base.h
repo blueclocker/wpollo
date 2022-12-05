@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2022-03-03 21:30:09
- * @LastEditTime: 2022-10-03 15:31:25
+ * @LastEditTime: 2022-11-11 15:20:17
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: /wpollo/src/lanelet/osmmap/include/osmmap/map_base.h
+ * @FilePath: /wpollo/src/lanelet/osmmap/include/hdmap/map_base.h
  */
 #ifndef MAP_BASE_H_
 #define MAP_BASE_H_
@@ -13,7 +13,7 @@
 #include <cmath>
 #include <vector>
 #include <unordered_map>
-#include "tinyxml.h"
+#include "tools/tinyxml.h"
 
 /*地图元素基本抽象类
 * std::unordered_map<int, T*>表示存放的数据，使用哈系表

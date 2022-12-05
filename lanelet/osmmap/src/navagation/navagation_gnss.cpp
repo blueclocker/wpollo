@@ -1,7 +1,7 @@
 /*
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-11-06 19:33:07
- * @LastEditTime: 2022-11-08 19:41:05
+ * @LastEditTime: 2022-11-09 14:02:09
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 
  * @FilePath: /wpollo/src/lanelet/osmmap/src/navagation/navagation_gnss.cpp
@@ -306,9 +306,6 @@ void NavagationGnss::GpsCallback(const fsd_common_msgs::Comb::ConstPtr &msg)
     hdmapstate.Accell.x = msg->Ax;
     hdmapstate.Accell.y = msg->Ay;
     hdmapstate.Accell.z = msg->Az;
-    hdmapstate.Accell.x = 0;
-    hdmapstate.Accell.y = 0;
-    hdmapstate.Accell.z = 0;
     if(imuinit_flag_)
     {
         hdmapstate.Accell.x = adjusted_acc_[0];

@@ -1,7 +1,7 @@
 /*
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-11-06 19:32:00
- * @LastEditTime: 2022-11-08 22:15:52
+ * @LastEditTime: 2022-11-11 15:33:16
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 
  * @FilePath: /wpollo/src/lanelet/osmmap/include/navagation/navagation.h
@@ -10,11 +10,11 @@
 #ifndef NAVAGATION_H_
 #define NAVAGATION_H_
 
-#include "osmmap/map_io.h"
-#include "osmmap/visualization.h"
-#include "osmmap/map_plan.h"
-#include "osmmap/dubins.h"
-#include "osmmap/cubic_spline.h"
+#include "hdmap/map_io.h"
+#include "hdmap/visualization.h"
+#include "plan/map_plan.h"
+#include "tools/dubins.h"
+#include "tools/cubic_spline.h"
 #include "smoother/reference_path_smoother.h"
 #include "smoother/smoother.h"
 #include <ros/ros.h>

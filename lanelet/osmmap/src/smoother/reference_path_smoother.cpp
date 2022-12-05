@@ -1,7 +1,7 @@
 /*
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-10-04 15:13:14
- * @LastEditTime: 2022-10-04 17:11:18
+ * @LastEditTime: 2022-11-23 15:48:24
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 
  * @FilePath: /wpollo/src/lanelet/osmmap/src/smoother/reference_path_smoother.cpp
@@ -25,7 +25,7 @@ ReferencePathSmoother::ReferencePathSmoother(const std::vector<map::centerway::C
         s_list_.emplace_back(i);
         angle_list_.emplace_back(csp_obj.calc_yaw(i));
         k_list_.emplace_back(csp_obj.calc_curvature(i));
-        if(i >= 15) break;
+        if(i >= 30) break;
     }
     // std::cout << "reference path smoother init success" << std::endl;
 }
@@ -170,7 +170,7 @@ void ReferencePathSmoother::SetConstraintMatrix(Eigen::SparseMatrix<double> *mat
     (*lower_bound)(d_start_index + size - 1) = -0.5;
     (*upper_bound)(d_start_index + size - 1) = 0.5;
     const double default_clearance = 2;
-//    const double shrink_clearance = 0;
+    // const double shrink_clearance = 0;
     for (size_t i = 1; i != size - 1; ++i) 
     {
         double x = x_list_[i];
@@ -178,8 +178,8 @@ void ReferencePathSmoother::SetConstraintMatrix(Eigen::SparseMatrix<double> *mat
         double clearance = 1.5;
         // Adjust clearance.
         clearance = std::min(clearance, default_clearance);
-//            isEqual(clearance, 0) ? default_clearance :
-//                   clearance > shrink_clearance ? clearance - shrink_clearance : clearance;
+        //    isEqual(clearance, 0) ? default_clearance :
+        //           clearance > shrink_clearance ? clearance - shrink_clearance : clearance;
         (*lower_bound)(d_start_index + i) = -clearance;
         (*upper_bound)(d_start_index + i) = clearance;
     }

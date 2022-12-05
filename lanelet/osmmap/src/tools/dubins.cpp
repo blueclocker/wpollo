@@ -1,7 +1,7 @@
 //
 // Created by kevin on 3/12/18.
 //
-#include "osmmap/dubins.h"
+#include "tools/dubins.h"
 
 #include <queue>
 #include <boost/math/constants/constants.hpp>

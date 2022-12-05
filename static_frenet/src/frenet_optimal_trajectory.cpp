@@ -1391,8 +1391,8 @@ int main(int argc, char **argv)
   // f = boost::bind(&paramCallback,_1);
   // server.setCallback(f);
   ros::Subscriber obs_sub = nh.subscribe<rs_perception::PerceptionListMsg>("/adaptive_clustering/rs_percept_result", 1, obsCallback);
-  ros::Subscriber car_sub = nh.subscribe<osmmap::CarState>("/mapio/carstate_info", 1, carStateCallback);
-  ros::Subscriber r_path_sub = nh.subscribe<visualization_msgs::Marker>("/mapio/golbalpath_info", 1, rPathCallback);
+  ros::Subscriber car_sub = nh.subscribe<osmmap::CarState>("/navagation_node/carstate_info", 1, carStateCallback);
+  ros::Subscriber r_path_sub = nh.subscribe<visualization_msgs::Marker>("/fem_pos_path", 1, rPathCallback);
   // message_filters::Subscriber<rs_perception::PerceptionListMsg> obs_sub(nh, "/adaptive_clustering/rs_percept_result", 1);
   // message_filters::Subscriber<visualization_msgs::Marker> r_path_sub(nh, "/mapio/golbalpath_info", 1);
   // message_filters::Subscriber<osmmap::carState>carstate_sub(nh, "/mapio/carstate_info", 1);

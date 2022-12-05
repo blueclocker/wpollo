@@ -1,12 +1,12 @@
 /*
  * @Author: your name
  * @Date: 2022-03-06 15:44:08
- * @LastEditTime: 2022-11-03 22:32:14
+ * @LastEditTime: 2022-11-11 15:19:10
  * @LastEditors: blueclocker 1456055290@hnu.edu.cn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /wpollo/src/lanelet/osmmap/src/hdmap/centerway.cpp
  */
-#include "../include/osmmap/centerway.h"
+#include "hdmap/centerway.h"
 
 namespace map
 {
@@ -300,6 +300,10 @@ std::pair<int, int> CenterWay::CreateNeighbor(const int centerwayid, const relat
             break;
         }
     }
+
+    //没找到
+    if(!findleft) neighbor.first = -1;
+    if(!findright) neighbor.second = -1;
 
     return neighbor;
 }

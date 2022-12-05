@@ -7,7 +7,7 @@
 #include <string>
 #include <eigen3/Eigen/Dense>
 #include <stdexcept>
-#include "centerway.h"
+#include "hdmap/centerway.h"
 
 namespace plan{
 
@@ -84,6 +84,15 @@ public:
     return 2 * c[seg_id] + 6 * d[seg_id] * dx;
   }
 
+  double calc_ddd(double t){
+    if(t<x.front() || t>x.back()){
+      throw std::invalid_argument( "received value out of the pre-defined range" );
+    }
+    int seg_id = bisect(t, 0, nx);
+    double dx = t - x[seg_id];
+    return 6 * d[seg_id];
+  }
+
 private:
   Eigen::MatrixXd calc_A(){
     Eigen::MatrixXd A = Eigen::MatrixXd::Zero(nx, nx);
@@ -150,18 +159,28 @@ public:
     return {{x, y, z}};
   };
 
-  double calc_curvature(double s_t){
+  double calc_curvature(double s_t){//曲率
     double dx = sx.calc_d(s_t);
     double ddx = sx.calc_dd(s_t);
     double dy = sy.calc_d(s_t);
     double ddy = sy.calc_dd(s_t);
-    return (ddy * dx - ddx * dy)/(dx * dx + dy * dy);
+    return (ddy * dx - ddx * dy)/std::pow((dx * dx + dy * dy), 1.5);//原本是std::pow(..., 1)
   };
 
-  double calc_yaw(double s_t){
+  double calc_yaw(double s_t){//朝向角
     double dx = sx.calc_d(s_t);
     double dy = sy.calc_d(s_t);
     return std::atan2(dy, dx);
+  };
+
+  double calc_rdkappa(double s_t){//曲率对弧长s的一阶导数
+    double dx = sx.calc_d(s_t);
+    double ddx = sx.calc_dd(s_t);
+    double dddx = sx.calc_ddd(s_t);
+    double dy = sy.calc_d(s_t);
+    double ddy = sy.calc_dd(s_t);
+    double dddy = sy.calc_ddd(s_t);
+    return ((dddy*dx - dddx*dy)*(dx*dx + dy*dy) - 3*(dx*ddx + dy*ddy)*(ddy*dx - ddx*dy))/std::pow((dx * dx + dy * dy), 3.0);
   };
 
 
