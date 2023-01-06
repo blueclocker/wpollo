@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(pcl_test)  
 
-add_compile_options(-std=c++11)
-#ADD_COMPILE_OPTIONS(-std=c++14 )
+add_compile_options(-std=c++14)
 
 find_package(catkin REQUIRED COMPONENTS
 pcl_ros

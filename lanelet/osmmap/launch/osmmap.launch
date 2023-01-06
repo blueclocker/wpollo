@@ -3,13 +3,13 @@
 <launch>
 <!--param name="use_sim_time" value="true"/-->
 <arg name="file_path" default="$(find osmmap)/maps/"/>
-<arg name="file_name" default="SurfMap_mullocate.osm"/>
+<arg name="file_name" default="simulation.osm"/>
 <arg name="origin_lat" default="39.9558622"/>
 <arg name="origin_lon" default="116.3105016"/>
 <!-- 58.45015716 -->
 <arg name="origin_ele" default="54.45015716"/>
 <!-- optional : GNSS, PCD, SIM-->
-<arg name="navagation_mode" default="GNSS"/>
+<arg name="navagation_mode" default="SIM"/>
 
 <node pkg="osmmap" type="navagation_node" name="navagation_node" output="screen" >
   <param name="file_path" value="$(arg file_path)"/>
@@ -22,7 +22,7 @@
 
 <node pkg="rviz" type="rviz" name="rviz" args="-d $(find osmmap)/config/osm.rviz"/>
 
-<node pkg="graph_tool" type="pcdviewer" name="pcdviewer" args="$(find osmmap)/maps/SurfMap.pcd"/>
+<node pkg="graph_tool" type="pcdviewer" name="pcdviewer" args="$(find osmmap)/maps/borregasave.pcd"/>
 
 <include file="$(find prius_description)/launch/demo.launch"/>
 

@@ -1,8 +1,8 @@
 /*
  * @Author: blueclocker 1456055290@hnu.edu.cn
  * @Date: 2022-11-06 21:26:47
- * @LastEditTime: 2022-11-07 14:19:40
- * @LastEditors: blueclocker 1456055290@hnu.edu.cn
+ * @LastEditTime: 2022-12-30 16:19:26
+ * @LastEditors: wpbit
  * @Description: 
  * @FilePath: /wpollo/src/lanelet/osmmap/src/navagation/navagation_sim.cpp
  * Copyright (c) 2022 by bit, All Rights Reserved. 
@@ -13,7 +13,7 @@ namespace navagation
 {
 NavagationSim::NavagationSim(ros::NodeHandle &n) : NavagationBase(n)
 {
-    gps_sub_ = n_.subscribe("/mapping_odometry", 1, &NavagationSim::SimCallback, this);
+    gps_sub_ = n_.subscribe("/odom", 1, &NavagationSim::SimCallback, this);
 }
 
 void NavagationSim::SimCallback(const nav_msgs::Odometry::ConstPtr &msg)

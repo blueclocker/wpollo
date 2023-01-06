@@ -285,5 +285,10 @@ add_dependencies(serialPort ${PROJECT_NAME} fsd_common_msgs_gencpp)
 * osmmap导航功能支持GPS、PCD配准、lgsvl仿真三种
 * 路径平滑方式使用apollo的二次规划piecewise_jerk_path_problem
 
+<<<<<<< HEAD
 ##### 20221205
 * 最后一版ubuntu18.04
+=======
+##### 20230106
+* 更新ubuntu20.04版本
+>>>>>>> 20230106
